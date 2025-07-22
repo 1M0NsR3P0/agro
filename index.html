@@ -26,7 +26,7 @@
 
     }
 
-    .loading{
+    .loading {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -34,8 +34,26 @@
       height: 100vh;
       width: 100%;
       position: absolute;
-      top: 0;right: 0;
+      top: 0;
+      right: 0;
     }
+
+    .loading2 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.301);
+      position: static;
+      top: 0;
+      right: 0;
+    }
+
+    .loading2 img {
+      height: 15px !important;
+      width: 15px !important;
+
+    }
+
     /* LOGIN STYLES */
     .login-container {
       display: flex;
@@ -176,12 +194,12 @@
     }
 
     .popup {
-      height: 350px;
+      height: 98vh;
       width: 95%;
       background-color: rgb(255, 255, 255);
       z-index: 2;
       position: absolute;
-      top: 20%;
+      top: 15%;
       margin: 10px;
       border: 1px solid black;
       border-radius: 15px;
@@ -255,7 +273,7 @@
             <div class="statusBtn button" id="totalbank"><span id="totalbankspan">
                 Total Bank
               </span></div>
-            <div class="statusBtn button" id="totalcash"><span>Total Cash</span></div>
+            <div class="statusBtn button" id="totalcash"><span id="totalcashspan">Total Cash</span></div>
             <div class="statusBtn button" id="totalWithdraw"><span>Total Withdraw</span></div>
           </div>
           <div style="display: flex; gap: 5px;">
@@ -340,17 +358,17 @@
       <div style="display: flex; flex-direction:  column; gap: 10px; justify-content: center; align-items: center;">
         <span>
           Date:
-          <input type="date">
+          <input id="addcashdate" type="date">
         </span>
-        <span style="display:  flex;"> Amount:
-          <input type="number" name="bankAmount" id="bankamount" placeholder="0.00">
+        <span id="" style="display:  flex;"> Amount:
+          <input type="number" name="bankAmount" id="addcashamount" placeholder="0.00">
         </span>
         <span style="display:  flex;"> Note:
-          <input type="number" name="bankAmount" id="bankamount" placeholder="Empty">
+          <input type="text" name="bankAmount" id="addcashnote" placeholder="Empty">
         </span>
         </span>
         <div style="display: flex; gap:50px; padding-top:10px ;">
-          <button class="button"
+          <button id="addcashdata" class="button"
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"> Add</button>
           <button id="addincashcancelpopup" class="button"
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
@@ -369,23 +387,23 @@
       <div style="display: flex; flex-direction:  column; gap: 10px; justify-content: center; align-items: center;">
         <span>
           Date:
-          <input type="date">
+          <input type="date" id="withdrawdate">
         </span>
         <span style="display:  flex;"> Amount:
-          <input type="number" name="bankAmount" id="bankamount" placeholder="0.00">
+          <input id="withdrawamount" type="number" name="bankAmount" placeholder="0.00">
         </span>
         <span style="display:  flex;"> Note:
-          <input type="number" name="bankAmount" id="bankamount" placeholder="Empty">
+          <input id="withdrawnote" type="text" name="bankAmount"  placeholder="Empty">
         </span>
         </span>
         <span>
           <select name="SelectWithdraw" id="SelectWithdraw">Select Withdraw:
-            <option value="Cash">Cash</option>
-            <option value="Bank">Bank</option>
+            <option value="cash">Cash</option>
+            <option value="bank">Bank</option>
           </select>
         </span>
         <div style="display: flex; gap:50px; padding-top:10px ;">
-          <button class="button"
+          <button class="button" id="addWithdraw"
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
             Withdraw</button>
           <button id="withdrawpopupcancel" class="button"
@@ -427,7 +445,7 @@
   </div>
 
   <!-- history popup -->
-  <div id="alltimehistory" class="popup" style="display: none;">
+  <div id="alltimehistory" class="popup" style="display: none; padding: 10px;">
     <div class="bankAdd">
       <u><span>all time history</span></u>
       <div id="totalbankamount"></div>
@@ -435,7 +453,7 @@
         <hr>
         <div class="addPages" style="font-weight: 800; font-size: 20px">
           <div id="costHistory" class="costhistory" style="width: 95vw;">
-            <div style="overflow-y: scroll; height: 40vh;">
+            <div style="overflow-y: scroll; height: 45vh; margin: 10px;">
               <table id="histtable" style="width: 100%;">
                 <thead>
                   <tr style="">
@@ -453,8 +471,6 @@
         </div>
         </span>
         <div style="display: flex; gap:50px; padding-top:10px ;">
-          <button class="button"
-            style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"> Add</button>
           <button id="historycencel" class="button"
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
             Cancel</button>
@@ -803,7 +819,7 @@
           return response.json(); // or .text() if your server returns plain text
         })
         .then(result => {
-          console.log("Response received:", result);
+          // console.log("Response received:", result);
           return result;
         })
         .catch(error => {
@@ -826,7 +842,6 @@
           return response.json(); // Assumes server returns JSON
         })
         .then(result => {
-          console.log("Response received:", result);
           return result;
         })
         .catch(error => {
@@ -834,18 +849,18 @@
           throw error;
         });
     }
-    
 
-        loader = document.createElement("div")
-        loader.setAttribute("id","loading")
-        loader.setAttribute("class","loading")
-        loader.innerHTML = `
+
+    loader = document.createElement("div")
+    loader.setAttribute("id", "loading")
+    loader.setAttribute("class", "loading")
+    loader.innerHTML = `
             <div>
               <img style="height: 50px; width: 50px;" src="/images/loading.gif" alt="loading...">
             </div>
         `
- 
-        
+
+
 
     document.querySelector("#logoutbtn").addEventListener("click", () => {
       document.querySelector("#login-section").style.display = "block"
@@ -853,12 +868,34 @@
       document.getElementById('password').value = "";
     })
 
+
     document.querySelector("#totalbank").addEventListener("click", () => {
-      document.querySelector("#totalbankspan").textContent = "5000.542"
-      setTimeout(() => {
-        document.querySelector("#totalbankspan").textContent = "Total Bank"
-      }, 2000);
+      let b = document.querySelector("#totalbankspan")
+      loader2 = document.createElement("div")
+      loader2.setAttribute("id", "loading2")
+      loader2.setAttribute("class", "loading2")
+      loader2.innerHTML = `
+
+              <img style="" src="/images/loading.gif" alt="loading...">
+
+        `
+      b.appendChild(loader2)
+
+      fetcher("http://127.0.0.1:10000/data/bank/")
+        .then(data => {
+          loader2.style.display = "none"
+          totalAmount = 0
+          data.forEach((item, index) => {
+            totalAmount += parseInt(item.amount)
+          });
+
+          document.querySelector("#totalbankspan").textContent = `${totalAmount}`
+          setTimeout(() => {
+            document.querySelector("#totalbankspan").textContent = "Total Bank"
+          }, 2000);
+        })
     })
+
     document.querySelector("#totalbank").addEventListener("dblclick", () => {
       document.querySelector("#addinbankpage").style.display = "block"
     })
@@ -867,10 +904,30 @@
     })
 
     document.querySelector("#totalcash").addEventListener("click", () => {
-      document.querySelector("#totalcash span").textContent = "5000.542"
-      setTimeout(() => {
-        document.querySelector("#totalcash span").textContent = "Total Cash"
-      }, 2000);
+      let b = document.querySelector("#totalcashspan")
+      loader2 = document.createElement("div")
+      loader2.setAttribute("id", "loading2")
+      loader2.setAttribute("class", "loading2")
+      loader2.innerHTML = `
+
+              <img style="" src="/images/loading.gif" alt="loading...">
+
+        `
+      b.appendChild(loader2)
+
+      fetcher("http://127.0.0.1:10000/data/cash/")
+        .then(data => {
+          loader2.style.display = "none"
+          totalAmount = 0
+          data.forEach((item, index) => {
+            totalAmount += parseInt(item.amount)
+          });
+
+          document.querySelector("#totalcashspan").textContent = `${totalAmount}`
+          setTimeout(() => {
+            document.querySelector("#totalcashspan").textContent = "Total Cash"
+          }, 2000);
+        })
     })
     document.querySelector("#totalcash").addEventListener("dblclick", () => {
       document.querySelector("#addincashpage").style.display = "block"
@@ -880,10 +937,30 @@
     })
 
     document.querySelector("#totalWithdraw").addEventListener("click", () => {
-      document.querySelector("#totalWithdraw span").textContent = "5000.542"
-      setTimeout(() => {
-        document.querySelector("#totalWithdraw span").textContent = "Total Withdraw"
-      }, 2000);
+      let b = document.querySelector("#totalWithdraw")
+      loader2 = document.createElement("div")
+      loader2.setAttribute("id", "loading2")
+      loader2.setAttribute("class", "loading2")
+      loader2.innerHTML = `
+
+              <img style="" src="/images/loading.gif" alt="loading...">
+
+        `
+      b.appendChild(loader2)
+
+      fetcher("http://127.0.0.1:10000/data/withdraw/")
+        .then(data => {
+          loader2.style.display = "none"
+          totalAmount = 0
+          data.forEach((item, index) => {
+            totalAmount += parseInt(item.amount)
+          });
+
+          document.querySelector("#totalWithdraw").textContent = `${totalAmount}`
+          setTimeout(() => {
+            document.querySelector("#totalWithdraw").textContent = "Total Withdraw"
+          }, 2000);
+        })
     })
     document.querySelector("#totalWithdraw").addEventListener("dblclick", () => {
       document.querySelector("#withpopuppage").style.display = "block"
@@ -1001,56 +1078,101 @@
         cancelbtn55.style.display = "none"
       })
     })
-    
-    // loading section
-    
-    
+
     document.querySelector("#histbank").addEventListener("click", () => {
       let b = document.querySelector("#alltimehistory")
       b.style.display = "block"
       b.appendChild(loader)
 
       fetcher("http://127.0.0.1:10000/data/bank/")
-      .then(data => {
-        loader.style.display = "none"
-        
-        // console.log(data)
-        totalAmount = 0
-        data.forEach((item, index) => {
-          totalAmount+=parseInt(item.amount)
-          let row = document.createElement("tr")
-          row.style.width = "100%"
-          row.innerHTML = `
+        .then(data => {
+
+          // console.log(data)
+          totalAmount = 0
+          data.forEach((item, index) => {
+            totalAmount += parseInt(item.amount)
+            let row = document.createElement("tr")
+            row.style.width = "100%"
+            row.innerHTML = `
           <td style="width: 85px; overflow-x: auto; ">${item.date}</td>
           <td style="overflow-x: auto; ">${item.note}</td>
           <td style="width: 85px; overflow-x: auto; ">${item.amount}</td>
           `
-          document.querySelector("#histtable").appendChild(row)
-          console.log(totalAmount)
-        });
+            document.querySelector("#histtable").appendChild(row)
+            loader.style.display = "none"
+          });
 
-        document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount?totalAmount:"loading"}</span>`
+          document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount ? totalAmount : "loading"}</span>`
         })
-      })
+    })
+
+    
+    document.querySelector("#histcash").addEventListener("click", () => {
+      let b = document.querySelector("#alltimehistory")
+      b.style.display = "block"
+      b.appendChild(loader)
+
+      fetcher("http://127.0.0.1:10000/data/cash/")
+        .then(data => {
+
+          // console.log(data)
+          totalAmount = 0
+          data.forEach((item, index) => {
+            totalAmount += parseInt(item.amount)
+            let row = document.createElement("tr")
+            row.style.width = "100%"
+            row.innerHTML = `
+          <td style="width: 85px; overflow-x: auto; ">${item.date}</td>
+          <td style="overflow-x: auto; ">${item.note}</td>
+          <td style="width: 85px; overflow-x: auto; ">${item.amount}</td>
+          `
+            document.querySelector("#histtable").appendChild(row)
+            loader.style.display = "none"
+          });
+
+          document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount ? totalAmount : "loading"}</span>`
+        })
+    })
+    document.querySelector("#histwithdraw").addEventListener("click", () => {
+      let b = document.querySelector("#alltimehistory")
+      b.style.display = "block"
+      b.appendChild(loader)
+
+      fetcher("http://127.0.0.1:10000/data/withdraw/")
+        .then(data => {
+
+          // console.log(data)
+          totalAmount = 0
+          data.forEach((item, index) => {
+            totalAmount += parseInt(item.amount)
+            let row = document.createElement("tr")
+            row.style.width = "100%"
+            row.innerHTML = `
+          <td style="width: 85px; overflow-x: auto; ">${item.date}</td>
+          <td style="overflow-x: auto; ">${item.note}</td>
+          <td style="width: 85px; overflow-x: auto; ">${item.amount}</td>
+          `
+            document.querySelector("#histtable").appendChild(row)
+            loader.style.display = "none"
+          });
+
+          document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount ? totalAmount : "loading"}</span>`
+        })
+    })
+
+
+    document.querySelector("#histwithdraw").addEventListener("click", () => {
+      document.querySelector("#alltimehistory").style.display = "block"
+    })
+
     document.querySelector("#historycencel").addEventListener("click", () => {
       document.querySelector("#alltimehistory").style.display = "none"
       let tablerows = document.querySelector("#histtable")
       tablerows.innerHTML = ""
-      
+
       loader.style.display = "flex"
     })
-    document.querySelector("#histbank").addEventListener("click", () => {
-      document.querySelector("#alltimehistory").style.display = "block"
-    })
-    document.querySelector("#historycencel").addEventListener("click", () => {
-      document.querySelector("#alltimehistory").style.display = "none"
-    })
-    document.querySelector("#histwithdraw").addEventListener("click", () => {
-      document.querySelector("#alltimehistory").style.display = "block"
-    })
-    document.querySelector("#historycencel").addEventListener("click", () => {
-      document.querySelector("#alltimehistory").style.display = "none"
-    })
+
 
 
 
@@ -1068,11 +1190,72 @@
       note = document.querySelector("#banknote").value;
       data = {
         "date": date,
-        "amount": amount?amount:0,
-        "note": note?note:"No Note Added!!"
+        "amount": amount ? amount : 0,
+        "note": note ? note : "No Note Added!!"
       }
       poster('http://127.0.0.1:10000/insert/bank/', data)
     })
+    document.querySelector("#addcashdata").addEventListener("click", () => {
+      let date = document.querySelector("#addcashdate").value;
+      if (!date) {
+        date = new Date().toISOString().replace('T', ', ').split('.')[0];
+      }
+      amount = document.querySelector("#addcashamount").value;
+      note = document.querySelector("#addcashnote").value;
+      data = {
+        "date": date,
+        "amount": amount ? amount : 0,
+        "note": note ? note : "No Note Added!!"
+      }
+      poster('http://127.0.0.1:10000/insert/cash/', data)
+    })
+
+document.querySelector("#addWithdraw").addEventListener("click", async () => {
+  let date = document.querySelector("#withdrawdate").value;
+  if (!date) {
+    date = new Date().toISOString().replace('T', ', ').split('.')[0];
+  }
+
+  let amount = parseFloat(document.querySelector("#withdrawamount").value);
+  let note = document.querySelector("#withdrawnote").value;
+  let Wtype = document.querySelector("#SelectWithdraw").value;
+
+  const data = {
+    "date": date,
+    "amount": isNaN(amount) ? 0 : amount,
+    "note": note || "No Note Added!!",
+    "withdrawType": Wtype || "cash"
+  };
+
+  try {
+    const res = await poster('http://127.0.0.1:10000/insert/withdraw/', data);
+    if (res) {
+      if (Wtype === "cash") {
+        const wdata = {
+          "date": date,
+          "amount": -Math.abs(amount),
+          "note": "Withdraw from cash"
+        };
+        await poster('http://127.0.0.1:10000/insert/cash/', wdata);
+      }
+      if(Wtype === "bank") {
+        const wdata = {
+          "date": date,
+          "amount": -Math.abs(amount),
+          "note": "Withdraw from cash"
+        };
+        await poster('http://127.0.0.1:10000/insert/bank/', wdata);
+      }
+    } 
+    
+    else {
+      console.error("Unexpected response:", res);
+    }
+  } catch (error) {
+    console.error("Error in withdrawal:", error);
+  }
+});
+
 
 
 
