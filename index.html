@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="logo.jpg" type="logo">
+  <title>N A Agro</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    table tr td {
+      border: 1px solid rgba(121, 121, 121, 0.678) !important;
+      margin-top: 5px;
+
+    }
+
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      background: #f4f4f4;
+
+    }
+
+    .loading{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.301);
+      height: 100vh;
+      width: 100%;
+      position: absolute;
+      top: 0;right: 0;
+    }
+    /* LOGIN STYLES */
+    .login-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f4f4f4;
+    }
+
+    .login-box {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 80%;
+      max-width: 300px;
+    }
+
+    .login-box input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      font-size: 16px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    /* HOME STYLES */
+    #home-section {
+      display: none;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #007bff;
+      color: white;
+      padding: 5px;
+      height: 150px;
+    }
+
+    .navbar .logo {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .navbar .logo img {
+      height: 150px;
+      width: 250px;
+    }
+
+    .navbar .settings {
+      font-size: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 15px;
+    }
+
+    .button {
+      background: white;
+      text-align: center;
+      border-radius: 8px;
+      font-size: 14px;
+      position: relative;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .button:active {
+      background-color: #a2c1e2;
+    }
+
+    .large-button {
+      font-size: 18px;
+      padding: 30px;
+    }
+
+    .counter {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      background: red;
+      color: white;
+      border-radius: 50%;
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+
+    .statement-btn {
+      display: block;
+      width: 90%;
+      margin: 20px auto;
+      padding: 15px;
+      background: #28a745;
+      color: white;
+      text-align: center;
+      border-radius: 8px;
+      font-size: 18px;
+      border: none;
+    }
+
+    .statement-btn:active {
+      background-color: #5c5c5c !important;
+    }
+
+    .statusBox {
+      /* background-color: rgb(211, 205, 205); */
+      border: 2px solid rgb(128, 128, 128);
+      border-radius: 25px;
+      margin: 15px;
+      padding: 15px;
+    }
+
+    .statusBtn {
+      border: 1px solid rgb(110, 110, 110);
+      border-radius: 50px;
+      height: 35px;
+      width: 120px;
+      gap: 5px;
+    }
+
+    .popup {
+      height: 350px;
+      width: 95%;
+      background-color: rgb(255, 255, 255);
+      z-index: 2;
+      position: absolute;
+      top: 20%;
+      margin: 10px;
+      border: 1px solid black;
+      border-radius: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 800;
+      color: rgb(14, 14, 14);
+    }
+
+    .popup span {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      align-items: center;
+    }
+
+    input,
+    textarea {
+      border-radius: 15px;
+      height: 30px;
+      width: 150px;
+      background-color: #bebebe;
+      font-weight: 900;
+      color: rgb(0, 0, 0);
+      font-size: 16px;
+      outline: none;
+      border: none;
+      padding-left: 20px !important;
+      user-select: none;
+    }
+
+    .costhistory {
+      /* height: 60vh; */
+      width: 100%;
+      display: flex;
+      padding: 5px;
+      font-weight: 600;
+      font-size: 15px;
+      overflow: auto;
+      flex-direction: column;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- LOGIN SECTION -->
+  <div class="login-container" id="login-section" style="display: none;">
+    <div>
+      <img src="logo.png" alt="logo" style="width: fit-content; height: 300px;">
+    </div>
+    <div class="login-box">
+      <form onsubmit="return login(event)">
+        <input type="password" placeholder="Enter Password" id="password" required />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- HOME SECTION -->
+  <div id="home-section" style="display: block;">
+    <div class="navbar">
+      <div id="logocont" class="logo"><img id="logoimg" src="logo.png" alt="N A Agro" /></div>
+    </div>
+
+    <div id="homepage">
+      <div class="statusBox">
+        <div style="display:  flex; flex-direction: column; gap: 5px;">
+          <div style="display:  flex; gap: 5px;">
+            <div class="statusBtn button" id="totalbank"><span id="totalbankspan">
+                Total Bank
+              </span></div>
+            <div class="statusBtn button" id="totalcash"><span>Total Cash</span></div>
+            <div class="statusBtn button" id="totalWithdraw"><span>Total Withdraw</span></div>
+          </div>
+          <div style="display: flex; gap: 5px;">
+            <div class="statusBtn button" id="totalSell"><span>Total Sell</span></div>
+            <div class="statusBtn button" id="totalcost"><span>Total cost</span></div>
+            <div class="statusBtn button" id="totalDue"><span>Total Due</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div></div>
+
+      <div class="grid">
+        <div class="button large-button" id="addcostbtn">
+          <!-- <div class="counter">3</div> -->
+          🧾 Add Cost
+        </div>
+        <div class="button large-button" id="addsellbtn">
+          <!-- <div class="counter">7</div> -->
+          🛒 Add Sell
+        </div>
+        <div id="totalproductbtn" class="button large-button">
+          <!-- <div class="counter">5</div> -->
+          📈 Product list
+        </div>
+        <div id="addduebtn" class="button large-button">
+          <!-- <div class="counter">2</div> -->
+          💸 Add Due
+        </div>
+        <div id="settingbtn" class="button large-button">
+          <!-- <div class="counter">2</div> -->
+          ⚙️ settings
+        </div>
+        <div id="notebtn" class="button large-button">
+          <!-- <div class="counter">2</div> -->
+          <img src="edit.svg" alt="Note edit">
+          Notes
+        </div>
+      </div>
+
+      <button id="logoutbtn" class="statement-btn">
+        📊 Logout</button>
+    </div>
+  </div>
+
+
+  <!-- POPUP SECTION -->
+
+  <!-- add in bank poup -->
+  <div class="popup" style="display:  none;" id="addinbankpage">
+    <div class="bankAdd">
+      <span>Add Blanace in Bank</span>
+      <div style="display: flex; flex-direction:  column; gap: 10px; justify-content: center; align-items: center;">
+        <span>
+          Date:
+          <input id="bankdate" type="date" data-de>
+        </span>
+        <span style="display:  flex;"> Amount:
+          <input type="number" name="bankAmount" id="bankamount" placeholder="0.00">
+        </span>
+        <span style="display:  flex;"> Note:
+          <input type="text" name="banknote" id="banknote" placeholder="Empty">
+        </span>
+        </span>
+        <div style="display: flex; gap:50px; padding-top:10px ;">
+          <button id="addbankdata" class="button"
+            style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"> Add</button>
+          <button id="canceladdbankpopup" class="button"
+            style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
+            Cancel</button>
+        </div>
+        </span>
+        <div><button id="histbank" style="height: 15px;width: 30px; font-size: 9px;">hist</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- add in cash popup -->
+  <div class="popup" style="display: none;" id="addincashpage">
+    <div class="bankAdd">
+      <span>Add Blanace in Cash</span>
+      <div style="display: flex; flex-direction:  column; gap: 10px; justify-content: center; align-items: center;">
+        <span>
+          Date:
+          <input type="date">
+        </span>
+        <span style="display:  flex;"> Amount:
+          <input type="number" name="bankAmount" id="bankamount" placeholder="0.00">
+        </span>
+        <span style="display:  flex;"> Note:
+          <input type="number" name="bankAmount" id="bankamount" placeholder="Empty">
+        </span>
+        </span>
+        <div style="display: flex; gap:50px; padding-top:10px ;">
+          <button class="button"
+            style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"> Add</button>
+          <button id="addincashcancelpopup" class="button"
+            style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
+            Cancel</button>
+        </div>
+        </span>
+        <div><button id="histcash" style="height: 15px;width: 30px; font-size: 9px;">hist</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- add withdraw popup -->
+  <div class="popup" style="display: none;" id="withpopuppage">
+    <div class="bankAdd">
+      <u><span>Add Withdraw</span></u>
+      <div style="display: flex; flex-direction:  column; gap: 10px; justify-content: center; align-items: center;">
+        <span>
+          Date:
+          <input type="date">
+        </span>
+        <span style="display:  flex;"> Amount:
+          <input type="number" name="bankAmount" id="bankamount" placeholder="0.00">
+        </span>
+        <span style="display:  flex;"> Note:
+          <input type="number" name="bankAmount" id="bankamount" placeholder="Empty">
+        </span>
+        </span>
+        <span>
+          <select name="SelectWithdraw" id="SelectWithdraw">Select Withdraw:
+            <option value="Cash">Cash</option>
+            <option value="Bank">Bank</option>
+          </select>
+        </span>
+        <div style="display: flex; gap:50px; padding-top:10px ;">
+          <button class="button"
+            style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
+            Withdraw</button>
+          <button id="withdrawpopupcancel" class="button"
+            style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
+            Cancel</button>
+        </div>
+        </span>
+        <div><button id="histwithdraw" style="height: 15px;width: 30px; font-size: 9px;">hist</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- add new product popup -->
+  <div id="addproductpopup" class="popup" style="display: none;">
+    <div class="bankAdd">
+      <u><span>Add product</span></u>
+      <div style="display: flex; flex-direction:  column; gap: 10px; justify-content: center; align-items: center;">
+        <span>
+          Product Name:
+          <input type="text" placeholder="Name">
+        </span>
+        <span style="display:  flex;"> Quantity:
+          <input type="number" name="bankAmount" id="bankamount" placeholder="0.00">
+        </span>
+        </span>
+        <span>
+        </span>
+        <div style="display: flex; gap:50px; padding-top:10px ;">
+          <button class="button"
+            style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"> Add</button>
+          <button id="newproductcencel" class="button"
+            style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
+            Cancel</button>
+        </div>
+        </span>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- history popup -->
+  <div id="alltimehistory" class="popup" style="display: none;">
+    <div class="bankAdd">
+      <u><span>all time history</span></u>
+      <div id="totalbankamount"></div>
+      <div style="display: flex; flex-direction:  column; gap: 10px; justify-content: center; align-items: center;">
+        <hr>
+        <div class="addPages" style="font-weight: 800; font-size: 20px">
+          <div id="costHistory" class="costhistory" style="width: 95vw;">
+            <div style="overflow-y: scroll; height: 40vh;">
+              <table id="histtable" style="width: 100%;">
+                <thead>
+                  <tr style="">
+                    <td>Date</td>
+                    <td>Note</td>
+                    <td>Amount</td>
+                  </tr>
+                </thead>
+                <tbody style="width: 100vw;">
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+        </span>
+        <div style="display: flex; gap:50px; padding-top:10px ;">
+          <button class="button"
+            style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"> Add</button>
+          <button id="historycencel" class="button"
+            style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
+            Cancel</button>
+        </div>
+        </span>
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- ADD PAGES SECTION -->
+  <!-- add sell page -->
+  <div id="addsellpage" style="display: none; flex-direction: column; justify-content: center; align-items: center;">
+    <div
+      style=" margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
+      <div style="display: flex; justify-content: space-evenly;">
+        <span style="font-weight: 900; font-size: 20px;">Add A Sell Record</span>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 15px; margin: 15px;">
+      <span>Transaction type:</span>
+      <select name="cashBank" id="cashBank">
+        <option value="Cash">Cash</option>
+        <option value="Cash">Bank</option>
+        <option value="Cash">Due</option>
+      </select>
+      <select name="cashBank" id="cashBank">
+        <option value="Cash">list 1</option>
+        <option value="Cash">product 2</option>
+        <option value="Cash">product 3</option>
+      </select>
+    </div>
+    <div>
+      <div> Date:
+        <input type="date" style="background-color: white; padding: 3px;">
+      </div>
+    </div>
+    <div style="margin: 10px; display: flex; align-items: center; gap: 15px;"> <span>Buyer Name</span>
+      <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="costAddNote" placeholder="Buyer Name"
+        cols="15" rows="1"></textarea>
+    </div>
+    <div style="margin: 10px; display: flex; align-items: center; gap: 15px;"> <span>Sell Details</span>
+      <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="costAddNote"
+        placeholder="How Did You Sold and what you sold" cols="15" rows="3"></textarea>
+    </div>
+    <div style="margin: 5px;"> Total Quantity
+      <input type="number" placeholder="0.00" style="background-color: white; padding: 5px;">
+    </div>
+    <div> Total Amount
+      <input type="number" placeholder="0.00" style="background-color: white; padding: 5px;">
+    </div>
+    <div style="display: flex;">
+      <div style="margin: 10px;" class="statement-btn"> Add
+      </div>
+      <div id="addsellpagecancel" style="margin: 10px; background-color: red;" class="statement-btn"> Cancel
+      </div>
+    </div>
+    <hr>
+    <div class="addPages" style="font-weight: 800; font-size: 20px">
+      <div
+        style=" background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
+        <div style="display: flex; justify-content: space-evenly;">
+          <span>Total Sell</span>
+          <span>5000</span>
+        </div>
+      </div>
+      <div id="costHistory" class="costhistory">
+        <div>
+          <table style="">
+            <tr style="">
+              <td>Date</td>
+              <td>Detials</td>
+              <td>Amount</td>
+            </tr>
+            <tr style="border: 10px solid black; padding: 10px;">
+              <td style="width: 85px; overflow-x: scroll; ">10-02-25</td>
+              <td>Lorem ipsum dolor sit amsdfsdf sdf sdf sdf sdf sdf sardf sadet consectetur adipisici corrupti.</td>
+              <td>2025</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Total product page -->
+  <div id="totalproductpage" style="display: none;">
+    <div class="addPages" style="font-weight: 800; font-size: 20px">
+      <div
+        style=" background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
+        <div style="display: flex; justify-content: space-evenly;">
+          <span>Products List</span>
+        </div>
+      </div>
+      <hr>
+      <div style="display: flex; align-items: center; width: 100%; justify-content: space-around;">
+        <div><button id="addnewproduct" class="statement-btn" style="width: 30vw;">Add New Product</button></div>
+        <div><button id="totalproductbackbtn" style="width: 30vw;" class="statement-btn">Cancel</button></div>
+      </div>
+      <hr>
+      <div id="costHistory" class="costhistory">
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+          <div style="display:  flex; justify-content: space-evenly;">
+            <span style="width: 80vw; ">Product Name</span>
+            <span>Quantity</span>
+          </div>
+          <table style="width: 100%; height: 60vh;">
+            <tr style=" padding: 3px; display: flex; justify-content: space-between; width: 100%; align-items: center;">
+              <td style="padding: 5px; width: 80%;"> en, faumi, egg, egg2 egg3 </td>
+              <td style="padding: 5px;">200</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- add Due Page -->
+  <div id="addduepage" style="display: none; flex-direction: column; justify-content: center; align-items: center;">
+    <div
+      style=" margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
+      <div style="display: flex; justify-content: space-evenly;">
+        <span style="font-weight: 900; font-size: 20px;">Add Due</span>
+      </div>
+    </div>
+
+    <div>
+      <div> Date:
+        <input type="date" style="background-color: white; padding: 3px;">
+      </div>
+    </div>
+    <div style="margin: 10px; display: flex; align-items: center; gap: 15px;"> <span>Details</span>
+      <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="costAddNote"
+        placeholder="Add Detils/Name" cols="15" rows="3"></textarea>
+    </div>
+    <div> Ttoal Amount
+      <input type="number" placeholder="0.00" style="background-color: white; padding: 5px;">
+    </div>
+    <div style="display: flex;">
+      <div style="margin: 10px;" class="statement-btn"> Add
+      </div>
+      <div style="margin: 10px;" class="statement-btn" id="addduepagecancel"> Cancel
+      </div>
+    </div>
+    <hr>
+    <div class="addPages" style="font-weight: 800; font-size: 20px">
+      <div
+        style=" background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
+        <div style="display: flex; justify-content: space-evenly;">
+          <span>Total Due</span>
+          <span style="color: red;">500 </span>
+        </div>
+      </div>
+      <div id="costHistory" class="costhistory">
+        <div>
+          <table style="">
+            <tr style="">
+              <td>Date</td>
+              <td>Detials</td>
+              <td>Amount</td>
+            </tr>
+            <tr style="border: 10px solid black; padding: 10px;">
+              <td style="width: 85px; overflow-x: scroll; ">10-02-25</td>
+              <td>Lorem ipsum dolor sit amet consectetur adipisici corrupti.</td>
+              <td>500 <button>✏️</button></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- add Note page -->
+  <div id="notepage" style="display: none; flex-direction: column; justify-content: center; align-items: center;">
+    <div
+      style=" margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
+      <div style="display: flex; justify-content: space-evenly;">
+        <span style="font-weight: 900; font-size: 20px;">Create Note</span>
+      </div>
+    </div>
+
+    <div>
+      <div> Date:
+        <input type="date" style="background-color: white; padding: 3px;">
+      </div>
+      <div style="margin-top: 10px;"> Title:
+        <input type="text" style="background-color: white; padding: 3px;" placeholder="add a title">
+      </div>
+    </div>
+    <div style="margin: 10px; display: flex; align-items: center; gap: 15px;"> <span>Details</span>
+      <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="costAddNote"
+        placeholder="Add Detils note" cols="15" rows="3"></textarea>
+    </div>
+
+    <div style="display: flex;">
+      <div style="margin: 10px;" class="statement-btn"> Add
+      </div>
+      <div id="notepagecancelbtn" style="margin: 10px;" class="statement-btn"> Cancel
+      </div>
+    </div>
+    <hr>
+    <div class="addPages" style="font-weight: 800; font-size: 20px">
+      <div
+        style=" background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
+        <div style="display: flex; justify-content: space-evenly;">
+          <span>Note List</span>
+        </div>
+      </div>
+      <div id="NoteHistory" class="costhistory">
+        <div>
+          <!-- Todo/// add note title system -->
+          <table style="">
+            <tr style="">
+              <td>Date</td>
+              <td>Details</td>
+            </tr>
+            <tr style="border: 10px solid black; padding: 10px;">
+              <td style="width: 85px; overflow-x: scroll; ">10-02-25</td>
+              <td>Lorem ipsum dolor sit amet consectetur adipisici corrupti.lore Lorem ipsum dolor sit amet consectetur
+                adipisicing elit. Sunt veniam porro accusamus tenetur voluptas maiores temporibus quos exercitationem ea
+                molestias nihil, at mollitia expedita ullam, enim dicta soluta placeat illum!</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- add setting page -->
+  <!-- Todo// pass change, reset database, logo/icon change -->
+  <div id="settingpage" style="display: none; flex-direction: column; justify-content: center; align-items: center;">
+    <div
+      style=" margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
+      <div style="display: flex; justify-content: space-evenly;">
+        <span style="font-weight: 900; font-size: 20px;">Setiings</span>
+      </div>
+    </div>
+    <div style="display: flex;">
+      <div style="margin: 10px;" class="statement-btn"> Save Setting
+      </div>
+      <div id="settingpagecancelbtn" style="margin: 10px;" class="statement-btn"> Cancel
+      </div>
+    </div>
+
+
+  </div>
+
+  <!-- add cost page -->
+  <div id="addcostpage" style="display: none; flex-direction: column; justify-content: center; align-items: center;">
+    <div
+      style=" margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
+      <div style="display: flex; justify-content: space-evenly;">
+        <span style="font-weight: 900; font-size: 20px;">Add Cost</span>
+      </div>
+    </div>
+
+    <div>
+      <div> Date:
+        <input type="date" style="background-color: white; padding: 3px;">
+      </div>
+
+      <div style="margin: 5px;">
+        <span>
+          method:
+        </span>
+        <select name="costAddfrom" id="costaddfrom">
+          <option value="cash">cash</option>
+          <option value="bank">bank</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin: 10px; display: flex; align-items: center; gap: 15px;"> <span>Details</span>
+      <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="costAddNote" placeholder="Add Detils"
+        cols="15" rows="3"></textarea>
+    </div>
+    <div> Ttoal Amount
+      <input type="number" placeholder="0.00" style="background-color: white; padding: 5px;">
+    </div>
+    <div style="display: flex;">
+      <div style="margin: 10px;" class="statement-btn"> Add
+      </div>
+      <div style="margin: 10px;" class="statement-btn" id="addcostpagecancel"> Cancel
+      </div>
+    </div>
+    <hr>
+    <div class="addPages" style="font-weight: 800; font-size: 20px">
+      <div
+        style=" background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
+        <div style="display: flex; justify-content: space-evenly;">
+          <span>Total Cost</span>
+          <span>5000</span>
+        </div>
+      </div>
+      <div id="costHistory" class="costhistory">
+        <div>
+          <table style="">
+            <tr style="">
+              <td>Date</td>
+              <td>Detials</td>
+              <td>Amount</td>
+            </tr>
+            <tr style="border: 10px solid black; padding: 10px;">
+              <td style="width: 85px; overflow-x: scroll; ">10-02-25</td>
+              <td>Lorem ipsum dolor sit amet consectetur adipisici corrupti.</td>
+              <td>2025</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- SCRIPT -->
+  <script>
+
+    function login(e) {
+      e.preventDefault();
+      const pwd = document.getElementById('password').value;
+      if (pwd === "1") {
+        document.getElementById("login-section").style.display = "none";
+        document.getElementById("home-section").style.display = "block";
+      } else {
+        alert("Wrong password, Tru Again");
+      }
+
+    }
+
+    function poster(route, data) {
+      return fetch(route, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json(); // or .text() if your server returns plain text
+        })
+        .then(result => {
+          console.log("Response received:", result);
+          return result;
+        })
+        .catch(error => {
+          console.error("Error in POST request:", error);
+          throw error;
+        });
+    }
+
+    function fetcher(route) {
+      return fetch(route, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json(); // Assumes server returns JSON
+        })
+        .then(result => {
+          console.log("Response received:", result);
+          return result;
+        })
+        .catch(error => {
+          console.error("Error in GET request:", error);
+          throw error;
+        });
+    }
+    
+
+        loader = document.createElement("div")
+        loader.setAttribute("id","loading")
+        loader.setAttribute("class","loading")
+        loader.innerHTML = `
+            <div>
+              <img style="height: 50px; width: 50px;" src="/images/loading.gif" alt="loading...">
+            </div>
+        `
+ 
+        
+
+    document.querySelector("#logoutbtn").addEventListener("click", () => {
+      document.querySelector("#login-section").style.display = "block"
+      document.querySelector("#home-section").style.display = "none"
+      document.getElementById('password').value = "";
+    })
+
+    document.querySelector("#totalbank").addEventListener("click", () => {
+      document.querySelector("#totalbankspan").textContent = "5000.542"
+      setTimeout(() => {
+        document.querySelector("#totalbankspan").textContent = "Total Bank"
+      }, 2000);
+    })
+    document.querySelector("#totalbank").addEventListener("dblclick", () => {
+      document.querySelector("#addinbankpage").style.display = "block"
+    })
+    document.querySelector("#canceladdbankpopup").addEventListener("click", () => {
+      document.querySelector("#addinbankpage").style.display = "none"
+    })
+
+    document.querySelector("#totalcash").addEventListener("click", () => {
+      document.querySelector("#totalcash span").textContent = "5000.542"
+      setTimeout(() => {
+        document.querySelector("#totalcash span").textContent = "Total Cash"
+      }, 2000);
+    })
+    document.querySelector("#totalcash").addEventListener("dblclick", () => {
+      document.querySelector("#addincashpage").style.display = "block"
+    })
+    document.querySelector("#addincashcancelpopup").addEventListener("click", () => {
+      document.querySelector("#addincashpage").style.display = "none"
+    })
+
+    document.querySelector("#totalWithdraw").addEventListener("click", () => {
+      document.querySelector("#totalWithdraw span").textContent = "5000.542"
+      setTimeout(() => {
+        document.querySelector("#totalWithdraw span").textContent = "Total Withdraw"
+      }, 2000);
+    })
+    document.querySelector("#totalWithdraw").addEventListener("dblclick", () => {
+      document.querySelector("#withpopuppage").style.display = "block"
+    })
+    document.querySelector("#withdrawpopupcancel").addEventListener("click", () => {
+      document.querySelector("#withpopuppage").style.display = "none"
+    })
+
+    document.querySelector("#totalSell").addEventListener("click", () => {
+      document.querySelector("#totalSell span").textContent = "5000.542"
+      setTimeout(() => {
+        document.querySelector("#totalSell span").textContent = "Total Sell"
+      }, 2000);
+    })
+    document.querySelector("#totalcost").addEventListener("click", () => {
+      document.querySelector("#totalcost span").textContent = "5000.542"
+      setTimeout(() => {
+        document.querySelector("#totalcost span").textContent = "Total cost"
+      }, 2000);
+    })
+    document.querySelector("#totalDue").addEventListener("click", () => {
+      document.querySelector("#totalDue span").textContent = "5000.542"
+      setTimeout(() => {
+        document.querySelector("#totalDue span").textContent = "Total Due"
+      }, 2000);
+    })
+
+    document.querySelector("#addcostbtn").addEventListener("click", () => {
+      document.querySelector("#homepage").style.display = "none"
+      document.querySelector("#addcostpage").style.display = "flex"
+    })
+    document.querySelector("#addcostpagecancel").addEventListener("click", () => {
+      document.querySelector("#homepage").style.display = "block"
+      document.querySelector("#addcostpage").style.display = "none"
+    })
+
+    document.querySelector("#addsellbtn").addEventListener("click", () => {
+      document.querySelector("#homepage").style.display = "none"
+      document.querySelector("#addsellpage").style.display = "flex"
+    })
+    document.querySelector("#addsellpagecancel").addEventListener("click", () => {
+      document.querySelector("#homepage").style.display = "block"
+      document.querySelector("#addsellpage").style.display = "none"
+    })
+
+    document.querySelector("#totalproductbtn").addEventListener("click", () => {
+      document.querySelector("#homepage").style.display = "none"
+      document.querySelector("#totalproductpage").style.display = "flex"
+    })
+    document.querySelector("#totalproductbackbtn").addEventListener("click", () => {
+      document.querySelector("#homepage").style.display = "block"
+      document.querySelector("#totalproductpage").style.display = "none"
+    })
+
+    document.querySelector("#addduebtn").addEventListener("click", () => {
+      document.querySelector("#homepage").style.display = "none"
+      document.querySelector("#addduepage").style.display = "flex"
+    })
+    document.querySelector("#addduepagecancel").addEventListener("click", () => {
+      document.querySelector("#homepage").style.display = "block"
+      document.querySelector("#addduepage").style.display = "none"
+    })
+
+    document.querySelector("#settingbtn").addEventListener("click", () => {
+      document.querySelector("#homepage").style.display = "none"
+      document.querySelector("#settingpage").style.display = "flex"
+    })
+    document.querySelector("#settingpagecancelbtn").addEventListener("click", () => {
+      document.querySelector("#homepage").style.display = "block"
+      document.querySelector("#settingpage").style.display = "none"
+    })
+
+    document.querySelector("#notebtn").addEventListener("click", () => {
+      document.querySelector("#homepage").style.display = "none"
+      document.querySelector("#notepage").style.display = "flex"
+    })
+    document.querySelector("#notepagecancelbtn").addEventListener("click", () => {
+      document.querySelector("#homepage").style.display = "block"
+      document.querySelector("#notepage").style.display = "none"
+    })
+
+    document.querySelector("#addnewproduct").addEventListener("click", () => {
+      document.querySelector("#addproductpopup").style.display = "block"
+    })
+    document.querySelector("#newproductcencel").addEventListener("click", () => {
+      document.querySelector("#addproductpopup").style.display = "none"
+    })
+
+    document.querySelector("#logoimg").addEventListener("dblclick", () => {
+      let path = ""
+      document.querySelector("#logoimg").style.display = "none"
+      const inputimg = document.createElement("input")
+      const cancelbtn55 = document.createElement("button")
+      const donebtn = document.createElement("button")
+      cancelbtn55.textContent = "Cancel"
+      donebtn.textContent = "done"
+      cancelbtn55.setAttribute("id", "cancelbtn55cancel")
+      donebtn.setAttribute("id", "donebtn55")
+      inputimg.setAttribute("id", "inputfile55")
+      inputimg.setAttribute("type", "file")
+      document.querySelector("#logocont").appendChild(cancelbtn55)
+      document.querySelector("#logocont").appendChild(donebtn)
+      document.querySelector("#logocont").appendChild(inputimg)
+      inputimg.addEventListener("change", () => {
+        const file = inputimg.files[0]
+        if (file) {
+          path = file.name
+        }
+        document.querySelector("#logoimg").setAttribute("src", `${path}`)
+      })
+      donebtn.addEventListener("click", () => {
+        document.querySelector("#logoimg").style.display = "block"
+        donebtn.style.display = "none"
+        inputimg.style.display = "none"
+        cancelbtn55.style.display = "none"
+      })
+    })
+    
+    // loading section
+    
+    
+    document.querySelector("#histbank").addEventListener("click", () => {
+      let b = document.querySelector("#alltimehistory")
+      b.style.display = "block"
+      b.appendChild(loader)
+
+      fetcher("http://127.0.0.1:10000/data/bank/")
+      .then(data => {
+        loader.style.display = "none"
+        
+        // console.log(data)
+        totalAmount = 0
+        data.forEach((item, index) => {
+          totalAmount+=parseInt(item.amount)
+          let row = document.createElement("tr")
+          row.style.width = "100%"
+          row.innerHTML = `
+          <td style="width: 85px; overflow-x: auto; ">${item.date}</td>
+          <td style="overflow-x: auto; ">${item.note}</td>
+          <td style="width: 85px; overflow-x: auto; ">${item.amount}</td>
+          `
+          document.querySelector("#histtable").appendChild(row)
+          console.log(totalAmount)
+        });
+
+        document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount?totalAmount:"loading"}</span>`
+        })
+      })
+    document.querySelector("#historycencel").addEventListener("click", () => {
+      document.querySelector("#alltimehistory").style.display = "none"
+      let tablerows = document.querySelector("#histtable")
+      tablerows.innerHTML = ""
+      
+      loader.style.display = "flex"
+    })
+    document.querySelector("#histbank").addEventListener("click", () => {
+      document.querySelector("#alltimehistory").style.display = "block"
+    })
+    document.querySelector("#historycencel").addEventListener("click", () => {
+      document.querySelector("#alltimehistory").style.display = "none"
+    })
+    document.querySelector("#histwithdraw").addEventListener("click", () => {
+      document.querySelector("#alltimehistory").style.display = "block"
+    })
+    document.querySelector("#historycencel").addEventListener("click", () => {
+      document.querySelector("#alltimehistory").style.display = "none"
+    })
+
+
+
+    // server codes
+
+
+
+
+    document.querySelector("#addbankdata").addEventListener("click", () => {
+      let date = document.querySelector("#bankdate").value;
+      if (!date) {
+        date = new Date().toISOString().replace('T', ', ').split('.')[0];
+      }
+      amount = document.querySelector("#bankamount").value;
+      note = document.querySelector("#banknote").value;
+      data = {
+        "date": date,
+        "amount": amount?amount:0,
+        "note": note?note:"No Note Added!!"
+      }
+      poster('http://127.0.0.1:10000/insert/bank/', data)
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </script>
+
+</body>
+
+</html>
