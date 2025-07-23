@@ -393,7 +393,7 @@
           <input id="withdrawamount" type="number" name="bankAmount" placeholder="0.00">
         </span>
         <span style="display:  flex;"> Note:
-          <input id="withdrawnote" type="text" name="bankAmount"  placeholder="Empty">
+          <input id="withdrawnote" type="text" name="bankAmount" placeholder="Empty">
         </span>
         </span>
         <span>
@@ -481,8 +481,6 @@
     </div>
   </div>
 
-
-
   <!-- ADD PAGES SECTION -->
   <!-- add sell page -->
   <div id="addsellpage" style="display: none; flex-direction: column; justify-content: center; align-items: center;">
@@ -495,12 +493,13 @@
 
     <div style="display: flex; gap: 15px; margin: 15px;">
       <span>Transaction type:</span>
-      <select name="cashBank" id="cashBank">
-        <option value="Cash">Cash</option>
-        <option value="Cash">Bank</option>
-        <option value="Cash">Due</option>
+      <select name="cashBank" id="sellmethod">
+        <option value="cash">Cash</option>
+        <option value="bank">Bank</option>
+        <!-- <option value="due">Due</option> -->
       </select>
-      <select name="cashBank" id="cashBank">
+      <span>select product</span>
+      <select name="cashBank" id="productselect">
         <option value="Cash">list 1</option>
         <option value="Cash">product 2</option>
         <option value="Cash">product 3</option>
@@ -508,51 +507,54 @@
     </div>
     <div>
       <div> Date:
-        <input type="date" style="background-color: white; padding: 3px;">
+        <input id="selldate" type="date" style="background-color: white; padding: 3px;">
       </div>
     </div>
     <div style="margin: 10px; display: flex; align-items: center; gap: 15px;"> <span>Buyer Name</span>
-      <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="costAddNote" placeholder="Buyer Name"
+      <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="buyername" placeholder="Buyer Name"
         cols="15" rows="1"></textarea>
     </div>
     <div style="margin: 10px; display: flex; align-items: center; gap: 15px;"> <span>Sell Details</span>
-      <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="costAddNote"
-        placeholder="How Did You Sold and what you sold" cols="15" rows="3"></textarea>
+      <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="sellnote"
+        placeholder="How Did You Sold and what you sold" cols="16" rows="3"></textarea>
     </div>
     <div style="margin: 5px;"> Total Quantity
-      <input type="number" placeholder="0.00" style="background-color: white; padding: 5px;">
+      <input id="quantitysell" type="number" placeholder="0.00" style="background-color: white; padding: 5px;">
+    </div>
+    <div style="margin: 5px;"> Each Price
+      <input id="eachprice" type="number" placeholder="0.00" style="background-color: white; padding: 5px;">
     </div>
     <div> Total Amount
-      <input type="number" placeholder="0.00" style="background-color: white; padding: 5px;">
+      <input id="totalamountrechived" type="number" placeholder="0.00" style="background-color: white; padding: 5px;">
     </div>
     <div style="display: flex;">
-      <div style="margin: 10px;" class="statement-btn"> Add
+      <div id="addselldata" style="margin: 10px;" class="statement-btn"> Add
       </div>
       <div id="addsellpagecancel" style="margin: 10px; background-color: red;" class="statement-btn"> Cancel
       </div>
     </div>
     <hr>
-    <div class="addPages" style="font-weight: 800; font-size: 20px">
+    <div class="addPages" style="font-weight: 800; font-size: 20px; width: 100vw;">
       <div
-        style=" background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
+        style=" background-color: rgb(189, 189, 189); width: 100vw; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
         <div style="display: flex; justify-content: space-evenly;">
           <span>Total Sell</span>
           <span>5000</span>
         </div>
       </div>
       <div id="costHistory" class="costhistory">
-        <div>
-          <table style="">
-            <tr style="">
-              <td>Date</td>
-              <td>Detials</td>
-              <td>Amount</td>
-            </tr>
-            <tr style="border: 10px solid black; padding: 10px;">
-              <td style="width: 85px; overflow-x: scroll; ">10-02-25</td>
-              <td>Lorem ipsum dolor sit amsdfsdf sdf sdf sdf sdf sdf sardf sadet consectetur adipisici corrupti.</td>
-              <td>2025</td>
-            </tr>
+        <div style="width: 98vw;height: 15vw; overflow-y: scroll; display: flex; justify-content: center;">
+          <table style="width: 90vw; ">
+            <thead>
+              <tr style="">
+                <td>Date</td>
+                <td>Detials</td>
+                <td>Amount</td>
+              </tr>
+            </thead>
+            <tbody id="tablesell">
+
+            </tbody>
           </table>
         </div>
       </div>
@@ -730,57 +732,56 @@
         <span style="font-weight: 900; font-size: 20px;">Add Cost</span>
       </div>
     </div>
-
     <div>
       <div> Date:
-        <input type="date" style="background-color: white; padding: 3px;">
+        <input id="addcostdate" type="date" style="background-color: white; padding: 3px;">
       </div>
 
       <div style="margin: 5px;">
         <span>
           method:
         </span>
-        <select name="costAddfrom" id="costaddfrom">
+        <select name="method" id="addcostmethod">
           <option value="cash">cash</option>
           <option value="bank">bank</option>
         </select>
       </div>
     </div>
     <div style="margin: 10px; display: flex; align-items: center; gap: 15px;"> <span>Details</span>
-      <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="costAddNote" placeholder="Add Detils"
+      <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="costaddnote" placeholder="Add Detils"
         cols="15" rows="3"></textarea>
     </div>
     <div> Ttoal Amount
-      <input type="number" placeholder="0.00" style="background-color: white; padding: 5px;">
+      <input id="costaddamount" type="number" placeholder="0.00" style="background-color: white; padding: 5px;">
     </div>
     <div style="display: flex;">
-      <div style="margin: 10px;" class="statement-btn"> Add
+      <div id="addcostdata" style="margin: 10px;" class="statement-btn"> Add
       </div>
       <div style="margin: 10px;" class="statement-btn" id="addcostpagecancel"> Cancel
       </div>
     </div>
+    <div id="costaddsuccess"></div>
     <hr>
-    <div class="addPages" style="font-weight: 800; font-size: 20px">
+    <div class="addPages" style="width: 95vw; font-weight: 800; font-size: 20px">
       <div
-        style=" background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
+        style=" background-color: rgb(189, 189, 189); width: 100vw; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
         <div style="display: flex; justify-content: space-evenly;">
           <span>Total Cost</span>
-          <span>5000</span>
+          <span id="totalcost2">0.00</span>
+          <img id="refreshbtn" src="/images/refresh.svg" alt="" style="width: 25px; height: 20px;">
         </div>
       </div>
-      <div id="costHistory" class="costhistory">
-        <div>
-          <table style="">
-            <tr style="">
-              <td>Date</td>
-              <td>Detials</td>
-              <td>Amount</td>
-            </tr>
-            <tr style="border: 10px solid black; padding: 10px;">
-              <td style="width: 85px; overflow-x: scroll; ">10-02-25</td>
-              <td>Lorem ipsum dolor sit amet consectetur adipisici corrupti.</td>
-              <td>2025</td>
-            </tr>
+      <div id="costHistory" class="costhistory" style="height: 35vh; width: 95vw;">
+        <div style="width: 95vw;">
+          <table style="width: 95vw;">
+            <thead>
+              <tr style="">
+                <td>Date</td>
+                <td>Detials</td>
+                <td>Amount</td>
+              </tr>
+            </thead>
+            <tbody id="costtablebody" style="width: 95vw;"></tbody>
           </table>
         </div>
       </div>
@@ -991,6 +992,47 @@
     document.querySelector("#addcostbtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "none"
       document.querySelector("#addcostpage").style.display = "flex"
+      fetcher("http://127.0.0.1:10000/data/cost/")
+        .then(data => {
+          totalcost = 0
+          data.forEach((d) => {
+            totalcost += parseInt(d.amount)
+            table = document.querySelector("#costtablebody")
+            rows = document.createElement("tr")
+            table.classList.add("costtablebody")
+            rows.innerHTML = `
+              <td style="width: 85px; overflow-x: scroll; ">${d.date}</td>
+              <td>${d.note}</td>
+              <td>${d.amount}</td>
+          `
+            table.appendChild(rows)
+          })
+          document.querySelector("#totalcost2").textContent = `${totalcost ? totalcost : "loading.."}`
+          document.querySelector("#refreshbtn").addEventListener("click", () => {
+            // console.log("clicked 2")
+            document.querySelector("#totalcost2").textContent = "loading.."
+            fetcher("http://127.0.0.1:10000/data/cost/")
+              .then(data => {
+                totalcost2 = 0
+                data.forEach(d => {
+                  totalcost2 += parseInt(d.amount)
+                  document.querySelector("#totalcost2").textContent = `${totalcost2 ? totalcost2 : "loading.."}`
+                  table = document.querySelector("#costtablebody")
+                  rows = document.createElement("tr")
+                  table.classList.add("costtablebody")
+                  rows.innerHTML = `
+                    <td style="width: 85px; overflow-x: scroll; ">${d.date}</td>
+                    <td>${d.note}</td>
+                    <td>${d.amount}</td>
+          `
+                  table.appendChild(rows)
+                })
+              })
+          })
+
+
+        })
+
     })
     document.querySelector("#addcostpagecancel").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "block"
@@ -1000,6 +1042,21 @@
     document.querySelector("#addsellbtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "none"
       document.querySelector("#addsellpage").style.display = "flex"
+      fetcher("http://127.0.0.1:10000/data/sell/")
+      .then((data)=>{
+        // console.log(data)
+        data.forEach((d)=>{
+          let table = document.querySelector("#tablesell")
+          let rows = document.createElement("tr")
+          rows.innerHTML = `
+                    <td style="width: 85px; overflow-x: scroll; ">${d.date}</td>
+                    <td>${d.note}</td>
+                    <td>${d.amount}</td>
+          `
+          table.appendChild(rows)
+        })
+
+      })
     })
     document.querySelector("#addsellpagecancel").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "block"
@@ -1106,7 +1163,7 @@
         })
     })
 
-    
+
     document.querySelector("#histcash").addEventListener("click", () => {
       let b = document.querySelector("#alltimehistory")
       b.style.display = "block"
@@ -1181,6 +1238,7 @@
 
 
 
+
     document.querySelector("#addbankdata").addEventListener("click", () => {
       let date = document.querySelector("#bankdate").value;
       if (!date) {
@@ -1195,6 +1253,7 @@
       }
       poster('http://127.0.0.1:10000/insert/bank/', data)
     })
+
     document.querySelector("#addcashdata").addEventListener("click", () => {
       let date = document.querySelector("#addcashdate").value;
       if (!date) {
@@ -1210,52 +1269,173 @@
       poster('http://127.0.0.1:10000/insert/cash/', data)
     })
 
-document.querySelector("#addWithdraw").addEventListener("click", async () => {
-  let date = document.querySelector("#withdrawdate").value;
-  if (!date) {
-    date = new Date().toISOString().replace('T', ', ').split('.')[0];
-  }
-
-  let amount = parseFloat(document.querySelector("#withdrawamount").value);
-  let note = document.querySelector("#withdrawnote").value;
-  let Wtype = document.querySelector("#SelectWithdraw").value;
-
-  const data = {
-    "date": date,
-    "amount": isNaN(amount) ? 0 : amount,
-    "note": note || "No Note Added!!",
-    "withdrawType": Wtype || "cash"
-  };
-
-  try {
-    const res = await poster('http://127.0.0.1:10000/insert/withdraw/', data);
-    if (res) {
-      if (Wtype === "cash") {
-        const wdata = {
-          "date": date,
-          "amount": -Math.abs(amount),
-          "note": "Withdraw from cash"
-        };
-        await poster('http://127.0.0.1:10000/insert/cash/', wdata);
+    document.querySelector("#addWithdraw").addEventListener("click", async () => {
+      let date = document.querySelector("#withdrawdate").value;
+      if (!date) {
+        date = new Date().toISOString().replace('T', ', ').split('.')[0];
       }
-      if(Wtype === "bank") {
-        const wdata = {
-          "date": date,
-          "amount": -Math.abs(amount),
-          "note": "Withdraw from cash"
-        };
-        await poster('http://127.0.0.1:10000/insert/bank/', wdata);
-      }
-    } 
-    
-    else {
-      console.error("Unexpected response:", res);
-    }
-  } catch (error) {
-    console.error("Error in withdrawal:", error);
-  }
-});
 
+      let amount = parseFloat(document.querySelector("#withdrawamount").value);
+      let note = document.querySelector("#withdrawnote").value;
+      let Wtype = document.querySelector("#SelectWithdraw").value;
+
+      const data = {
+        "date": date,
+        "amount": isNaN(amount) ? 0 : amount,
+        "note": note || "No Note Added!!",
+        "withdrawType": Wtype || "cash"
+      };
+
+      try {
+        const res = await poster('http://127.0.0.1:10000/insert/withdraw/', data);
+        if (res) {
+          if (Wtype === "cash") {
+            const wdata = {
+              "date": date,
+              "amount": -Math.abs(amount),
+              "note": "Withdraw from cash"
+            };
+            await poster('http://127.0.0.1:10000/insert/cash/', wdata);
+          }
+          if (Wtype === "bank") {
+            const wdata = {
+              "date": date,
+              "amount": -Math.abs(amount),
+              "note": "Withdraw from cash"
+            };
+            await poster('http://127.0.0.1:10000/insert/bank/', wdata);
+          }
+        }
+
+        else {
+          console.error("Unexpected response:", res);
+        }
+      } catch (error) {
+        console.error("Error in withdrawal:", error);
+      }
+    });
+
+    document.querySelector("#addcostdata").addEventListener("click", async () => {
+      let date = document.querySelector("#addcostdate").value;
+      if (!date) {
+        date = new Date().toISOString().replace('T', ', ').split('.')[0];
+      }
+
+      let amount = parseFloat(document.querySelector("#costaddamount").value);
+      let note = document.querySelector("#costaddnote").value;
+      let method = document.querySelector("#addcostmethod").value;
+
+      const data = {
+        "date": date,
+        "amount": isNaN(amount) ? 0 : amount,
+        "note": note || "No Note Added!!",
+        "method": method || "cash"
+      };
+
+      try {
+        const res = await poster('http://127.0.0.1:10000/insert/cost/', data);
+
+        if (res) {
+          // Decrease from cash or bank
+          const wdata = {
+            "date": date,
+            "amount": amount ? -Math.abs(amount) : 0.00,
+            "note": "Cost deducted from cash/bank"
+          };
+
+          if (method === "cash") {
+            await poster('http://127.0.0.1:10000/insert/cash/', wdata);
+          } else if (method === "bank") {
+            await poster('http://127.0.0.1:10000/insert/bank/', wdata);
+          }
+
+          // Show success message
+          document.querySelector("#costaddsuccess").textContent = "Cost added successfully!!";
+          document.querySelector("#costaddsuccess").style.color = "green";
+          setTimeout(() => {
+            document.querySelector("#costaddsuccess").textContent = "";
+          }, 2000);
+        } else {
+          console.error("Unexpected response from cost insert:", res);
+        }
+      } catch (error) {
+        console.error("Error in cost insert:", error);
+      }
+    });
+
+
+    document.querySelector("#addselldata").addEventListener("click", async () => {
+      let date = document.querySelector("#selldate").value;
+      if (!date) {
+        date = new Date().toISOString().replace('T', ', ').split('.')[0];
+      }
+
+      let amount = parseFloat(document.querySelector("#totalamountrechived").value);
+      let note = document.querySelector("#sellnote").value;
+      let method = document.querySelector("#sellmethod").value;
+      let buyerName = document.querySelector("#buyername").value;
+      let eachprice = document.querySelector("#eachprice").value;
+      let quantity = document.querySelector("#quantitysell").value;
+      let productList = document.querySelector("#productselect").value;
+      const data = {
+        "method": method || "cash",
+        "productList": productList ? productList : "Not Added",
+        "date": date,
+        "buyerName": buyerName ? buyerName : "Name not added",
+        "note": note || "No sell Detals Added!!",
+        "quantity": quantity ? quantity : 0,
+        "eachprice": eachprice ? eachprice : 0.0,
+        "amount": isNaN(amount) ? 0 : amount,
+
+      };
+
+      try {
+        const res = await poster('http://127.0.0.1:10000/insert/sell/', data);
+
+        if (res) {
+          let checkDue = parseInt(data.amount) - (parseInt(data.quantity) * parseInt(data.eachprice))
+          // console.log(checkDue)
+          let due = false
+          if (checkDue < 0) {
+            due = true
+          }
+          else {
+            due = false
+          }
+          // Decrease from cash or bank
+          const wdata = {
+            "date": date,
+            "amount": amount ? Math.abs(amount) : 0.00,
+            "note": "Cost deducted from cash/bank"
+          };
+          const wdata2 = {
+            "date": date,
+            "amount": due ? parseInt(Math.abs(checkDue)) : 0.00,
+            "note": "Cost deducted from cash/bank"
+          };
+
+          if (method === "cash") {
+            await poster('http://127.0.0.1:10000/insert/cash/', wdata);
+          } else if (method === "bank") {
+            await poster('http://127.0.0.1:10000/insert/bank/', wdata);
+          }
+          if (due) {
+            await poster('http://127.0.0.1:10000/insert/due/', wdata2);
+          }
+
+          // Show success message
+          document.querySelector("#costaddsuccess").textContent = "Cost added successfully!!";
+          document.querySelector("#costaddsuccess").style.color = "green";
+          setTimeout(() => {
+            document.querySelector("#costaddsuccess").textContent = "";
+          }, 2000);
+        } else {
+          console.error("Unexpected response from cost insert:", res);
+        }
+      } catch (error) {
+        console.error("Error in cost insert:", error);
+      }
+    });
 
 
 
