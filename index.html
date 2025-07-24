@@ -358,7 +358,7 @@
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"> Add</button>
           <button id="canceladdbankpopup" class="button"
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
-            Cancel</button>
+            Back</button>
         </div>
         </span>
         <div><button id="histbank" style="height: 15px;width: 30px; font-size: 9px;">hist</button></div>
@@ -387,7 +387,7 @@
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"> Add</button>
           <button id="addincashcancelpopup" class="button"
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
-            Cancel</button>
+            Back</button>
         </div>
         </span>
         <div><button id="histcash" style="height: 15px;width: 30px; font-size: 9px;">hist</button></div>
@@ -423,7 +423,7 @@
             Withdraw</button>
           <button id="withdrawpopupcancel" class="button"
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
-            Cancel</button>
+            Back</button>
         </div>
         </span>
         <div><button id="histwithdraw" style="height: 15px;width: 30px; font-size: 9px;">hist</button></div>
@@ -452,7 +452,7 @@
             id="productaddlistbtn"> Add</button>
           <button id="newproductcencel" class="button"
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
-            Cancel</button>
+            Back</button>
         </div>
         </span>
 
@@ -489,7 +489,7 @@
         <div style="display: flex; gap:50px; padding-top:10px ;">
           <button id="historycencel" class="button"
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
-            Cancel</button>
+            Back</button>
         </div>
         </span>
 
@@ -548,7 +548,7 @@
     <div style="display: flex;">
       <div id="addselldata" style="margin: 10px;" class="statement-btn"> Add
       </div>
-      <div id="addsellpagecancel" style="margin: 10px; background-color: red;" class="statement-btn"> Cancel
+      <div id="addsellpagecancel" style="margin: 10px; background-color: red;" class="statement-btn"> Back
       </div>
     </div>
     <hr>
@@ -595,7 +595,7 @@
       <hr>
       <div style="display: flex; align-items: center; width: 100%; justify-content: space-around;">
         <div><button id="addnewproduct" class="statement-btn" style="width: 30vw;">Add New Product</button></div>
-        <div><button id="totalproductbackbtn" style="width: 30vw;" class="statement-btn">Cancel</button></div>
+        <div><button id="totalproductbackbtn" style="width: 30vw;" class="statement-btn">Back</button></div>
       </div>
       <hr>
       <div id="costHistory" class="costhistory" style="height: 50vh;">
@@ -637,7 +637,7 @@
     <div style="display: flex;">
       <div id="addduedata" style="margin: 10px;" class="statement-btn"> Add
       </div>
-      <div style="margin: 10px;" class="statement-btn" id="addduepagecancel"> Cancel
+      <div style="margin: 10px;" class="statement-btn" id="addduepagecancel"> Back
       </div>
     </div>
     <hr>
@@ -693,7 +693,7 @@
     <div style="display: flex;">
       <div id="notedataaddbtn" style="margin: 10px;" class="statement-btn"> Add
       </div>
-      <div id="notepagecancelbtn" style="margin: 10px;" class="statement-btn"> Cancel
+      <div id="notepagecancelbtn" style="margin: 10px;" class="statement-btn"> Back
       </div>
     </div>
     <hr>
@@ -734,7 +734,7 @@
     <div style="display: flex;">
       <div style="margin: 10px;" class="statement-btn"> Save Setting
       </div>
-      <div id="settingpagecancelbtn" style="margin: 10px;" class="statement-btn"> Cancel
+      <div id="settingpagecancelbtn" style="margin: 10px;" class="statement-btn"> Back
       </div>
     </div>
 
@@ -774,7 +774,7 @@
     <div style="display: flex;">
       <div id="addcostdata" style="margin: 10px;" class="statement-btn"> Add
       </div>
-      <div style="margin: 10px;" class="statement-btn" id="addcostpagecancel"> Cancel
+      <div style="margin: 10px;" class="statement-btn" id="addcostpagecancel"> Back
       </div>
     </div>
     <div id="costaddsuccess"></div>
@@ -924,7 +924,7 @@
         `
       b.appendChild(loader2)
 
-      fetcher("http://127.0.0.1:10000/data/bank/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/bank/")
         .then(data => {
           loader2.style.display = "none"
           totalAmount = 0
@@ -958,7 +958,7 @@
         `
       b.appendChild(loader2)
 
-      fetcher("http://127.0.0.1:10000/data/cash/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/cash/")
         .then(data => {
           loader2.style.display = "none"
           totalAmount = 0
@@ -991,7 +991,7 @@
         `
       b.appendChild(loader2)
 
-      fetcher("http://127.0.0.1:10000/data/withdraw/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/withdraw/")
         .then(data => {
           loader2.style.display = "none"
           totalAmount = 0
@@ -1014,7 +1014,7 @@
 
     document.querySelector("#totalSell").addEventListener("click", () => {
       total = 0
-      fetcher('http://127.0.0.1:10000/data/sell/')
+      fetcher('https://agroserver-mdz5.onrender.com/data/sell/')
         .then((data) => {
           data.forEach(d => {
             // console.log(d.amount)
@@ -1029,7 +1029,7 @@
     })
     document.querySelector("#totalcost").addEventListener("click", () => {
       total = 0
-      fetcher('http://127.0.0.1:10000/data/cost/')
+      fetcher('https://agroserver-mdz5.onrender.com/data/cost/')
         .then((data) => {
           data.forEach(d => {
             total += parseInt(d.amount)
@@ -1042,7 +1042,7 @@
     })
     document.querySelector("#totalDue").addEventListener("click", () => {
       total = 0
-      fetcher('http://127.0.0.1:10000/data/due/')
+      fetcher('https://agroserver-mdz5.onrender.com/data/due/')
         .then((data) => {
           data.forEach(d => {
             // console.log(d.amount)
@@ -1058,7 +1058,7 @@
     document.querySelector("#addcostbtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "none"
       document.querySelector("#addcostpage").style.display = "flex"
-      fetcher("http://127.0.0.1:10000/data/cost/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/cost/")
         .then(data => {
           totalcost = 0
           data.forEach((d) => {
@@ -1077,7 +1077,7 @@
           document.querySelector("#refreshbtn").addEventListener("click", () => {
             // console.log("clicked 2")
             document.querySelector("#totalcost2").textContent = "loading.."
-            fetcher("http://127.0.0.1:10000/data/cost/")
+            fetcher("https://agroserver-mdz5.onrender.com/data/cost/")
               .then(data => {
                 totalcost2 = 0
                 data.forEach(d => {
@@ -1110,7 +1110,7 @@
       document.querySelector("#homepage").style.display = "none"
       document.querySelector("#addsellpage").style.display = "flex"
       totalSell = 0
-      fetcher("http://127.0.0.1:10000/data/sell/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/sell/")
         .then((data) => {
           document.querySelector("#totalsellhappened").textContent = "loading.."
           // console.log(data)
@@ -1130,7 +1130,7 @@
           })
 
         })
-      fetcher("http://127.0.0.1:10000/data/products/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/products/")
         .then((data) => {
           selection = document.querySelector("#productselect")
           data.forEach((d) => {
@@ -1153,7 +1153,7 @@
       document.querySelector("#homepage").style.display = "none";
       document.querySelector("#totalproductpage").style.display = "flex";
 
-      fetcher("http://127.0.0.1:10000/data/products/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/products/")
         .then((data) => {
           let tablebody = document.querySelector("#productlisttable");
           tablebody.innerHTML = ""; // clear old rows if any
@@ -1188,7 +1188,7 @@
       <div style="display: flex; justify-content: center; align-items: center;">
         <input type="number" placeholder="Enter" value="${d.amount}" id="newAmount-${d._id}">
         <button id="save-${d._id}">Save</button>
-        <button id="cancel-${d._id}">Cancel</button>
+        <button id="cancel-${d._id}">Back</button>
       </div>
     `;
 
@@ -1196,7 +1196,7 @@
         document.querySelector(`#save-${d._id}`).addEventListener("click", () => {
           const newAmount = document.querySelector(`#newAmount-${d._id}`).value;
           console.log(newAmount)
-          poster(`http://127.0.0.1:10000/edit/products/`, { "id" : d._id ,amount: newAmount ? Number(newAmount) : 0 })
+          poster(`https://agroserver-mdz5.onrender.com/edit/products/`, { "id" : d._id ,amount: newAmount ? Number(newAmount) : 0 })
             .then(() => {
               // location.reload()
               document.querySelector("#totalproductbtn").click()
@@ -1226,7 +1226,7 @@
       document.querySelector("#addduepage").style.display = "flex"
       document.querySelector("#totalsuespan").textContent = "loading.."
       totalDue = 0
-      fetcher('http://127.0.0.1:10000/data/due/')
+      fetcher('https://agroserver-mdz5.onrender.com/data/due/')
         .then((data) => {
           data.forEach(d => {
             // console.log(d.amount)
@@ -1261,7 +1261,7 @@
     document.querySelector("#notebtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "none"
       document.querySelector("#notepage").style.display = "flex"
-      fetcher('http://127.0.0.1:10000/data/note/')
+      fetcher('https://agroserver-mdz5.onrender.com/data/note/')
         .then((data) => {
           data.forEach(d => {
             // console.log(d)
@@ -1324,7 +1324,7 @@
       b.style.display = "block"
       b.appendChild(loader)
 
-      fetcher("http://127.0.0.1:10000/data/bank/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/bank/")
         .then(data => {
 
           // console.log(data)
@@ -1352,7 +1352,7 @@
       b.style.display = "block"
       b.appendChild(loader)
 
-      fetcher("http://127.0.0.1:10000/data/cash/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/cash/")
         .then(data => {
 
           // console.log(data)
@@ -1378,7 +1378,7 @@
       b.style.display = "block"
       b.appendChild(loader)
 
-      fetcher("http://127.0.0.1:10000/data/withdraw/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/withdraw/")
         .then(data => {
 
           // console.log(data)
@@ -1429,7 +1429,7 @@
         "amount": amount ? amount : 0,
         "note": note ? note : "No Note Added!!"
       }
-      poster('http://127.0.0.1:10000/insert/bank/', data)
+      poster('https://agroserver-mdz5.onrender.com/insert/bank/', data)
     })
 
     document.querySelector("#addcashdata").addEventListener("click", () => {
@@ -1444,7 +1444,7 @@
         "amount": amount ? amount : 0,
         "note": note ? note : "No Note Added!!"
       }
-      poster('http://127.0.0.1:10000/insert/cash/', data)
+      poster('https://agroserver-mdz5.onrender.com/insert/cash/', data)
     })
 
     document.querySelector("#addWithdraw").addEventListener("click", async () => {
@@ -1465,7 +1465,7 @@
       };
 
       try {
-        const res = await poster('http://127.0.0.1:10000/insert/withdraw/', data);
+        const res = await poster('https://agroserver-mdz5.onrender.com/insert/withdraw/', data);
         if (res) {
           if (Wtype === "cash") {
             const wdata = {
@@ -1473,7 +1473,7 @@
               "amount": -Math.abs(amount),
               "note": "Withdraw from cash"
             };
-            await poster('http://127.0.0.1:10000/insert/cash/', wdata);
+            await poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
           }
           if (Wtype === "bank") {
             const wdata = {
@@ -1481,7 +1481,7 @@
               "amount": -Math.abs(amount),
               "note": "Withdraw from cash"
             };
-            await poster('http://127.0.0.1:10000/insert/bank/', wdata);
+            await poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
           }
         }
 
@@ -1511,7 +1511,7 @@
       };
 
       try {
-        const res = await poster('http://127.0.0.1:10000/insert/cost/', data);
+        const res = await poster('https://agroserver-mdz5.onrender.com/insert/cost/', data);
 
         if (res) {
           // Decrease from cash or bank
@@ -1522,9 +1522,9 @@
           };
 
           if (method === "cash") {
-            await poster('http://127.0.0.1:10000/insert/cash/', wdata);
+            await poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
           } else if (method === "bank") {
-            await poster('http://127.0.0.1:10000/insert/bank/', wdata);
+            await poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
           }
 
           // Show success message
@@ -1569,10 +1569,10 @@
       };
 
       try {
-        const res = await poster('http://127.0.0.1:10000/insert/sell/', data);
+        const res = await poster('https://agroserver-mdz5.onrender.com/insert/sell/', data);
         totalDue = 0
         document.querySelector("#totalsellhappened").textContent = "loading.."
-        fetcher('http://127.0.0.1:10000/data/sell/')
+        fetcher('https://agroserver-mdz5.onrender.com/data/sell/')
           .then((data) => {
             data.forEach(d => {
               // console.log(d.amount)
@@ -1604,13 +1604,13 @@
           };
 
           if (method === "cash") {
-            await poster('http://127.0.0.1:10000/insert/cash/', wdata);
+            await poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
           } else if (method === "bank") {
-            await poster('http://127.0.0.1:10000/insert/bank/', wdata);
+            await poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
           }
           if (due && !checkbox.checked) {
             console.log(due, " ", checkbox.checked)
-            await poster('http://127.0.0.1:10000/insert/due/', wdata2);
+            await poster('https://agroserver-mdz5.onrender.com/insert/due/', wdata2);
           }
 
           // Show success message
@@ -1639,7 +1639,7 @@
         "amount": quanity ? parseInt(quanity) : 0,
         "note": name ? name : "Annonymous Product"
       }
-      poster('http://127.0.0.1:10000/insert/products/', data)
+      poster('https://agroserver-mdz5.onrender.com/insert/products/', data)
     })
 
     document.querySelector("#addduedata").addEventListener("click", () => {
@@ -1654,10 +1654,10 @@
         "note": note ? note : "You didn't added a Name, should have",
         "amount": amount ? parseInt(amount) : 0
       }
-      poster('http://127.0.0.1:10000/insert/due/', data)
+      poster('https://agroserver-mdz5.onrender.com/insert/due/', data)
         .then(() => {
           totalDue = 0
-          fetcher('http://127.0.0.1:10000/data/due/')
+          fetcher('https://agroserver-mdz5.onrender.com/data/due/')
             .then((data) => {
               data.forEach(d => {
                 // console.log(d.amount)
@@ -1681,10 +1681,10 @@
         "title": title ? title : "No Title added",
         "note": note ? note : "You didn't added a Name, should have",
       }
-      poster('http://127.0.0.1:10000/insert/note/', data)
+      poster('https://agroserver-mdz5.onrender.com/insert/note/', data)
         .then(() => {
           document.querySelector("#notepadtablebody").innerHTML = ``
-          fetcher('http://127.0.0.1:10000/data/note/')
+          fetcher('https://agroserver-mdz5.onrender.com/data/note/')
             .then((data) => {
               data.forEach(d => {
                 // console.log(d.amount)
