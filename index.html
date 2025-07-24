@@ -1195,8 +1195,8 @@
         document.querySelector(`#save-${d._id}`).addEventListener("click", () => {
           const newAmount = document.querySelector(`#newAmount-${d._id}`).value;
           console.log(newAmount)
-          // editor(`https://agroserver-mdz5.onrender.com/edit/products/${d._id}`, { amount: newAmount ? Number(newAmount) : 0 })
-          //   .then(() => location.reload());
+          editor(`https://agroserver-mdz5.onrender.com/edit/products/${d._id}`, { amount: newAmount ? Number(newAmount) : 0 })
+            .then(() => location.reload());
         });
 
         // Cancel
