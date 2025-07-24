@@ -54,6 +54,21 @@
 
     }
 
+    .productpagetable {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+    }
+
+    .productpagetable td:nth-child(2) {
+      width: 150px;
+      display: flex;
+      gap: 5px;
+      justify-content: space-around;
+      align-items: center;
+    }
+
     /* LOGIN STYLES */
     .login-container {
       display: flex;
@@ -423,17 +438,18 @@
       <div style="display: flex; flex-direction:  column; gap: 10px; justify-content: center; align-items: center;">
         <span>
           Product Name:
-          <input type="text" placeholder="Name">
+          <input id="productname" type="text" placeholder="Name">
         </span>
         <span style="display:  flex;"> Quantity:
-          <input type="number" name="bankAmount" id="bankamount" placeholder="0.00">
+          <input type="number" name="bankAmount" id="procutquantity" placeholder="0.00">
         </span>
         </span>
         <span>
         </span>
         <div style="display: flex; gap:50px; padding-top:10px ;">
           <button class="button"
-            style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"> Add</button>
+            style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"
+            id="productaddlistbtn"> Add</button>
           <button id="newproductcencel" class="button"
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
             Cancel</button>
@@ -481,6 +497,7 @@
     </div>
   </div>
 
+
   <!-- ADD PAGES SECTION -->
   <!-- add sell page -->
   <div id="addsellpage" style="display: none; flex-direction: column; justify-content: center; align-items: center;">
@@ -500,9 +517,6 @@
       </select>
       <span>select product</span>
       <select name="cashBank" id="productselect">
-        <option value="Cash">list 1</option>
-        <option value="Cash">product 2</option>
-        <option value="Cash">product 3</option>
       </select>
     </div>
     <div>
@@ -527,6 +541,10 @@
     <div> Total Amount
       <input id="totalamountrechived" type="number" placeholder="0.00" style="background-color: white; padding: 5px;">
     </div>
+    <div style="display: flex; justify-content: center; align-items: center; font-size: 14px; margin: 5px;">
+      <span>Discounted?</span>
+      <input type="checkbox" name="choice" id="discountedCheck" value="yes" style="height: 20px; width: 20px;">
+    </div>
     <div style="display: flex;">
       <div id="addselldata" style="margin: 10px;" class="statement-btn"> Add
       </div>
@@ -539,7 +557,7 @@
         style=" background-color: rgb(189, 189, 189); width: 100vw; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
         <div style="display: flex; justify-content: space-evenly;">
           <span>Total Sell</span>
-          <span>5000</span>
+          <span id="totalsellhappened">0.00</span>
         </div>
       </div>
       <div id="costHistory" class="costhistory">
@@ -549,6 +567,8 @@
               <tr style="">
                 <td>Date</td>
                 <td>Detials</td>
+                <td>Buyer</td>
+                <td>Product</td>
                 <td>Amount</td>
               </tr>
             </thead>
@@ -564,7 +584,8 @@
 
   <!-- Total product page -->
   <div id="totalproductpage" style="display: none;">
-    <div class="addPages" style="font-weight: 800; font-size: 20px">
+    <div class="addPages"
+      style="width: 98vw; font-weight: 800; font-size: 20px; display: flex; justify-content: center; flex-direction: column;">
       <div
         style=" background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
         <div style="display: flex; justify-content: space-evenly;">
@@ -577,17 +598,15 @@
         <div><button id="totalproductbackbtn" style="width: 30vw;" class="statement-btn">Cancel</button></div>
       </div>
       <hr>
-      <div id="costHistory" class="costhistory">
+      <div id="costHistory" class="costhistory" style="height: 50vh;">
         <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-          <div style="display:  flex; justify-content: space-evenly;">
+          <div style="display:  flex; justify-content: space-evenly; width: 48vw;">
             <span style="width: 80vw; ">Product Name</span>
             <span>Quantity</span>
           </div>
-          <table style="width: 100%; height: 60vh;">
-            <tr style=" padding: 3px; display: flex; justify-content: space-between; width: 100%; align-items: center;">
-              <td style="padding: 5px; width: 80%;"> en, faumi, egg, egg2 egg3 </td>
-              <td style="padding: 5px;">200</td>
-            </tr>
+          <table style="width: 50vw; height: 60vh;">
+            <tbody id="productlisttable">
+            </tbody>
           </table>
         </div>
       </div>
@@ -605,44 +624,44 @@
 
     <div>
       <div> Date:
-        <input type="date" style="background-color: white; padding: 3px;">
+        <input id="addduedate" type="date" style="background-color: white; padding: 3px;">
       </div>
     </div>
     <div style="margin: 10px; display: flex; align-items: center; gap: 15px;"> <span>Details</span>
-      <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="costAddNote"
+      <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="addduenote"
         placeholder="Add Detils/Name" cols="15" rows="3"></textarea>
     </div>
     <div> Ttoal Amount
-      <input type="number" placeholder="0.00" style="background-color: white; padding: 5px;">
+      <input id="adddueamount" type="number" placeholder="0.00" style="background-color: white; padding: 5px;">
     </div>
     <div style="display: flex;">
-      <div style="margin: 10px;" class="statement-btn"> Add
+      <div id="addduedata" style="margin: 10px;" class="statement-btn"> Add
       </div>
       <div style="margin: 10px;" class="statement-btn" id="addduepagecancel"> Cancel
       </div>
     </div>
     <hr>
-    <div class="addPages" style="font-weight: 800; font-size: 20px">
+    <div class="addPages" style="font-weight: 800; width: 99vw; font-size: 20px">
       <div
         style=" background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
         <div style="display: flex; justify-content: space-evenly;">
           <span>Total Due</span>
-          <span style="color: red;">500 </span>
+          <span style="color: red;" id="totalsuespan">500 </span>
         </div>
       </div>
-      <div id="costHistory" class="costhistory">
-        <div>
-          <table style="">
-            <tr style="">
-              <td>Date</td>
-              <td>Detials</td>
-              <td>Amount</td>
-            </tr>
-            <tr style="border: 10px solid black; padding: 10px;">
-              <td style="width: 85px; overflow-x: scroll; ">10-02-25</td>
-              <td>Lorem ipsum dolor sit amet consectetur adipisici corrupti.</td>
-              <td>500 <button>✏️</button></td>
-            </tr>
+      <div id="costHistory" class="costhistory"
+        style="width: 99vw; display: flex; justify-content: center; align-items: center;">
+        <div
+          style="width: 96vw; display: flex; justify-content: center; align-items: center;height:45vh; position: relative;">
+          <table style="width: 90vw; margin-top: 15px; position: absolute;top: 2%;">
+            <thead>
+              <tr style="">
+                <td>Date</td>
+                <td>Detials</td>
+                <td>Amount</td>
+              </tr>
+            </thead>
+            <tbody id="addduetable" style=""></tbody>
           </table>
         </div>
       </div>
@@ -660,19 +679,19 @@
 
     <div>
       <div> Date:
-        <input type="date" style="background-color: white; padding: 3px;">
+        <input id="notepadDate" type="date" style="background-color: white; padding: 3px;">
       </div>
       <div style="margin-top: 10px;"> Title:
-        <input type="text" style="background-color: white; padding: 3px;" placeholder="add a title">
+        <input id="notepadtitle" type="text" style="background-color: white; padding: 3px;" placeholder="add a title">
       </div>
     </div>
     <div style="margin: 10px; display: flex; align-items: center; gap: 15px;"> <span>Details</span>
-      <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="costAddNote"
+      <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="notepadnote"
         placeholder="Add Detils note" cols="15" rows="3"></textarea>
     </div>
 
     <div style="display: flex;">
-      <div style="margin: 10px;" class="statement-btn"> Add
+      <div id="notedataaddbtn" style="margin: 10px;" class="statement-btn"> Add
       </div>
       <div id="notepagecancelbtn" style="margin: 10px;" class="statement-btn"> Cancel
       </div>
@@ -685,20 +704,18 @@
           <span>Note List</span>
         </div>
       </div>
-      <div id="NoteHistory" class="costhistory">
+      <div id="NoteHistory" class="costhistory" style="display: flex; width: 98vw; height: 40vh;">
         <div>
           <!-- Todo/// add note title system -->
-          <table style="">
-            <tr style="">
-              <td>Date</td>
-              <td>Details</td>
-            </tr>
-            <tr style="border: 10px solid black; padding: 10px;">
-              <td style="width: 85px; overflow-x: scroll; ">10-02-25</td>
-              <td>Lorem ipsum dolor sit amet consectetur adipisici corrupti.lore Lorem ipsum dolor sit amet consectetur
-                adipisicing elit. Sunt veniam porro accusamus tenetur voluptas maiores temporibus quos exercitationem ea
-                molestias nihil, at mollitia expedita ullam, enim dicta soluta placeat illum!</td>
-            </tr>
+          <table style="width: 100%;">
+            <thead>
+              <tr style="">
+                <td>Date</td>
+                <td>title</td>
+                <td>Details</td>
+              </tr>
+            </thead>
+            <tbody id="notepadtablebody"></tbody>
           </table>
         </div>
       </div>
@@ -793,6 +810,13 @@
   <!-- SCRIPT -->
   <script>
 
+    // windows dom loaded funciton
+    window.addEventListener("DOMContentLoaded", () => {
+      console.log("paged loaded")
+    })
+
+
+
     function login(e) {
       e.preventDefault();
       const pwd = document.getElementById('password').value;
@@ -851,6 +875,26 @@
         });
     }
 
+    function editor(route, data) {
+      return fetch(route, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .catch(error => {
+          console.error("Error in PUT request:", error);
+          throw error;
+        });
+    }
+
 
     loader = document.createElement("div")
     loader.setAttribute("id", "loading")
@@ -861,14 +905,11 @@
             </div>
         `
 
-
-
     document.querySelector("#logoutbtn").addEventListener("click", () => {
       document.querySelector("#login-section").style.display = "block"
       document.querySelector("#home-section").style.display = "none"
       document.getElementById('password').value = "";
     })
-
 
     document.querySelector("#totalbank").addEventListener("click", () => {
       let b = document.querySelector("#totalbankspan")
@@ -882,7 +923,7 @@
         `
       b.appendChild(loader2)
 
-      fetcher("http://127.0.0.1:10000/data/bank/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/bank/")
         .then(data => {
           loader2.style.display = "none"
           totalAmount = 0
@@ -916,7 +957,7 @@
         `
       b.appendChild(loader2)
 
-      fetcher("http://127.0.0.1:10000/data/cash/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/cash/")
         .then(data => {
           loader2.style.display = "none"
           totalAmount = 0
@@ -949,7 +990,7 @@
         `
       b.appendChild(loader2)
 
-      fetcher("http://127.0.0.1:10000/data/withdraw/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/withdraw/")
         .then(data => {
           loader2.style.display = "none"
           totalAmount = 0
@@ -971,19 +1012,43 @@
     })
 
     document.querySelector("#totalSell").addEventListener("click", () => {
-      document.querySelector("#totalSell span").textContent = "5000.542"
+      total = 0
+      fetcher('https://agroserver-mdz5.onrender.com/data/sell/')
+        .then((data) => {
+          data.forEach(d => {
+            // console.log(d.amount)
+            total += parseInt(d.amount)
+          })
+          // alert(total)
+          document.querySelector("#totalSell span").textContent = total
+        })
       setTimeout(() => {
         document.querySelector("#totalSell span").textContent = "Total Sell"
       }, 2000);
     })
     document.querySelector("#totalcost").addEventListener("click", () => {
-      document.querySelector("#totalcost span").textContent = "5000.542"
+      total = 0
+      fetcher('https://agroserver-mdz5.onrender.com/data/cost/')
+        .then((data) => {
+          data.forEach(d => {
+            total += parseInt(d.amount)
+          })
+          document.querySelector("#totalcost span").textContent = total
+        })
       setTimeout(() => {
         document.querySelector("#totalcost span").textContent = "Total cost"
       }, 2000);
     })
     document.querySelector("#totalDue").addEventListener("click", () => {
-      document.querySelector("#totalDue span").textContent = "5000.542"
+      total = 0
+      fetcher('https://agroserver-mdz5.onrender.com/data/due/')
+        .then((data) => {
+          data.forEach(d => {
+            // console.log(d.amount)
+            total += parseInt(d.amount)
+          })
+          document.querySelector("#totalDue span").textContent = total
+        })
       setTimeout(() => {
         document.querySelector("#totalDue span").textContent = "Total Due"
       }, 2000);
@@ -992,7 +1057,7 @@
     document.querySelector("#addcostbtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "none"
       document.querySelector("#addcostpage").style.display = "flex"
-      fetcher("http://127.0.0.1:10000/data/cost/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/cost/")
         .then(data => {
           totalcost = 0
           data.forEach((d) => {
@@ -1011,7 +1076,7 @@
           document.querySelector("#refreshbtn").addEventListener("click", () => {
             // console.log("clicked 2")
             document.querySelector("#totalcost2").textContent = "loading.."
-            fetcher("http://127.0.0.1:10000/data/cost/")
+            fetcher("https://agroserver-mdz5.onrender.com/data/cost/")
               .then(data => {
                 totalcost2 = 0
                 data.forEach(d => {
@@ -1037,48 +1102,146 @@
     document.querySelector("#addcostpagecancel").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "block"
       document.querySelector("#addcostpage").style.display = "none"
+      document.querySelector("#costtablebody").innerHTML = ``
     })
 
     document.querySelector("#addsellbtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "none"
       document.querySelector("#addsellpage").style.display = "flex"
-      fetcher("http://127.0.0.1:10000/data/sell/")
-      .then((data)=>{
-        // console.log(data)
-        data.forEach((d)=>{
-          let table = document.querySelector("#tablesell")
-          let rows = document.createElement("tr")
-          rows.innerHTML = `
-                    <td style="width: 85px; overflow-x: scroll; ">${d.date}</td>
-                    <td>${d.note}</td>
-                    <td>${d.amount}</td>
+      totalSell = 0
+      fetcher("https://agroserver-mdz5.onrender.com/data/sell/")
+        .then((data) => {
+          document.querySelector("#totalsellhappened").textContent = "loading.."
+          // console.log(data)
+          data.forEach((d) => {
+            totalSell += parseInt(d.amount)
+            let table = document.querySelector("#tablesell")
+            let rows = document.createElement("tr")
+            rows.innerHTML = `
+          <td style="width: 85px; overflow-x: scroll; ">${d.date}</td>
+          <td>${d.note}</td>
+          <td>${d.buyerName}</td>
+          <td>${d.productList}</td>
+          <td>${d.amount}</td>
           `
-          table.appendChild(rows)
+            table.appendChild(rows)
+            document.querySelector("#totalsellhappened").textContent = totalSell
+          })
+
+        })
+      fetcher("https://agroserver-mdz5.onrender.com/data/products/")
+        .then((data) => {
+          selection = document.querySelector("#productselect")
+          data.forEach((d) => {
+            opt = document.createElement("option")
+            opt.innerHTML = `
+          <option value="${d.note}">${d.note}</option>
+          `
+            selection.appendChild(opt)
+          })
         })
 
-      })
     })
     document.querySelector("#addsellpagecancel").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "block"
       document.querySelector("#addsellpage").style.display = "none"
+      document.querySelector("#tablesell").innerHTML = ``
     })
 
     document.querySelector("#totalproductbtn").addEventListener("click", () => {
-      document.querySelector("#homepage").style.display = "none"
-      document.querySelector("#totalproductpage").style.display = "flex"
-    })
+      document.querySelector("#homepage").style.display = "none";
+      document.querySelector("#totalproductpage").style.display = "flex";
+
+      fetcher("https://agroserver-mdz5.onrender.com/data/products/")
+        .then((data) => {
+          let tablebody = document.querySelector("#productlisttable");
+          tablebody.innerHTML = ""; // clear old rows if any
+
+          data.forEach(d => {
+            const row = document.createElement("tr");
+            row.classList.add("productpagetable");
+
+            row.innerHTML = `
+          <td style="padding: 5px; width: 80%;">${d.note}</td>
+          <td style="padding: 5px;">
+            <span id="amount-${d._id}">
+              ${d.amount}
+              <button id="btn-${d._id}">edit</button>
+            </span>
+          </td>
+        `;
+
+            tablebody.appendChild(row);
+
+            bindEditButton(d); // bind edit logic per row
+          });
+        });
+    });
+
+    function bindEditButton(d) {
+      const editBtn = document.querySelector(`#btn-${d._id}`);
+      const amountSpan = document.querySelector(`#amount-${d._id}`);
+
+      editBtn.addEventListener("click", () => {
+        amountSpan.innerHTML = `
+      <div style="display: flex; justify-content: center; align-items: center;">
+        <input type="number" placeholder="Enter" value="${d.amount}" id="newAmount-${d._id}">
+        <button id="save-${d._id}">Save</button>
+        <button id="cancel-${d._id}">Cancel</button>
+      </div>
+    `;
+
+        // Save
+        document.querySelector(`#save-${d._id}`).addEventListener("click", () => {
+          const newAmount = document.querySelector(`#newAmount-${d._id}`).value;
+          console.log(newAmount)
+          // editor(`https://agroserver-mdz5.onrender.com/edit/products/${d._id}`, { amount: newAmount ? Number(newAmount) : 0 })
+          //   .then(() => location.reload());
+        });
+
+        // Cancel
+        document.querySelector(`#cancel-${d._id}`).addEventListener("click", () => {
+          amountSpan.innerHTML = `
+        ${d.amount}
+        <button id="btn-${d._id}">edit</button>
+      `;
+          bindEditButton(d); // Re-bind the edit button again after cancel
+        });
+      });
+    }
+
     document.querySelector("#totalproductbackbtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "block"
       document.querySelector("#totalproductpage").style.display = "none"
+      document.querySelector("#productlisttable").innerHTML = ``
     })
 
     document.querySelector("#addduebtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "none"
       document.querySelector("#addduepage").style.display = "flex"
+      document.querySelector("#totalsuespan").textContent = "loading.."
+      totalDue = 0
+      fetcher('https://agroserver-mdz5.onrender.com/data/due/')
+        .then((data) => {
+          data.forEach(d => {
+            // console.log(d.amount)
+            totalDue += parseInt(d.amount)
+            rows = document.createElement("tr")
+            rows.innerHTML = `
+              <td style="overflow: auto; ">${d.date}</td>
+              <td style="overflow: scroll; ">${d.note}</td>
+              <td style="display:flex; justify-content:space-around;align-items:center; ">${d.amount} <button id="dueeditbtn">✏️</button></td>
+            `
+            document.querySelector("#addduetable").appendChild(rows)
+          })
+          document.querySelector("#totalsuespan").textContent = totalDue
+        })
     })
     document.querySelector("#addduepagecancel").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "block"
       document.querySelector("#addduepage").style.display = "none"
+      document.querySelector("#addduetable").innerHTML = ``
+
     })
 
     document.querySelector("#settingbtn").addEventListener("click", () => {
@@ -1093,10 +1256,25 @@
     document.querySelector("#notebtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "none"
       document.querySelector("#notepage").style.display = "flex"
+      fetcher('https://agroserver-mdz5.onrender.com/data/note/')
+        .then((data) => {
+          data.forEach(d => {
+            // console.log(d)
+            let parent = document.querySelector("#notepadtablebody")
+            let rows = document.createElement("tr")
+            rows.innerHTML = `
+                <td style="width:150px;">${d.date}</td>
+                <td style="width:250px;">${d.title}</td>
+                <td style="display:flex;justify-content:space-between; align-items:center;">${d.note} <button>edit</button> </td>
+                `
+            parent.appendChild(rows)
+          })
+        })
     })
     document.querySelector("#notepagecancelbtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "block"
       document.querySelector("#notepage").style.display = "none"
+      document.querySelector("#notepadtablebody").innerHTML = ``
     })
 
     document.querySelector("#addnewproduct").addEventListener("click", () => {
@@ -1141,7 +1319,7 @@
       b.style.display = "block"
       b.appendChild(loader)
 
-      fetcher("http://127.0.0.1:10000/data/bank/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/bank/")
         .then(data => {
 
           // console.log(data)
@@ -1169,7 +1347,7 @@
       b.style.display = "block"
       b.appendChild(loader)
 
-      fetcher("http://127.0.0.1:10000/data/cash/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/cash/")
         .then(data => {
 
           // console.log(data)
@@ -1195,7 +1373,7 @@
       b.style.display = "block"
       b.appendChild(loader)
 
-      fetcher("http://127.0.0.1:10000/data/withdraw/")
+      fetcher("https://agroserver-mdz5.onrender.com/data/withdraw/")
         .then(data => {
 
           // console.log(data)
@@ -1232,12 +1410,7 @@
 
 
 
-
     // server codes
-
-
-
-
 
     document.querySelector("#addbankdata").addEventListener("click", () => {
       let date = document.querySelector("#bankdate").value;
@@ -1251,7 +1424,7 @@
         "amount": amount ? amount : 0,
         "note": note ? note : "No Note Added!!"
       }
-      poster('http://127.0.0.1:10000/insert/bank/', data)
+      poster('https://agroserver-mdz5.onrender.com/insert/bank/', data)
     })
 
     document.querySelector("#addcashdata").addEventListener("click", () => {
@@ -1266,7 +1439,7 @@
         "amount": amount ? amount : 0,
         "note": note ? note : "No Note Added!!"
       }
-      poster('http://127.0.0.1:10000/insert/cash/', data)
+      poster('https://agroserver-mdz5.onrender.com/insert/cash/', data)
     })
 
     document.querySelector("#addWithdraw").addEventListener("click", async () => {
@@ -1287,7 +1460,7 @@
       };
 
       try {
-        const res = await poster('http://127.0.0.1:10000/insert/withdraw/', data);
+        const res = await poster('https://agroserver-mdz5.onrender.com/insert/withdraw/', data);
         if (res) {
           if (Wtype === "cash") {
             const wdata = {
@@ -1295,7 +1468,7 @@
               "amount": -Math.abs(amount),
               "note": "Withdraw from cash"
             };
-            await poster('http://127.0.0.1:10000/insert/cash/', wdata);
+            await poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
           }
           if (Wtype === "bank") {
             const wdata = {
@@ -1303,7 +1476,7 @@
               "amount": -Math.abs(amount),
               "note": "Withdraw from cash"
             };
-            await poster('http://127.0.0.1:10000/insert/bank/', wdata);
+            await poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
           }
         }
 
@@ -1333,7 +1506,7 @@
       };
 
       try {
-        const res = await poster('http://127.0.0.1:10000/insert/cost/', data);
+        const res = await poster('https://agroserver-mdz5.onrender.com/insert/cost/', data);
 
         if (res) {
           // Decrease from cash or bank
@@ -1344,9 +1517,9 @@
           };
 
           if (method === "cash") {
-            await poster('http://127.0.0.1:10000/insert/cash/', wdata);
+            await poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
           } else if (method === "bank") {
-            await poster('http://127.0.0.1:10000/insert/bank/', wdata);
+            await poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
           }
 
           // Show success message
@@ -1365,6 +1538,7 @@
 
 
     document.querySelector("#addselldata").addEventListener("click", async () => {
+      let checkbox = document.querySelector("#discountedCheck")
       let date = document.querySelector("#selldate").value;
       if (!date) {
         date = new Date().toISOString().replace('T', ', ').split('.')[0];
@@ -1390,7 +1564,17 @@
       };
 
       try {
-        const res = await poster('http://127.0.0.1:10000/insert/sell/', data);
+        const res = await poster('https://agroserver-mdz5.onrender.com/insert/sell/', data);
+        totalDue = 0
+        document.querySelector("#totalsellhappened").textContent = "loading.."
+        fetcher('https://agroserver-mdz5.onrender.com/data/sell/')
+          .then((data) => {
+            data.forEach(d => {
+              // console.log(d.amount)
+              totalDue += parseInt(d.amount)
+            })
+            document.querySelector("#totalsellhappened").textContent = totalDue
+          })
 
         if (res) {
           let checkDue = parseInt(data.amount) - (parseInt(data.quantity) * parseInt(data.eachprice))
@@ -1406,21 +1590,22 @@
           const wdata = {
             "date": date,
             "amount": amount ? Math.abs(amount) : 0.00,
-            "note": "Cost deducted from cash/bank"
+            "note": `Sell Added To ${method ? method : "cash"} for sell to ${buyerName ? buyerName : "Annonymous Buyer"} at ${date} || product: ${productList}, quantity: ${quantity}`
           };
           const wdata2 = {
             "date": date,
             "amount": due ? parseInt(Math.abs(checkDue)) : 0.00,
-            "note": "Cost deducted from cash/bank"
+            "note": `Due Added From Sell To ${buyerName ? buyerName : "annonymous with method: " + method} || date : ${date}, product : ${productList}, quantity: ${quantity}`
           };
 
           if (method === "cash") {
-            await poster('http://127.0.0.1:10000/insert/cash/', wdata);
+            await poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
           } else if (method === "bank") {
-            await poster('http://127.0.0.1:10000/insert/bank/', wdata);
+            await poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
           }
-          if (due) {
-            await poster('http://127.0.0.1:10000/insert/due/', wdata2);
+          if (due && !checkbox.checked) {
+            console.log(due, " ", checkbox.checked)
+            await poster('https://agroserver-mdz5.onrender.com/insert/due/', wdata2);
           }
 
           // Show success message
@@ -1437,6 +1622,80 @@
       }
     });
 
+    document.querySelector("#productaddlistbtn").addEventListener("click", () => {
+      let date = document.querySelector("#bankdate").value;
+      if (!date) {
+        date = new Date().toISOString().replace('T', ', ').split('.')[0];
+      }
+      quanity = document.querySelector("#procutquantity").value;
+      name = document.querySelector("#productname").value;
+      data = {
+        "date": date,
+        "amount": quanity ? parseInt(quanity) : 0,
+        "note": name ? name : "Annonymous Product"
+      }
+      poster('https://agroserver-mdz5.onrender.com/insert/products/', data)
+    })
+
+    document.querySelector("#addduedata").addEventListener("click", () => {
+      let date = document.querySelector("#addduedate").value;
+      if (!date) {
+        date = new Date().toISOString().replace('T', ', ').split('.')[0];
+      }
+      note = document.querySelector("#addduenote").value;
+      amount = document.querySelector("#adddueamount").value;
+      data = {
+        "date": date,
+        "note": note ? note : "You didn't added a Name, should have",
+        "amount": amount ? parseInt(amount) : 0
+      }
+      poster('https://agroserver-mdz5.onrender.com/insert/due/', data)
+        .then(() => {
+          totalDue = 0
+          fetcher('https://agroserver-mdz5.onrender.com/data/due/')
+            .then((data) => {
+              data.forEach(d => {
+                // console.log(d.amount)
+                totalDue += parseInt(d.amount)
+              })
+              document.querySelector("#totalsuespan").textContent = totalDue
+            })
+        })
+
+    })
+
+    document.querySelector("#notedataaddbtn").addEventListener("click", () => {
+      let date = document.querySelector("#notepadDate").value;
+      if (!date) {
+        date = new Date().toISOString().replace('T', ', ').split('.')[0];
+      }
+      title = document.querySelector("#notepadtitle").value;
+      note = document.querySelector("#notepadnote").value;
+      data = {
+        "date": date,
+        "title": title ? title : "No Title added",
+        "note": note ? note : "You didn't added a Name, should have",
+      }
+      poster('https://agroserver-mdz5.onrender.com/insert/note/', data)
+        .then(() => {
+          document.querySelector("#notepadtablebody").innerHTML = ``
+          fetcher('https://agroserver-mdz5.onrender.com/data/note/')
+            .then((data) => {
+              data.forEach(d => {
+                // console.log(d.amount)
+                let parent = document.querySelector("#notepadtablebody")
+                let rows = document.createElement("tr")
+                rows.innerHTML = `
+                <td style="width:150px;">${d.date}</td>
+                <td style="width:250px;">${d.title}</td>
+                <td style="display:flex;justify-content:space-between; align-items:center;">${d.note} <button>edit</button> </td>
+                `
+                parent.appendChild(rows)
+              })
+            })
+        })
+
+    })
 
 
 
@@ -1452,10 +1711,42 @@
 
 
 
+    window.onload = () => {
+      function editor(url, data) {
+        return fetch(url, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .catch(error => {
+            console.error("Error in PUT request:", error);
+            throw error;
+          });
+      }
+      // Test function to update a product's amount
+      function testEditAmount(productId, newAmount) {
+        const url = `https://agroserver-mdz5.onrender.com/edit/products/${productId}`;
+        editor(url, { amount: newAmount })
+          .then(data => {
+            console.log("Update successful:", data);
+            // You can add UI refresh logic here if needed
+          })
+          .catch(err => {
+            console.error("Update failed:", err);
+          });
+      }
 
-
-
-
+      // Example: update product with id '6880aa2be8e663834a78b484' to amount 42
+      testEditAmount('6881f200ae622be213202bf4', 42000);
+    }
 
 
 
