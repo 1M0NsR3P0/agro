@@ -880,7 +880,7 @@
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          // 'Access-Control-Allow-Origin': "*"
+          'Access-Control-Allow-Origin': "*"
         },
         body: JSON.stringify(data)
       })
@@ -924,7 +924,7 @@
         `
       b.appendChild(loader2)
 
-      fetcher("https://agroserver-mdz5.onrender.com/data/bank/")
+      fetcher("http://127.0.0.1:10000/data/bank/")
         .then(data => {
           loader2.style.display = "none"
           totalAmount = 0
@@ -958,7 +958,7 @@
         `
       b.appendChild(loader2)
 
-      fetcher("https://agroserver-mdz5.onrender.com/data/cash/")
+      fetcher("http://127.0.0.1:10000/data/cash/")
         .then(data => {
           loader2.style.display = "none"
           totalAmount = 0
@@ -991,7 +991,7 @@
         `
       b.appendChild(loader2)
 
-      fetcher("https://agroserver-mdz5.onrender.com/data/withdraw/")
+      fetcher("http://127.0.0.1:10000/data/withdraw/")
         .then(data => {
           loader2.style.display = "none"
           totalAmount = 0
@@ -1014,7 +1014,7 @@
 
     document.querySelector("#totalSell").addEventListener("click", () => {
       total = 0
-      fetcher('https://agroserver-mdz5.onrender.com/data/sell/')
+      fetcher('http://127.0.0.1:10000/data/sell/')
         .then((data) => {
           data.forEach(d => {
             // console.log(d.amount)
@@ -1029,7 +1029,7 @@
     })
     document.querySelector("#totalcost").addEventListener("click", () => {
       total = 0
-      fetcher('https://agroserver-mdz5.onrender.com/data/cost/')
+      fetcher('http://127.0.0.1:10000/data/cost/')
         .then((data) => {
           data.forEach(d => {
             total += parseInt(d.amount)
@@ -1042,7 +1042,7 @@
     })
     document.querySelector("#totalDue").addEventListener("click", () => {
       total = 0
-      fetcher('https://agroserver-mdz5.onrender.com/data/due/')
+      fetcher('http://127.0.0.1:10000/data/due/')
         .then((data) => {
           data.forEach(d => {
             // console.log(d.amount)
@@ -1058,7 +1058,7 @@
     document.querySelector("#addcostbtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "none"
       document.querySelector("#addcostpage").style.display = "flex"
-      fetcher("https://agroserver-mdz5.onrender.com/data/cost/")
+      fetcher("http://127.0.0.1:10000/data/cost/")
         .then(data => {
           totalcost = 0
           data.forEach((d) => {
@@ -1077,7 +1077,7 @@
           document.querySelector("#refreshbtn").addEventListener("click", () => {
             // console.log("clicked 2")
             document.querySelector("#totalcost2").textContent = "loading.."
-            fetcher("https://agroserver-mdz5.onrender.com/data/cost/")
+            fetcher("http://127.0.0.1:10000/data/cost/")
               .then(data => {
                 totalcost2 = 0
                 data.forEach(d => {
@@ -1110,7 +1110,7 @@
       document.querySelector("#homepage").style.display = "none"
       document.querySelector("#addsellpage").style.display = "flex"
       totalSell = 0
-      fetcher("https://agroserver-mdz5.onrender.com/data/sell/")
+      fetcher("http://127.0.0.1:10000/data/sell/")
         .then((data) => {
           document.querySelector("#totalsellhappened").textContent = "loading.."
           // console.log(data)
@@ -1130,7 +1130,7 @@
           })
 
         })
-      fetcher("https://agroserver-mdz5.onrender.com/data/products/")
+      fetcher("http://127.0.0.1:10000/data/products/")
         .then((data) => {
           selection = document.querySelector("#productselect")
           data.forEach((d) => {
@@ -1153,7 +1153,7 @@
       document.querySelector("#homepage").style.display = "none";
       document.querySelector("#totalproductpage").style.display = "flex";
 
-      fetcher("https://agroserver-mdz5.onrender.com/data/products/")
+      fetcher("http://127.0.0.1:10000/data/products/")
         .then((data) => {
           let tablebody = document.querySelector("#productlisttable");
           tablebody.innerHTML = ""; // clear old rows if any
@@ -1196,8 +1196,12 @@
         document.querySelector(`#save-${d._id}`).addEventListener("click", () => {
           const newAmount = document.querySelector(`#newAmount-${d._id}`).value;
           console.log(newAmount)
-          editor(`https://agroserver-mdz5.onrender.com/edit/products/${d._id}`, { amount: newAmount ? Number(newAmount) : 0 })
-            .then(() => location.reload());
+          poster(`http://127.0.0.1:10000/edit/products/`, { "id" : d._id ,amount: newAmount ? Number(newAmount) : 0 })
+            .then(() => {
+              // location.reload()
+              document.querySelector("#totalproductbtn").click()
+            });
+            
         });
 
         // Cancel
@@ -1222,7 +1226,7 @@
       document.querySelector("#addduepage").style.display = "flex"
       document.querySelector("#totalsuespan").textContent = "loading.."
       totalDue = 0
-      fetcher('https://agroserver-mdz5.onrender.com/data/due/')
+      fetcher('http://127.0.0.1:10000/data/due/')
         .then((data) => {
           data.forEach(d => {
             // console.log(d.amount)
@@ -1257,7 +1261,7 @@
     document.querySelector("#notebtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "none"
       document.querySelector("#notepage").style.display = "flex"
-      fetcher('https://agroserver-mdz5.onrender.com/data/note/')
+      fetcher('http://127.0.0.1:10000/data/note/')
         .then((data) => {
           data.forEach(d => {
             // console.log(d)
@@ -1320,7 +1324,7 @@
       b.style.display = "block"
       b.appendChild(loader)
 
-      fetcher("https://agroserver-mdz5.onrender.com/data/bank/")
+      fetcher("http://127.0.0.1:10000/data/bank/")
         .then(data => {
 
           // console.log(data)
@@ -1348,7 +1352,7 @@
       b.style.display = "block"
       b.appendChild(loader)
 
-      fetcher("https://agroserver-mdz5.onrender.com/data/cash/")
+      fetcher("http://127.0.0.1:10000/data/cash/")
         .then(data => {
 
           // console.log(data)
@@ -1374,7 +1378,7 @@
       b.style.display = "block"
       b.appendChild(loader)
 
-      fetcher("https://agroserver-mdz5.onrender.com/data/withdraw/")
+      fetcher("http://127.0.0.1:10000/data/withdraw/")
         .then(data => {
 
           // console.log(data)
@@ -1425,7 +1429,7 @@
         "amount": amount ? amount : 0,
         "note": note ? note : "No Note Added!!"
       }
-      poster('https://agroserver-mdz5.onrender.com/insert/bank/', data)
+      poster('http://127.0.0.1:10000/insert/bank/', data)
     })
 
     document.querySelector("#addcashdata").addEventListener("click", () => {
@@ -1440,7 +1444,7 @@
         "amount": amount ? amount : 0,
         "note": note ? note : "No Note Added!!"
       }
-      poster('https://agroserver-mdz5.onrender.com/insert/cash/', data)
+      poster('http://127.0.0.1:10000/insert/cash/', data)
     })
 
     document.querySelector("#addWithdraw").addEventListener("click", async () => {
@@ -1461,7 +1465,7 @@
       };
 
       try {
-        const res = await poster('https://agroserver-mdz5.onrender.com/insert/withdraw/', data);
+        const res = await poster('http://127.0.0.1:10000/insert/withdraw/', data);
         if (res) {
           if (Wtype === "cash") {
             const wdata = {
@@ -1469,7 +1473,7 @@
               "amount": -Math.abs(amount),
               "note": "Withdraw from cash"
             };
-            await poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
+            await poster('http://127.0.0.1:10000/insert/cash/', wdata);
           }
           if (Wtype === "bank") {
             const wdata = {
@@ -1477,7 +1481,7 @@
               "amount": -Math.abs(amount),
               "note": "Withdraw from cash"
             };
-            await poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
+            await poster('http://127.0.0.1:10000/insert/bank/', wdata);
           }
         }
 
@@ -1507,7 +1511,7 @@
       };
 
       try {
-        const res = await poster('https://agroserver-mdz5.onrender.com/insert/cost/', data);
+        const res = await poster('http://127.0.0.1:10000/insert/cost/', data);
 
         if (res) {
           // Decrease from cash or bank
@@ -1518,9 +1522,9 @@
           };
 
           if (method === "cash") {
-            await poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
+            await poster('http://127.0.0.1:10000/insert/cash/', wdata);
           } else if (method === "bank") {
-            await poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
+            await poster('http://127.0.0.1:10000/insert/bank/', wdata);
           }
 
           // Show success message
@@ -1565,10 +1569,10 @@
       };
 
       try {
-        const res = await poster('https://agroserver-mdz5.onrender.com/insert/sell/', data);
+        const res = await poster('http://127.0.0.1:10000/insert/sell/', data);
         totalDue = 0
         document.querySelector("#totalsellhappened").textContent = "loading.."
-        fetcher('https://agroserver-mdz5.onrender.com/data/sell/')
+        fetcher('http://127.0.0.1:10000/data/sell/')
           .then((data) => {
             data.forEach(d => {
               // console.log(d.amount)
@@ -1600,13 +1604,13 @@
           };
 
           if (method === "cash") {
-            await poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
+            await poster('http://127.0.0.1:10000/insert/cash/', wdata);
           } else if (method === "bank") {
-            await poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
+            await poster('http://127.0.0.1:10000/insert/bank/', wdata);
           }
           if (due && !checkbox.checked) {
             console.log(due, " ", checkbox.checked)
-            await poster('https://agroserver-mdz5.onrender.com/insert/due/', wdata2);
+            await poster('http://127.0.0.1:10000/insert/due/', wdata2);
           }
 
           // Show success message
@@ -1635,7 +1639,7 @@
         "amount": quanity ? parseInt(quanity) : 0,
         "note": name ? name : "Annonymous Product"
       }
-      poster('https://agroserver-mdz5.onrender.com/insert/products/', data)
+      poster('http://127.0.0.1:10000/insert/products/', data)
     })
 
     document.querySelector("#addduedata").addEventListener("click", () => {
@@ -1650,10 +1654,10 @@
         "note": note ? note : "You didn't added a Name, should have",
         "amount": amount ? parseInt(amount) : 0
       }
-      poster('https://agroserver-mdz5.onrender.com/insert/due/', data)
+      poster('http://127.0.0.1:10000/insert/due/', data)
         .then(() => {
           totalDue = 0
-          fetcher('https://agroserver-mdz5.onrender.com/data/due/')
+          fetcher('http://127.0.0.1:10000/data/due/')
             .then((data) => {
               data.forEach(d => {
                 // console.log(d.amount)
@@ -1677,10 +1681,10 @@
         "title": title ? title : "No Title added",
         "note": note ? note : "You didn't added a Name, should have",
       }
-      poster('https://agroserver-mdz5.onrender.com/insert/note/', data)
+      poster('http://127.0.0.1:10000/insert/note/', data)
         .then(() => {
           document.querySelector("#notepadtablebody").innerHTML = ``
-          fetcher('https://agroserver-mdz5.onrender.com/data/note/')
+          fetcher('http://127.0.0.1:10000/data/note/')
             .then((data) => {
               data.forEach(d => {
                 // console.log(d.amount)
