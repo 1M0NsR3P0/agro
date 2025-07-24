@@ -879,7 +879,8 @@
       return fetch(route, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          // 'Access-Control-Allow-Origin': "*"
         },
         body: JSON.stringify(data)
       })
@@ -1705,48 +1706,6 @@
 
 
 
-
-
-
-
-
-
-    // window.onload = () => {
-    //   function editor(url, data) {
-    //     return fetch(url, {
-    //       method: 'PUT',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //       body: JSON.stringify(data),
-    //     })
-    //       .then(response => {
-    //         if (!response.ok) {
-    //           throw new Error(`HTTP error! status: ${response.status}`);
-    //         }
-    //         return response.json();
-    //       })
-    //       .catch(error => {
-    //         console.error("Error in PUT request:", error);
-    //         throw error;
-    //       });
-    //   }
-    //   // Test function to update a product's amount
-    //   function testEditAmount(productId, newAmount) {
-    //     const url = `https://agroserver-mdz5.onrender.com/edit/products/${productId}`;
-    //     editor(url, { amount: newAmount })
-    //       .then(data => {
-    //         console.log("Update successful:", data);
-    //         // You can add UI refresh logic here if needed
-    //       })
-    //       .catch(err => {
-    //         console.error("Update failed:", err);
-    //       });
-    //   }
-
-    //   // Example: update product with id '6880aa2be8e663834a78b484' to amount 42
-    //   testEditAmount('6881f200ae622be213202bf4', 42000);
-    // }
 
 
 
