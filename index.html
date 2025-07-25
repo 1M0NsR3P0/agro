@@ -128,7 +128,7 @@
     }
 
     .navbar .logo img {
-      height: 150px;
+      height: 180px;
       width: 250px;
     }
 
@@ -783,7 +783,7 @@
       <div style="margin: 10px;" class="statement-btn" id="addcostpagecancel"> Back
       </div>
     </div>
-    <div id="costaddsuccess"></div>
+    <div id="costaddsuccess" style="color: green; display: none;">Addess successfully</div>
     <hr>
     <div class="addPages" style="width: 95vw; font-weight: 800; font-size: 20px">
       <div
@@ -1593,13 +1593,14 @@
       if (!date) {
         date = new Date().toISOString().replace('T', ', ').split('.')[0];
       }
-
       let amount = parseFloat(document.querySelector("#costaddamount").value);
       let note = document.querySelector("#costaddnote").value;
       let method = document.querySelector("#addcostmethod").value;
 
 
-      if (amount <= 0) {
+
+      if (Number(amount) <= 0 || isNaN(amount)) {
+        console.log("what is halppeing.")
         document.querySelector("#costaddsuccess").style.display = "block"
         document.querySelector("#costaddsuccess").style.color = "red"
         document.querySelector("#costaddsuccess").textContent = "Pls Enter All Required Fields(check these: amount, Each price, Quantity Etc)"
@@ -1623,10 +1624,9 @@
         const res = await poster('https://agroserver-mdz5.onrender.com/insert/cost/', data);
 
         if (res) {
-          document.querySelector("#costaddsuccess").textContent = "Cost added successfully!!";
-          document.querySelector("#costaddsuccess").style.color = "green";
+          document.querySelector("#costaddsuccess").style.display = "block";
           setTimeout(() => {
-            document.querySelector("#costaddsuccess").textContent = "";
+            document.querySelector("#costaddsuccess").style.display = "none";
           }, 2000);
           document.querySelector("#addcostmethod").selectedIndex = 0
           document.querySelector("#costaddnote").placeholder = "Enter Details"
@@ -1765,26 +1765,63 @@
     });
 
     document.querySelector("#productaddlistbtn").addEventListener("click", () => {
-      let date = document.querySelector("#bankdate").value;
-      if (!date) {
-        date = new Date().toISOString().replace('T', ', ').split('.')[0];
+  let date = document.querySelector("#bankdate").value;
+  if (!date) {
+    date = new Date().toISOString().replace('T', ', ').split('.')[0];
+  }
+
+  const qCheck = document.querySelector("#procutquantity").value;
+  const name = document.querySelector("#productname").value;
+
+  // ✅ Validate required fields
+  if (qCheck <= 0 || isNaN(qCheck)) {
+    const msg = document.querySelector("#prodaddsuccessmsg");
+    msg.style.display = "block";
+    msg.style.color = "red";
+    msg.textContent = "Please enter a valid quantity!";
+    setTimeout(() => {
+      msg.style.display = "none";
+      msg.style.color = "green";
+      msg.textContent = "Data Added Successfully!!";
+    }, 3000);
+    return; // ⛔ Don't continue if invalid
+  }
+
+  const data = {
+    date: date,
+    amount: parseInt(qCheck),
+    note: name || "Anonymous Product"
+  };
+
+  fetcher('https://agroserver-mdz5.onrender.com/data/products/')
+    .then((products) => {
+      const exists = products.some(p => p.note.toLowerCase() === name.toLowerCase());
+
+      if (exists || name == "" || name == null) {
+        const msg = document.querySelector("#prodaddsuccessmsg");
+        msg.style.display = "block";
+        msg.style.color = "red";
+        msg.textContent = "This Product Name Already Exists. Choose a New Name!";
+        setTimeout(() => {
+          msg.style.display = "none";
+          msg.style.color = "green";
+          msg.textContent = "Data Added Successfully!!";
+        }, 3000);
+        return;
       }
-      quanity = document.querySelector("#procutquantity").value;
-      name = document.querySelector("#productname").value;
-      data = {
-        "date": date,
-        "amount": quanity ? parseInt(quanity) : 0,
-        "note": name ? name : "Annonymous Product"
-      }
+
+      // ✅ Safe to insert
       poster('https://agroserver-mdz5.onrender.com/insert/products/', data)
         .then(() => {
-          document.querySelector("#prodaddsuccessmsg").style.display = "block"
-          document.querySelector("#totalproductbtn").click()
+          document.querySelector("#prodaddsuccessmsg").style.display = "block";
+          document.querySelector("#totalproductbtn").click();
           setTimeout(() => {
-            document.querySelector("#prodaddsuccessmsg").style.display = "none"
-          }, 2000)
-        })
-    })
+            document.querySelector("#prodaddsuccessmsg").style.display = "none";
+          }, 2000);
+        });
+    });
+});
+
 
     document.querySelector("#addduedata").addEventListener("click", () => {
       let date = document.querySelector("#addduedate").value;
@@ -1793,6 +1830,19 @@
       }
       note = document.querySelector("#addduenote").value;
       amount = document.querySelector("#adddueamount").value;
+
+      if(note == "" || amount <= 0 || isNaN(amount)){
+        document.querySelector("#msgsuccessfordue").style.display = "block"
+        document.querySelector("#msgsuccessfordue").style.color = "red"
+        document.querySelector("#msgsuccessfordue").textContent = "enter amount first!!"
+        setTimeout(()=>{
+          document.querySelector("#msgsuccessfordue").style.display = "none"
+          document.querySelector("#msgsuccessfordue").style.color = "green"
+          document.querySelector("#msgsuccessfordue").textContent = "Data Added Successfully!!"
+
+        },2000)
+      }
+      
       data = {
         "date": date,
         "note": note ? note : "You didn't added a Name, should have",
