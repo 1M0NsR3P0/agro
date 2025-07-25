@@ -360,6 +360,7 @@
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
             Back</button>
         </div>
+        <div style="color: green; display: none;" class="idclassforsuccess">Successfully Added</div>
         </span>
         <div><button id="histbank" style="height: 15px;width: 30px; font-size: 9px;">hist</button></div>
       </div>
@@ -389,6 +390,7 @@
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
             Back</button>
         </div>
+        <div style="color: green; display: none;" id="cashaddsuccess">Successfully Added</div>
         </span>
         <div><button id="histcash" style="height: 15px;width: 30px; font-size: 9px;">hist</button></div>
       </div>
@@ -425,6 +427,7 @@
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
             Back</button>
         </div>
+        <div style="color: green; display: none;" id="withdrawaddsuccess">Withdraw success!!</div>
         </span>
         <div><button id="histwithdraw" style="height: 15px;width: 30px; font-size: 9px;">hist</button></div>
       </div>
@@ -454,6 +457,7 @@
             style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
             Back</button>
         </div>
+        <span style="color: #28a745; display: none;" id="prodaddsuccessmsg">Addes successfully!!</span>
         </span>
 
       </div>
@@ -551,6 +555,7 @@
       <div id="addsellpagecancel" style="margin: 10px; background-color: red;" class="statement-btn"> Back
       </div>
     </div>
+    <span style="color: #28a745; display: none;" id="selladdedsuccessfully">Product Sell Added!!</span>
     <hr>
     <div class="addPages" style="font-weight: 800; font-size: 20px; width: 100vw;">
       <div
@@ -640,6 +645,7 @@
       <div style="margin: 10px;" class="statement-btn" id="addduepagecancel"> Back
       </div>
     </div>
+    <span id="msgsuccessfordue" style="display: none; color: green;">Addess Successfully!!</span>
     <hr>
     <div class="addPages" style="font-weight: 800; width: 99vw; font-size: 20px">
       <div
@@ -896,6 +902,23 @@
         });
     }
 
+    function decreaser(pName, Q) {
+      let id = ''
+      let Qty = 0
+      fetcher(`https://agroserver-mdz5.onrender.com/data/products/`)
+        .then((datas) => {
+          // console.log(datas)
+          datas.forEach(data => {
+            if (data.note.toLowerCase() == pName.toLowerCase()) {
+              id = data._id
+              Qty = Number(data.amount) - Number(Q)
+            }
+          });
+          // console.log(id,Q)
+          poster(`https://agroserver-mdz5.onrender.com/edit/products/`, { "id": id, "amount": Q ? Number(Qty) : 0 })
+          // .then(()=>console.log(""))
+        })
+    }
 
     loader = document.createElement("div")
     loader.setAttribute("id", "loading")
@@ -1077,13 +1100,14 @@
           document.querySelector("#refreshbtn").addEventListener("click", () => {
             // console.log("clicked 2")
             document.querySelector("#totalcost2").textContent = "loading.."
+            table = document.querySelector("#costtablebody")
+            table.innerHTML = ``
             fetcher("https://agroserver-mdz5.onrender.com/data/cost/")
               .then(data => {
                 totalcost2 = 0
                 data.forEach(d => {
                   totalcost2 += parseInt(d.amount)
                   document.querySelector("#totalcost2").textContent = `${totalcost2 ? totalcost2 : "loading.."}`
-                  table = document.querySelector("#costtablebody")
                   rows = document.createElement("tr")
                   table.classList.add("costtablebody")
                   rows.innerHTML = `
@@ -1104,6 +1128,7 @@
       document.querySelector("#homepage").style.display = "block"
       document.querySelector("#addcostpage").style.display = "none"
       document.querySelector("#costtablebody").innerHTML = ``
+      location.reload()
     })
 
     document.querySelector("#addsellbtn").addEventListener("click", () => {
@@ -1147,6 +1172,7 @@
       document.querySelector("#homepage").style.display = "block"
       document.querySelector("#addsellpage").style.display = "none"
       document.querySelector("#tablesell").innerHTML = ``
+      location.reload()
     })
 
     document.querySelector("#totalproductbtn").addEventListener("click", () => {
@@ -1196,12 +1222,12 @@
         document.querySelector(`#save-${d._id}`).addEventListener("click", () => {
           const newAmount = document.querySelector(`#newAmount-${d._id}`).value;
           console.log(newAmount)
-          poster(`https://agroserver-mdz5.onrender.com/edit/products/`, { "id" : d._id ,amount: newAmount ? Number(newAmount) : 0 })
+          poster(`https://agroserver-mdz5.onrender.com/edit/products/`, { "id": d._id, amount: newAmount ? Number(newAmount) : 0 })
             .then(() => {
               // location.reload()
               document.querySelector("#totalproductbtn").click()
             });
-            
+
         });
 
         // Cancel
@@ -1213,6 +1239,7 @@
           bindEditButton(d); // Re-bind the edit button again after cancel
         });
       });
+
     }
 
     document.querySelector("#totalproductbackbtn").addEventListener("click", () => {
@@ -1222,31 +1249,78 @@
     })
 
     document.querySelector("#addduebtn").addEventListener("click", () => {
-      document.querySelector("#homepage").style.display = "none"
-      document.querySelector("#addduepage").style.display = "flex"
-      document.querySelector("#totalsuespan").textContent = "loading.."
-      totalDue = 0
+      document.querySelector("#homepage").style.display = "none";
+      document.querySelector("#addduepage").style.display = "flex";
+      document.querySelector("#totalsuespan").textContent = "loading..";
+
+      let totalDue = 0;
+      document.querySelector("#addduetable").innerHTML = ""; // Clear old rows
+
       fetcher('https://agroserver-mdz5.onrender.com/data/due/')
         .then((data) => {
           data.forEach(d => {
-            // console.log(d.amount)
-            totalDue += parseInt(d.amount)
-            rows = document.createElement("tr")
-            rows.innerHTML = `
-              <td style="overflow: auto; ">${d.date}</td>
-              <td style="overflow: scroll; ">${d.note}</td>
-              <td style="display:flex; justify-content:space-around;align-items:center; ">${d.amount} <button id="dueeditbtn">✏️</button></td>
-            `
-            document.querySelector("#addduetable").appendChild(rows)
-          })
-          document.querySelector("#totalsuespan").textContent = totalDue
-        })
-    })
+            totalDue += parseInt(d.amount);
+            renderDueRow(d);
+          });
+          document.querySelector("#totalsuespan").textContent = totalDue;
+        });
+    });
+
+    function renderDueRow(d) {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+      <td style="overflow: auto;">${d.date}</td>
+      <td style="overflow: scroll;">${d.note}</td>
+      <td style="display:flex; justify-content:space-around; align-items:center;" id="due-cell-${d._id}">
+        <span id="amountDue-${d._id}">${d.amount}</span>
+        <button id="dueeditbtn-${d._id}">✏️</button>
+      </td>
+    `;
+
+      document.querySelector("#addduetable").appendChild(row);
+
+      bindEditButton3(d);
+    }
+
+    function bindEditButton3(d) {
+      const editBtn = document.querySelector(`#dueeditbtn-${d._id}`);
+      const cell = document.querySelector(`#due-cell-${d._id}`);
+
+      editBtn.addEventListener("click", () => {
+        cell.innerHTML = `
+        <div style="display: flex; justify-content: center; align-items: center; gap: 5px;">
+          <input type="number" id="due-newAmount-${d._id}" value="${d.amount}" style="width: 80px;">
+          <button id="due-save-${d._id}">Save</button>
+          <button id="due-cancel-${d._id}">Cancel</button>
+        </div>
+      `;
+
+        // Save handler
+        document.querySelector(`#due-save-${d._id}`).addEventListener("click", () => {
+          const newAmount = document.querySelector(`#due-newAmount-${d._id}`).value;
+          poster('https://agroserver-mdz5.onrender.com/edit/due/', { id: d._id, amount: newAmount ? Number(newAmount) : 0 })
+            .then(() => {
+              document.querySelector("#addduebtn").click(); // Refresh the entire table
+            });
+        });
+
+        // Cancel handler
+        document.querySelector(`#due-cancel-${d._id}`).addEventListener("click", () => {
+          // Re-render just this cell to restore the original display
+          cell.innerHTML = `
+          <span id="amountDue-${d._id}">${d.amount}</span>
+          <button id="dueeditbtn-${d._id}">✏️</button>
+        `;
+          bindEditButton3(d); // Rebind the edit button after cancel
+        });
+      });
+    }
+
     document.querySelector("#addduepagecancel").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "block"
       document.querySelector("#addduepage").style.display = "none"
       document.querySelector("#addduetable").innerHTML = ``
-
+      location.reload()
     })
 
     document.querySelector("#settingbtn").addEventListener("click", () => {
@@ -1430,6 +1504,13 @@
         "note": note ? note : "No Note Added!!"
       }
       poster('https://agroserver-mdz5.onrender.com/insert/bank/', data)
+        .then(() => {
+          document.querySelector(".idclassforsuccess").style.display = "block"
+        })
+      setTimeout(() => {
+        document.querySelector(".idclassforsuccess").style.display = "none"
+      }, 3000)
+
     })
 
     document.querySelector("#addcashdata").addEventListener("click", () => {
@@ -1445,6 +1526,12 @@
         "note": note ? note : "No Note Added!!"
       }
       poster('https://agroserver-mdz5.onrender.com/insert/cash/', data)
+        .then(() => {
+          document.querySelector("#cashaddsuccess").style.display = "block"
+        })
+      setTimeout(() => {
+        document.querySelector("#cashaddsuccess").style.display = "none"
+      }, 3000)
     })
 
     document.querySelector("#addWithdraw").addEventListener("click", async () => {
@@ -1467,6 +1554,8 @@
       try {
         const res = await poster('https://agroserver-mdz5.onrender.com/insert/withdraw/', data);
         if (res) {
+          document.querySelector("#withdrawaddsuccess").style.display = "block"
+
           if (Wtype === "cash") {
             const wdata = {
               "date": date,
@@ -1483,6 +1572,12 @@
             };
             await poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
           }
+
+
+
+          setTimeout(() => {
+            document.querySelector("#withdrawaddsuccess").style.display = "none"
+          }, 3000)
         }
 
         else {
@@ -1503,6 +1598,20 @@
       let note = document.querySelector("#costaddnote").value;
       let method = document.querySelector("#addcostmethod").value;
 
+
+      if (amount <= 0) {
+        document.querySelector("#costaddsuccess").style.display = "block"
+        document.querySelector("#costaddsuccess").style.color = "red"
+        document.querySelector("#costaddsuccess").textContent = "Pls Enter All Required Fields(check these: amount, Each price, Quantity Etc)"
+        setTimeout(() => {
+          document.querySelector("#costaddsuccess").style.display = "none"
+          document.querySelector("#costaddsuccess").style.color = "green"
+          document.querySelector("#costaddsuccess").textContent = "Successfully Added!!"
+
+        }, 2000);
+        return
+      }
+
       const data = {
         "date": date,
         "amount": isNaN(amount) ? 0 : amount,
@@ -1514,6 +1623,14 @@
         const res = await poster('https://agroserver-mdz5.onrender.com/insert/cost/', data);
 
         if (res) {
+          document.querySelector("#costaddsuccess").textContent = "Cost added successfully!!";
+          document.querySelector("#costaddsuccess").style.color = "green";
+          setTimeout(() => {
+            document.querySelector("#costaddsuccess").textContent = "";
+          }, 2000);
+          document.querySelector("#addcostmethod").selectedIndex = 0
+          document.querySelector("#costaddnote").placeholder = "Enter Details"
+          document.querySelector("#costaddamount").value = 0.0
           // Decrease from cash or bank
           const wdata = {
             "date": date,
@@ -1528,11 +1645,7 @@
           }
 
           // Show success message
-          document.querySelector("#costaddsuccess").textContent = "Cost added successfully!!";
-          document.querySelector("#costaddsuccess").style.color = "green";
-          setTimeout(() => {
-            document.querySelector("#costaddsuccess").textContent = "";
-          }, 2000);
+
         } else {
           console.error("Unexpected response from cost insert:", res);
         }
@@ -1556,6 +1669,18 @@
       let eachprice = document.querySelector("#eachprice").value;
       let quantity = document.querySelector("#quantitysell").value;
       let productList = document.querySelector("#productselect").value;
+      if (amount <= 0 || eachprice <= 0 || quantity <= 0) {
+        document.querySelector("#selladdedsuccessfully").style.display = "block"
+        document.querySelector("#selladdedsuccessfully").style.color = "red"
+        document.querySelector("#selladdedsuccessfully").textContent = "Pls Enter All Required Fields(check these: amount, Each price, Quantity Etc)"
+        setTimeout(() => {
+          document.querySelector("#selladdedsuccessfully").style.display = "none"
+          document.querySelector("#selladdedsuccessfully").style.color = "green"
+          document.querySelector("#selladdedsuccessfully").textContent = "Successfully Added!!"
+
+        }, 2000);
+        return
+      }
       const data = {
         "method": method || "cash",
         "productList": productList ? productList : "Not Added",
@@ -1575,16 +1700,28 @@
         fetcher('https://agroserver-mdz5.onrender.com/data/sell/')
           .then((data) => {
             data.forEach(d => {
-              // console.log(d.amount)
               totalDue += parseInt(d.amount)
             })
             document.querySelector("#totalsellhappened").textContent = totalDue
           })
 
         if (res) {
+
+          document.querySelector("#selladdedsuccessfully").style.display = "block"
+          document.querySelector("#totalamountrechived").value = 0
+          document.querySelector("#sellnote").value = ""
+          document.querySelector("#buyername").value = ""
+          document.querySelector("#eachprice").value = 0.0
+          document.querySelector("#quantitysell").value = 0
+          // document.querySelector("#productselect").selectedIndex = 0
+          document.querySelector("#productselect").innerHTML = ``
+          document.querySelector("#tablesell").innerHTML = ""
+          document.querySelector("#addsellbtn").click()
           let checkDue = parseInt(data.amount) - (parseInt(data.quantity) * parseInt(data.eachprice))
-          // console.log(checkDue)
           let due = false
+
+          decreaser(productList, quantity)
+
           if (checkDue < 0) {
             due = true
           }
@@ -1617,7 +1754,7 @@
           document.querySelector("#costaddsuccess").textContent = "Cost added successfully!!";
           document.querySelector("#costaddsuccess").style.color = "green";
           setTimeout(() => {
-            document.querySelector("#costaddsuccess").textContent = "";
+            document.querySelector("#selladdedsuccessfully").style.display = "none"
           }, 2000);
         } else {
           console.error("Unexpected response from cost insert:", res);
@@ -1640,6 +1777,13 @@
         "note": name ? name : "Annonymous Product"
       }
       poster('https://agroserver-mdz5.onrender.com/insert/products/', data)
+        .then(() => {
+          document.querySelector("#prodaddsuccessmsg").style.display = "block"
+          document.querySelector("#totalproductbtn").click()
+          setTimeout(() => {
+            document.querySelector("#prodaddsuccessmsg").style.display = "none"
+          }, 2000)
+        })
     })
 
     document.querySelector("#addduedata").addEventListener("click", () => {
@@ -1656,6 +1800,13 @@
       }
       poster('https://agroserver-mdz5.onrender.com/insert/due/', data)
         .then(() => {
+          document.querySelector("#addduenote").placeholder = "Add"
+          document.querySelector("#adddueamount").value = 0
+          success = document.querySelector("#msgsuccessfordue")
+          success.style.display = "block"
+          setTimeout(() => {
+            success.style.display = "none"
+          }, 2000)
           totalDue = 0
           fetcher('https://agroserver-mdz5.onrender.com/data/due/')
             .then((data) => {
