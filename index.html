@@ -18,7 +18,8 @@
       margin-top: 5px;
 
     }
-    .cnhangepasspage{
+
+    .cnhangepasspage {
       height: 100%;
       width: 100%;
       display: flex;
@@ -359,6 +360,22 @@
 
 
   <!-- POPUP SECTION -->
+
+  <!-- otp poup -->
+  <div class="popup" style="display:  none; justify-content: center; align-items: flex-start; " id="otppopup">
+    <div class="bankAdd"
+      style="gap: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+      <span style="color: green;">verify the account, enter the otp sent to your mail account!!</span>
+
+      <input id="otp" type="number" placeholder="Type OTP">
+      <button id="cancelVerify" class="button"
+        style="height: 55px; width: 75px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
+        Cancel</button>
+      <div><button id="verifybtn">Verify</button></div>
+    </div>
+    </span>
+  </div>
+
 
   <!-- add in bank poup -->
   <div class="popup" style="display:  none;" id="addinbankpage">
@@ -855,6 +872,7 @@
 
     // windows dom loaded funciton
     window.addEventListener("DOMContentLoaded", () => {
+
       const loginTime = localStorage.getItem('loginTime');
       const SIX_HOURS = 6 * 60 * 60 * 1000;
 
@@ -899,6 +917,27 @@
           console.error("Error fetching users:", err);
         });
     });
+
+    function mail(sub, whom, msg) {
+      fetch('https://agroserver-mdz5.onrender.com/mail', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: whom,
+          subject: sub,
+          message: msg
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          // console.log();
+          // alert("Email sent successfully!");
+        })
+        .catch(err => {
+          console.error("Fetch error:", err);
+          alert("Failed to send email. Is the server running?");
+        });
+    }
 
 
     function poster(route, data) {
@@ -1003,6 +1042,10 @@
       localStorage.removeItem('loggedInUser');
     })
 
+    document.querySelector("#cancelVerify").addEventListener("click", () => {
+      location.reload()
+    })
+
     document.querySelector("#createacc").addEventListener("click", () => {
       document.querySelector("#create-section").style.display = "block"
       // document.querySelector("#login-container").style.display = "none"
@@ -1011,19 +1054,44 @@
       document.querySelector("#createuser").addEventListener("click", () => {
         let name = document.querySelector("#name").value
         let pass = document.querySelector("#pass").value
+
+        
+
+
         let data = {
           "user": name,
           "amount": pass
         }
         // console.log(data)
+        presentOTP = Math.floor(1000 + Math.random() * 9000)
+        setTimeout(() => {
+          presentOTP = Math.floor(1000 + Math.random() * 9000)
+        }, 180000)
+        mail("GET THE OTP CODE", "freedomabir67@gmail.com", `Enter this OTP code: ${presentOTP} on your website in 3 miniute`)
+        mail("GET THE OTP CODE", "nurulabsarimon@gmail.com", `Enter this OTP code: ${presentOTP} on your website in 3 miniute`)
+        document.querySelector("#otppopup").style.display = "flex"
+        document.querySelector("#verifybtn").addEventListener("click", () => {
+          // freedomabir67@gmail.com
+          const otp = document.querySelector("#otp").value
 
-        poster('https://agroserver-mdz5.onrender.com/insert/user/', data)
-          .then(() => {
-            document.querySelector("#login-section").style.display = "block"
-            document.querySelector("#create-section").style.display = "none"
-            document.getElementById("home-section").style.display = "none";
-            location.reload()
-          })
+          console.log(otp, presentOTP)
+          if (Number(otp) === Number(presentOTP)) {
+            poster('https://agroserver-mdz5.onrender.com/insert/user/', data)
+              .then(() => {
+                document.querySelector("#login-section").style.display = "block"
+                document.querySelector("#create-section").style.display = "none"
+                document.getElementById("home-section").style.display = "none";
+                location.reload()
+              })
+          }
+          else if (otp == "no") { return }
+          else if (!otp) {
+            alert("type otp!")
+          }
+        })
+
+
+
       })
     })
 
@@ -2021,11 +2089,11 @@
             let newpass = document.querySelector("#newpass").value
             const matched = data.find(d => d.user.toLowerCase() === usr.toLowerCase() && d.amount === oldpass);
             if (matched) {
-              console.log(matched._id,newpass)
+              console.log(matched._id, newpass)
               poster(`https://agroserver-mdz5.onrender.com/edit/user/`, { "id": matched._id, "amount": newpass })
 
                 .then(alert("Password changed"))
-                document.querySelector("#logoutbtn").click()
+              document.querySelector("#logoutbtn").click()
 
             }
           })
