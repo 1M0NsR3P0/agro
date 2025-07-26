@@ -85,6 +85,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      width: 99vw;
       background: #f4f4f4;
     }
 
@@ -93,7 +94,7 @@
       padding: 30px;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      width: 80%;
+      /* width: 80%; */
       max-width: 300px;
     }
 
@@ -272,29 +273,36 @@
 <body>
   <!-- LOGIN SECTION -->
   <div class="login-container" id="create-section" style="display: none;">
-    <div style="text-align: center; width: 100vw;">create an account</div>
-    <div>
-      <img src="logo.png" alt="logo" style="width: fit-content; height: 300px;">
+    <div style="width: 99vw; display: flex; justify-content: center; align-items: center;">
+      <img src="logo.png" alt="logo" style="width: auto; height: 300px;">
     </div>
-    <div class="login-box">
-      <input type="text" placeholder="Enter Your Name" id="name" />
-      <input type="password" placeholder="Enter Password" id="pass" />
-      <button id="createuser">Create Account</button>
-      <button type="submit" id="login2">log in instead?</button>
+    <div style="text-align: center; width: 100vw; font-size: 20px; font-weight: 800;">Create Your Goddamn Account</div>
+    <div class=""
+      style="width: 99vw; display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 20px; margin: 10px; padding: 10px;">
+      <input type="text" placeholder="Your Name" id="name" />
+      <input type="password" placeholder="Password" id="pass" />
+      <button id="createuser" class="statusBtn">Create Account</button>
+      <button type="submit" id="login2"
+        style="text-decoration: underline; background-color: transparent; color: #007bffd3; border: none; font-size: 8px;">log
+        in instead?</button>
     </div>
   </div>
 
-
   <div class="login-container" id="login-section" style="display: block;">
-    <div>
-      <img src="logo.png" alt="logo" style="width: fit-content; height: 300px;">
+    <div style="width: 99vw; display: flex; justify-content: center; align-items: center;">
+      <img src="logo.png" alt="logo" style="width: 320px; height: 300px;">
     </div>
-    <div class="login-box">
-      <input type="text" placeholder="Enter Username" id="user" required />
-      <input type="password" placeholder="Enter Password" id="password" required />
-      <button id="login">Login</button>
+    <div class="" style="display: flex; justify-content: center; align-items: center; width: 99vw;">
+      <div
+        style="width: 99vw; height: 20vh; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; padding: 10px; margin: 10px;">
+        <p type="text" placeholder="Enter Username" id="user" style="font-weight: 800; font-size: 20px;">Hi Abir </p>
+        <input type="password" placeholder="Password" id="password" required />
+        <button id="login" class="statusBtn">Login</button>
+        <button id="createacc"
+          style="text-decoration: underline; background-color: transparent; color: #007bffd3; border: none; font-size: 8px;">want
+          to create account instead?</button>
+      </div>
     </div>
-    <button id="createacc">want to create account instead?</button>
   </div>
 
 
@@ -375,7 +383,6 @@
     </div>
     </span>
   </div>
-
 
   <!-- add in bank poup -->
   <div class="popup" style="display:  none;" id="addinbankpage">
@@ -562,6 +569,9 @@
       <span>select product</span>
       <select name="cashBank" id="productselect">
       </select>
+      <div id="qIndicator" style="font-size: 9px; color: green;">
+        available: <span id="currentstock"></span> product
+      </div>
     </div>
     <div>
       <div> Date:
@@ -779,20 +789,24 @@
     </div>
     <div style="display: flex;">
       <div style="margin: 10px;" class="">
-        <div>
-          <button>Statement</button>
-          <button id="changepasswordbtn">Change password</button>
-          <div>
-            <select name="resetCollection" id="resetcollectionselect">
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <button class="statusBtn">Statement</button>
+          <button class="statusBtn" id="changepasswordbtn">Change password</button>
+          <div style="display: flex; justify-content: center; align-items: center; width: 150px; gap: 10px;">
+            <select class="statusBtn"  name="resetCollection" id="resetcollectionselect">
               <option value="sell">sell</option>
               <option value="cost">cost</option>
               <option value="withdraw">withdraw</option>
-              <option value="withdraw">due</option>
+              <option value="due">due</option>
+              <option value="user">all user data</option>
+              <option value="products">products</option>
+              <option value="bank">bank</option>
+              <option value="cash">cash</option>
             </select>
             <button id="resetCollectionbtn">reset</button>
           </div>
-          <button id="factoryresetbtn">Factory Reset All</button>
-          <button id="settingpagecancelbtn" style="margin: 10px;" class="statement-btn"> Back</button>
+          <button class="statusBtn" id="factoryresetbtn">Factory Reset All</button>
+          <button class="statusBtn" id="settingpagecancelbtn" style="margin: 10px;" class="statement-btn"> Back</button>
         </div>
       </div>
     </div>
@@ -890,10 +904,6 @@
       }
     });
 
-
-
-
-
     document.getElementById("login").addEventListener("click", (e) => {
       e.preventDefault(); // Just in case a form tries to submit
       fetcher('https://agroserver-mdz5.onrender.com/data/user/')
@@ -902,7 +912,7 @@
           const user = document.getElementById('user').value;
           const pwd = document.getElementById('password').value;
 
-          const matched = data.find(d => d.user.toLowerCase() === user.toLowerCase() && d.amount === pwd);
+          const matched = data.find(d => d.amount === pwd);
 
           if (matched) {
             localStorage.setItem('loginTime', Date.now().toString());
@@ -938,7 +948,6 @@
           alert("Failed to send email. Is the server running?");
         });
     }
-
 
     function poster(route, data) {
       return fetch(route, {
@@ -1012,7 +1021,7 @@
       let Qty = 0
       fetcher(`https://agroserver-mdz5.onrender.com/data/products/`)
         .then((datas) => {
-          // console.log(datas)
+          console.log(datas)
           datas.forEach(data => {
             if (data.note.toLowerCase() == pName.toLowerCase()) {
               id = data._id
@@ -1022,7 +1031,10 @@
           // console.log(id,Q)
           poster(`https://agroserver-mdz5.onrender.com/edit/products/`, { "id": id, "amount": Q ? Number(Qty) : 0 })
           // .then(()=>console.log(""))
+
+
         })
+
     }
 
     loader = document.createElement("div")
@@ -1046,6 +1058,13 @@
       location.reload()
     })
 
+    document.querySelector("#login2").addEventListener("click", (() => {
+      document.querySelector("#create-section").style.display = "none"
+      document.querySelector("#login-container").style.display = "block"
+      document.getElementById("home-section").style.display = "none"
+      
+    }))
+
     document.querySelector("#createacc").addEventListener("click", () => {
       document.querySelector("#create-section").style.display = "block"
       // document.querySelector("#login-container").style.display = "none"
@@ -1055,7 +1074,7 @@
         let name = document.querySelector("#name").value
         let pass = document.querySelector("#pass").value
 
-        
+
 
 
         let data = {
@@ -1291,43 +1310,86 @@
       location.reload()
     })
 
+    let totalSell = 0
+
     document.querySelector("#addsellbtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "none"
       document.querySelector("#addsellpage").style.display = "flex"
+
       totalSell = 0
+
+      // Fetch and render sales data
       fetcher("https://agroserver-mdz5.onrender.com/data/sell/")
         .then((data) => {
           document.querySelector("#totalsellhappened").textContent = "loading.."
-          // console.log(data)
+          let table = document.querySelector("#tablesell")
+          table.innerHTML = "" // Clear previous rows
+
           data.forEach((d) => {
             totalSell += parseInt(d.amount)
-            let table = document.querySelector("#tablesell")
-            let rows = document.createElement("tr")
-            rows.innerHTML = `
-          <td style="width: 85px; overflow-x: scroll; ">${d.date}</td>
+
+            let row = document.createElement("tr")
+            row.innerHTML = `
+          <td style="width: 85px; overflow-x: scroll;">${d.date}</td>
           <td>${d.note}</td>
           <td>${d.buyerName}</td>
           <td>${d.productList}</td>
           <td>${d.amount}</td>
-          `
-            table.appendChild(rows)
-            document.querySelector("#totalsellhappened").textContent = totalSell
+        `
+            table.appendChild(row)
           })
 
+          document.querySelector("#totalsellhappened").textContent = totalSell
         })
+
+      // Fetch and populate product list
       fetcher("https://agroserver-mdz5.onrender.com/data/products/")
         .then((data) => {
-          selection = document.querySelector("#productselect")
+          let selection = document.querySelector("#productselect")
+          let stock = document.querySelector("#currentstock")
+          selection.innerHTML = "" // Clear existing options
+          stock.textContent = "" // Reset stock display
+
           data.forEach((d) => {
-            opt = document.createElement("option")
-            opt.innerHTML = `
-          <option value="${d.note}">${d.note}</option>
-          `
+            let opt = document.createElement("option")
+            opt.value = d.note
+            opt.textContent = d.note
             selection.appendChild(opt)
           })
-        })
 
+          // Update stock when product changes
+          selection.addEventListener("change", () => {
+            const selectedProduct = selection.value
+            const selected = data.find(p => p.note === selectedProduct)
+            stock.textContent = selected ? selected.amount : "0"
+          })
+
+          // Initial stock display
+          if (data.length > 0) {
+            stock.textContent = data[0].amount
+          }
+        })
     })
+
+    // Restrict sell amount based on current stock from API (no cache)
+    document.querySelector("#quantitysell").addEventListener("input", (e) => {
+      const selectedProduct = document.querySelector("#productselect").value
+
+      // Fetch product data just for validation
+      fetcher("https://agroserver-mdz5.onrender.com/data/products/")
+        .then((products) => {
+          const product = products.find(p => p.note === selectedProduct)
+          const stockAmount = product ? parseInt(product.amount) : 0
+          const inputAmount = parseInt(e.target.value)
+
+          if (inputAmount > stockAmount) {
+            alert("Sell amount exceeds available stock!")
+            e.target.value = stockAmount
+          }
+        })
+    })
+
+
     document.querySelector("#addsellpagecancel").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "block"
       document.querySelector("#addsellpage").style.display = "none"
@@ -1815,6 +1877,8 @@
 
 
     document.querySelector("#addselldata").addEventListener("click", async () => {
+
+
       let checkbox = document.querySelector("#discountedCheck")
       let date = document.querySelector("#selldate").value;
       if (!date) {
@@ -1857,15 +1921,17 @@
         totalDue = 0
         document.querySelector("#totalsellhappened").textContent = "loading.."
         fetcher('https://agroserver-mdz5.onrender.com/data/sell/')
-          .then((data) => {
-            data.forEach(d => {
+          .then((datas) => {
+            datas.forEach(d => {
               totalDue += parseInt(d.amount)
             })
             document.querySelector("#totalsellhappened").textContent = totalDue
+
+
+
           })
 
         if (res) {
-
           document.querySelector("#selladdedsuccessfully").style.display = "block"
           document.querySelector("#totalamountrechived").value = 0
           document.querySelector("#sellnote").value = ""
@@ -1880,6 +1946,8 @@
           let due = false
 
           decreaser(productList, quantity)
+          document.querySelector("#currentstock").textContent = productData.find(p => p.note === productList).amount -= quantity;
+
 
           if (checkDue < 0) {
             due = true
