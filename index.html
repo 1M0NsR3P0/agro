@@ -18,6 +18,14 @@
       margin-top: 5px;
 
     }
+    .cnhangepasspage{
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
 
     body {
       font-family: sans-serif;
@@ -262,21 +270,36 @@
 
 <body>
   <!-- LOGIN SECTION -->
-  <div class="login-container" id="login-section" style="display: none;">
+  <div class="login-container" id="create-section" style="display: none;">
+    <div style="text-align: center; width: 100vw;">create an account</div>
     <div>
       <img src="logo.png" alt="logo" style="width: fit-content; height: 300px;">
     </div>
     <div class="login-box">
-      <form onsubmit="return login(event)">
-        <input type="password" placeholder="Enter Password" id="password" required />
-        <button type="submit">Login</button>
-      </form>
+      <input type="text" placeholder="Enter Your Name" id="name" />
+      <input type="password" placeholder="Enter Password" id="pass" />
+      <button id="createuser">Create Account</button>
+      <button type="submit" id="login2">log in instead?</button>
     </div>
   </div>
 
 
+  <div class="login-container" id="login-section" style="display: block;">
+    <div>
+      <img src="logo.png" alt="logo" style="width: fit-content; height: 300px;">
+    </div>
+    <div class="login-box">
+      <input type="text" placeholder="Enter Username" id="user" required />
+      <input type="password" placeholder="Enter Password" id="password" required />
+      <button id="login">Login</button>
+    </div>
+    <button id="createacc">want to create account instead?</button>
+  </div>
+
+
+
   <!-- HOME SECTION -->
-  <div id="home-section" style="display: block;">
+  <div id="home-section" style="display: none;">
     <div class="navbar">
       <div id="logocont" class="logo"><img id="logoimg" src="logo.png" alt="N A Agro" /></div>
     </div>
@@ -738,11 +761,25 @@
       </div>
     </div>
     <div style="display: flex;">
-      <div style="margin: 10px;" class="statement-btn"> Save Setting
-      </div>
-      <div id="settingpagecancelbtn" style="margin: 10px;" class="statement-btn"> Back
+      <div style="margin: 10px;" class="">
+        <div>
+          <button>Statement</button>
+          <button id="changepasswordbtn">Change password</button>
+          <div>
+            <select name="resetCollection" id="resetcollectionselect">
+              <option value="sell">sell</option>
+              <option value="cost">cost</option>
+              <option value="withdraw">withdraw</option>
+              <option value="withdraw">due</option>
+            </select>
+            <button id="resetCollectionbtn">reset</button>
+          </div>
+          <button id="factoryresetbtn">Factory Reset All</button>
+          <button id="settingpagecancelbtn" style="margin: 10px;" class="statement-btn"> Back</button>
+        </div>
       </div>
     </div>
+  </div>
 
 
   </div>
@@ -818,22 +855,51 @@
 
     // windows dom loaded funciton
     window.addEventListener("DOMContentLoaded", () => {
-      console.log("paged loaded")
-    })
+      const loginTime = localStorage.getItem('loginTime');
+      const SIX_HOURS = 6 * 60 * 60 * 1000;
 
-
-
-    function login(e) {
-      e.preventDefault();
-      const pwd = document.getElementById('password').value;
-      if (pwd === "1") {
+      if (loginTime && (Date.now() - parseInt(loginTime)) < SIX_HOURS) {
+        // Still within session time
+        console.log("Auto-login");
         document.getElementById("login-section").style.display = "none";
         document.getElementById("home-section").style.display = "block";
       } else {
-        alert("Wrong password, Tru Again");
+        // Session expired
+        localStorage.removeItem('loginTime');
+        localStorage.removeItem('loggedInUser');
+        document.getElementById("login-section").style.display = "block";
+        document.getElementById("home-section").style.display = "none";
       }
+    });
 
-    }
+
+
+
+
+    document.getElementById("login").addEventListener("click", (e) => {
+      e.preventDefault(); // Just in case a form tries to submit
+      fetcher('https://agroserver-mdz5.onrender.com/data/user/')
+        .then((data) => {
+          // console.log(data)
+          const user = document.getElementById('user').value;
+          const pwd = document.getElementById('password').value;
+
+          const matched = data.find(d => d.user.toLowerCase() === user.toLowerCase() && d.amount === pwd);
+
+          if (matched) {
+            localStorage.setItem('loginTime', Date.now().toString());
+            console.log("login successful");
+            document.getElementById("login-section").style.display = "none";
+            document.getElementById("home-section").style.display = "block";
+          } else {
+            alert("Wrong username or password, try again");
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching users:", err);
+        });
+    });
+
 
     function poster(route, data) {
       return fetch(route, {
@@ -933,6 +999,32 @@
       document.querySelector("#login-section").style.display = "block"
       document.querySelector("#home-section").style.display = "none"
       document.getElementById('password').value = "";
+      localStorage.removeItem('loginTime');
+      localStorage.removeItem('loggedInUser');
+    })
+
+    document.querySelector("#createacc").addEventListener("click", () => {
+      document.querySelector("#create-section").style.display = "block"
+      // document.querySelector("#login-container").style.display = "none"
+      // document.getElementById("home-section").style.display = "none"
+
+      document.querySelector("#createuser").addEventListener("click", () => {
+        let name = document.querySelector("#name").value
+        let pass = document.querySelector("#pass").value
+        let data = {
+          "user": name,
+          "amount": pass
+        }
+        // console.log(data)
+
+        poster('https://agroserver-mdz5.onrender.com/insert/user/', data)
+          .then(() => {
+            document.querySelector("#login-section").style.display = "block"
+            document.querySelector("#create-section").style.display = "none"
+            document.getElementById("home-section").style.display = "none";
+            location.reload()
+          })
+      })
     })
 
     document.querySelector("#totalbank").addEventListener("click", () => {
@@ -1488,8 +1580,7 @@
     })
 
 
-
-    // server codes
+    //  insert funcitons
 
     document.querySelector("#addbankdata").addEventListener("click", () => {
       let date = document.querySelector("#bankdate").value;
@@ -1559,7 +1650,7 @@
           if (Wtype === "cash") {
             const wdata = {
               "date": date,
-              "amount": -Math.abs(amount),
+              "amount": amount ? -Math.abs(amount) : 0,
               "note": "Withdraw from cash"
             };
             await poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
@@ -1567,7 +1658,7 @@
           if (Wtype === "bank") {
             const wdata = {
               "date": date,
-              "amount": -Math.abs(amount),
+              "amount": amount ? -Math.abs(amount) : 0,
               "note": "Withdraw from cash"
             };
             await poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
@@ -1765,62 +1856,62 @@
     });
 
     document.querySelector("#productaddlistbtn").addEventListener("click", () => {
-  let date = document.querySelector("#bankdate").value;
-  if (!date) {
-    date = new Date().toISOString().replace('T', ', ').split('.')[0];
-  }
+      let date = document.querySelector("#bankdate").value;
+      if (!date) {
+        date = new Date().toISOString().replace('T', ', ').split('.')[0];
+      }
 
-  const qCheck = document.querySelector("#procutquantity").value;
-  const name = document.querySelector("#productname").value;
+      const qCheck = document.querySelector("#procutquantity").value;
+      const name = document.querySelector("#productname").value;
 
-  // ✅ Validate required fields
-  if (qCheck <= 0 || isNaN(qCheck)) {
-    const msg = document.querySelector("#prodaddsuccessmsg");
-    msg.style.display = "block";
-    msg.style.color = "red";
-    msg.textContent = "Please enter a valid quantity!";
-    setTimeout(() => {
-      msg.style.display = "none";
-      msg.style.color = "green";
-      msg.textContent = "Data Added Successfully!!";
-    }, 3000);
-    return; // ⛔ Don't continue if invalid
-  }
-
-  const data = {
-    date: date,
-    amount: parseInt(qCheck),
-    note: name || "Anonymous Product"
-  };
-
-  fetcher('https://agroserver-mdz5.onrender.com/data/products/')
-    .then((products) => {
-      const exists = products.some(p => p.note.toLowerCase() === name.toLowerCase());
-
-      if (exists || name == "" || name == null) {
+      // ✅ Validate required fields
+      if (qCheck <= 0 || isNaN(qCheck)) {
         const msg = document.querySelector("#prodaddsuccessmsg");
         msg.style.display = "block";
         msg.style.color = "red";
-        msg.textContent = "This Product Name Already Exists. Choose a New Name!";
+        msg.textContent = "Please enter a valid quantity!";
         setTimeout(() => {
           msg.style.display = "none";
           msg.style.color = "green";
           msg.textContent = "Data Added Successfully!!";
         }, 3000);
-        return;
+        return; // ⛔ Don't continue if invalid
       }
 
-      // ✅ Safe to insert
-      poster('https://agroserver-mdz5.onrender.com/insert/products/', data)
-        .then(() => {
-          document.querySelector("#prodaddsuccessmsg").style.display = "block";
-          document.querySelector("#totalproductbtn").click();
-          setTimeout(() => {
-            document.querySelector("#prodaddsuccessmsg").style.display = "none";
-          }, 2000);
+      const data = {
+        date: date,
+        amount: parseInt(qCheck),
+        note: name || "Anonymous Product"
+      };
+
+      fetcher('https://agroserver-mdz5.onrender.com/data/products/')
+        .then((products) => {
+          const exists = products.some(p => p.note.toLowerCase() === name.toLowerCase());
+
+          if (exists || name == "" || name == null) {
+            const msg = document.querySelector("#prodaddsuccessmsg");
+            msg.style.display = "block";
+            msg.style.color = "red";
+            msg.textContent = "This Product Name Already Exists. Choose a New Name!";
+            setTimeout(() => {
+              msg.style.display = "none";
+              msg.style.color = "green";
+              msg.textContent = "Data Added Successfully!!";
+            }, 3000);
+            return;
+          }
+
+          // ✅ Safe to insert
+          poster('https://agroserver-mdz5.onrender.com/insert/products/', data)
+            .then(() => {
+              document.querySelector("#prodaddsuccessmsg").style.display = "block";
+              document.querySelector("#totalproductbtn").click();
+              setTimeout(() => {
+                document.querySelector("#prodaddsuccessmsg").style.display = "none";
+              }, 2000);
+            });
         });
     });
-});
 
 
     document.querySelector("#addduedata").addEventListener("click", () => {
@@ -1831,18 +1922,18 @@
       note = document.querySelector("#addduenote").value;
       amount = document.querySelector("#adddueamount").value;
 
-      if(note == "" || amount <= 0 || isNaN(amount)){
+      if (note == "" || amount <= 0 || isNaN(amount)) {
         document.querySelector("#msgsuccessfordue").style.display = "block"
         document.querySelector("#msgsuccessfordue").style.color = "red"
         document.querySelector("#msgsuccessfordue").textContent = "enter amount first!!"
-        setTimeout(()=>{
+        setTimeout(() => {
           document.querySelector("#msgsuccessfordue").style.display = "none"
           document.querySelector("#msgsuccessfordue").style.color = "green"
           document.querySelector("#msgsuccessfordue").textContent = "Data Added Successfully!!"
 
-        },2000)
+        }, 2000)
       }
-      
+
       data = {
         "date": date,
         "note": note ? note : "You didn't added a Name, should have",
@@ -1905,6 +1996,65 @@
 
 
 
+    document.querySelector("#changepasswordbtn").addEventListener("click", () => {
+      const divva = document.createElement("div")
+      divva.classList.add("cnhangepasspage")
+      divva.innerHTML = `
+      <input id="usr" type="text"> username
+      <input id="oldpass" type="password" placeholder="Old password"> 
+      <input id="newpass" type="password" placeholder="new pass">
+      <button id="chngepassbtn">change</button>
+      <button id="chngepasscancelbtn">cancel</button>
+      `
+      const lSection = document.querySelector("#login-section")
+      document.body.innerHTML = ``
+      document.body.appendChild(divva)
+
+      document.querySelector("#chngepasscancelbtn").addEventListener("click", () => {
+        location.reload()
+      })
+      document.querySelector("#chngepassbtn").addEventListener("click", () => {
+        fetcher('https://agroserver-mdz5.onrender.com/data/user/')
+          .then((data) => {
+            let usr = document.querySelector("#usr").value
+            let oldpass = document.querySelector("#oldpass").value
+            let newpass = document.querySelector("#newpass").value
+            const matched = data.find(d => d.user.toLowerCase() === usr.toLowerCase() && d.amount === oldpass);
+            if (matched) {
+              console.log(matched._id,newpass)
+              poster(`https://agroserver-mdz5.onrender.com/edit/user/`, { "id": matched._id, "amount": newpass })
+
+                .then(alert("Password changed"))
+                document.querySelector("#logoutbtn").click()
+
+            }
+          })
+
+      })
+
+
+    })
+
+    document.querySelector("#resetCollectionbtn").addEventListener("click", () => {
+      alert("ALert!!!!! (Remember! it will effect on the other database, such as bank balance or cash balance mismatch etc) ")
+      let name = document.querySelector("#resetcollectionselect").value
+      console.log(name)
+      fetcher(`https://agroserver-mdz5.onrender.com/reset/${name}/`)
+        .then(() => {
+          alert(`${name} deleted successfully!!`)
+        })
+
+
+    })
+
+    document.querySelector("#factoryresetbtn").addEventListener("click", () => {
+      alert("alert!! you know what you doing right? all your database will be reset.")
+      fetcher('https://agroserver-mdz5.onrender.com/reset/all/')
+        .then(() => {
+          alert("database deleted success!!!")
+          location.reload()
+        })
+    })
 
 
 
