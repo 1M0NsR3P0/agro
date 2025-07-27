@@ -1061,11 +1061,12 @@
     }
 
     function decreaser(pName, Q) {
+      // console.log(pName,Q)
       let id = ''
       let Qty = 0
       fetcher(`https://agroserver-mdz5.onrender.com/data/products/`)
         .then((datas) => {
-          console.log(datas)
+          // console.log(datas)
           datas.forEach(data => {
             if (data.note.toLowerCase() == pName.toLowerCase()) {
               id = data._id
@@ -1175,7 +1176,9 @@
           loader2.style.display = "none"
           totalAmount = 0
           data.forEach((item, index) => {
-            totalAmount += parseInt(item.amount)
+            if (item.status == true) {
+              totalAmount += parseInt(item.amount)
+            }
           });
 
           document.querySelector("#totalbankspan").textContent = `${totalAmount}`
@@ -1209,7 +1212,7 @@
           loader2.style.display = "none"
           totalAmount = 0
           data.forEach((item, index) => {
-            totalAmount += parseInt(item.amount)
+            if (item.status == true) { totalAmount += parseInt(item.amount) }
           });
 
           document.querySelector("#totalcashspan").textContent = `${totalAmount}`
@@ -1242,7 +1245,7 @@
           loader2.style.display = "none"
           totalAmount = 0
           data.forEach((item, index) => {
-            totalAmount += parseInt(item.amount)
+            if (item.status == true) { totalAmount += parseInt(item.amount) }
           });
 
           document.querySelector("#totalWithdraw").textContent = `${totalAmount}`
@@ -1264,7 +1267,7 @@
         .then((data) => {
           data.forEach(d => {
             // console.log(d.amount)
-            total += parseInt(d.amount)
+            if (d.status == true) { total += parseInt(d.amount) }
           })
           // alert(total)
           document.querySelector("#totalSell span").textContent = total
@@ -1278,7 +1281,7 @@
       fetcher('https://agroserver-mdz5.onrender.com/data/cost/')
         .then((data) => {
           data.forEach(d => {
-            total += parseInt(d.amount)
+            if (d.status == true) { total += parseInt(d.amount) }
           })
           document.querySelector("#totalcost span").textContent = total
         })
@@ -1292,7 +1295,7 @@
         .then((data) => {
           data.forEach(d => {
             // console.log(d.amount)
-            total += parseInt(d.amount)
+            if (d.status == true) { total += parseInt(d.amount) }
           })
           document.querySelector("#totalDue span").textContent = total
         })
@@ -1302,55 +1305,131 @@
     })
 
     document.querySelector("#addcostbtn").addEventListener("click", () => {
-      document.querySelector("#homepage").style.display = "none"
-      document.querySelector("#addcostpage").style.display = "flex"
+      document.querySelector("#homepage").style.display = "none";
+      document.querySelector("#addcostpage").style.display = "flex";
+
+      const table = document.querySelector("#costtablebody");
+      table.innerHTML = "";
+      let totalcost = 0;
+
       fetcher("https://agroserver-mdz5.onrender.com/data/cost/")
         .then(data => {
-          totalcost = 0
-          data.forEach((d) => {
+          data.forEach(d => {
             if (d.status === true) {
-              totalcost += parseInt(d.amount)
-              table = document.querySelector("#costtablebody")
-              rows = document.createElement("tr")
-              table.classList.add("costtablebody")
-              rows.innerHTML = `
-                <td style="width: 85px; overflow-x: scroll; ">${d.date}</td>
-                <td>${d.note}</td>
-                <td>${d.amount}</td>
-            `
-              table.appendChild(rows)
-            };
-          })
-          document.querySelector("#totalcost2").textContent = `${totalcost ? totalcost : "loading.."}`
-          document.querySelector("#refreshbtn").addEventListener("click", () => {
-            // console.log("clicked 2")
-            document.querySelector("#totalcost2").textContent = "loading.."
-            table = document.querySelector("#costtablebody")
-            table.innerHTML = ``
-            fetcher("https://agroserver-mdz5.onrender.com/data/cost/")
-              .then(data => {
-                totalcost2 = 0
-                data.forEach(d => {
-                  if (d.status == true) {
-                    totalcost2 += parseInt(d.amount)
-                    document.querySelector("#totalcost2").textContent = `${totalcost2 ? totalcost2 : "loading.."}`
-                    rows = document.createElement("tr")
-                    table.classList.add("costtablebody")
-                    rows.innerHTML = `
-                      <td style="width: 85px; overflow-x: scroll; ">${d.date}</td>
-                      <td>${d.note}</td>
-                      <td>${d.amount}</td>
-            `
-                    table.appendChild(rows)
-                  }
-                })
-              })
-          })
+              totalcost += parseInt(d.amount);
+              const row = document.createElement("tr");
+              table.classList.add("costtablebody");
+
+              row.innerHTML = `
+            <td style="width: 85px; overflow-x: scroll;">${d.date}</td>
+            <td>${d.note}</td>
+            <td>
+              ${d.amount}
+              <span id="costdel-${d._id}" style="cursor:pointer; color:red; margin-left:8px;">del</span>
+            </td>
+          `;
+
+              table.appendChild(row);
+
+              // Add delete button functionality
+              document.querySelector(`#costdel-${d._id}`).addEventListener("click", () => {
+                document.querySelector("#refreshbtn").click()
+                poster("https://agroserver-mdz5.onrender.com/delete/cost/", { id: d._id })
+                  .then(response => {
+                    if (response) {
+                      const wdata = {
+                        "date": d.date,
+                        "amount": d.amount ? Math.abs(d.amount) : 0.00,
+                        "note": "Cost decreased",
+                        "status": true
+                      };
+                      if (d.method === "cash") {
+                        poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
+                      } else if (d.method === "bank") {
+                        poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
+                      }
+                      row.remove();
+                      totalcost -= parseInt(d.amount);
+                      document.querySelector("#totalcost2").textContent = totalcost;
+                    } else {
+                      alert("Failed to delete item");
+                    }
+                  })
+                  .catch(err => {
+                    console.error("Delete error:", err);
+                    alert("Error deleting item.");
+                  });
+              });
+            }
+          });
+
+          document.querySelector("#totalcost2").textContent = totalcost ? totalcost : "loading..";
+        });
+
+      // Refresh Button Handler
+      document.querySelector("#refreshbtn").addEventListener("click", () => {
+        document.querySelector("#totalcost2").textContent = "loading..";
+        table.innerHTML = "";
+        let totalcost2 = 0;
+
+        fetcher("https://agroserver-mdz5.onrender.com/data/cost/")
+          .then(data => {
+            data.forEach(d => {
+              if (d.status === true) {
+                totalcost2 += parseInt(d.amount);
+                const row = document.createElement("tr");
+                table.classList.add("costtablebody");
+
+                row.innerHTML = `
+              <td style="width: 85px; overflow-x: scroll;">${d.date}</td>
+              <td>${d.note}</td>
+              <td>
+                ${d.amount}
+                <span id="costdel-${d._id}" style="cursor:pointer; color:red; margin-left:8px;">del</span>
+              </td>
+            `;
+
+                table.appendChild(row);
+
+                // Add delete logic again for refreshed entries
+                document.querySelector(`#costdel-${d._id}`).addEventListener("click", () => {
+                  poster("https://agroserver-mdz5.onrender.com/delete/cost/", { id: d._id })
+                    .then(response => {
+                      if (response.status == "success") {
+                        console.log(d, response)
+                        row.remove();
+                        const wdata = {
+                          "date": d.date,
+                          "amount": d.amount ? Math.abs(d.amount) : 0.00,
+                          "note": "Cost decreased",
+                          "status": true
+                        };
+                        if (d.method === "cash") {
+                          poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
+                        } else if (d.method === "bank") {
+                          poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
+                        }
+
+                        totalcost2 -= parseInt(d.amount);
+                        document.querySelector("#totalcost2").textContent = totalcost2;
+                      } else {
+                        alert("Failed to delete item");
+                      }
+                    })
+                    .catch(err => {
+                      console.error("Delete error:", err);
+                      alert("Error deleting item.");
+                    });
+                });
+              }
+            });
+
+            document.querySelector("#totalcost2").textContent = totalcost2 ? totalcost2 : "loading..";
+          });
+      });
+    });
 
 
-        })
-
-    })
     document.querySelector("#addcostpagecancel").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "block"
       document.querySelector("#addcostpage").style.display = "none"
@@ -1358,69 +1437,124 @@
       location.reload()
     })
 
-    let totalSell = 0
+    let totalSell = 0;
 
     document.querySelector("#addsellbtn").addEventListener("click", () => {
-      document.querySelector("#homepage").style.display = "none"
-      document.querySelector("#addsellpage").style.display = "flex"
+      document.querySelector("#homepage").style.display = "none";
+      document.querySelector("#addsellpage").style.display = "flex";
 
-      totalSell = 0
+      totalSell = 0;
 
       // Fetch and render sales data
       fetcher("https://agroserver-mdz5.onrender.com/data/sell/")
         .then((data) => {
-          document.querySelector("#totalsellhappened").textContent = "loading.."
-          let table = document.querySelector("#tablesell")
-          table.innerHTML = "" // Clear previous rows
+          document.querySelector("#totalsellhappened").textContent = "loading..";
+          let table = document.querySelector("#tablesell");
+          table.innerHTML = ""; // Clear previous rows
 
           data.forEach((d) => {
             if (d.status == true) {
+              totalSell += parseInt(d.amount);
 
-              totalSell += parseInt(d.amount)
-
-              let row = document.createElement("tr")
+              let row = document.createElement("tr");
               row.innerHTML = `
-            <td style="width: 85px; overflow-x: scroll;">${d.date}</td>
+            <td style="width: 85px; overflow-x: scroll; height:25px;">${d.date}</td>
             <td>${d.note}</td>
             <td>${d.buyerName}</td>
-            <td>${d.productList}</td>
-            <td>${d.amount}</td>
-          `
-              table.appendChild(row)
-            }
-          })
+            <td >${d.productList}</td>
+            <td style="">
+              ${d.amount}
+              <buton class="seeldel" data-id="${d._id}" style="color:red;margin-left:20px;"> del</button>
+            </td>
+          `;
 
-          document.querySelector("#totalsellhappened").textContent = totalSell
-        })
+              table.appendChild(row);
+
+              // Bind delete button after adding row
+              row.querySelector(".seeldel").addEventListener("click", () => {
+                poster("https://agroserver-mdz5.onrender.com/delete/sell/", { id: d._id })
+                  .then(() => {
+                    row.remove(); // Remove from DOM
+                    totalSell -= parseInt(d.amount); // Update total
+                    document.querySelector("#totalsellhappened").textContent = totalSell;
+
+
+                    let checkDue = parseInt(d.amount) - (parseInt(d.quantity) * parseInt(d.eachprice))
+                    let due = false
+
+                    decreaser(d.productList, -Math.abs(d.quantity))
+                    // document.querySelector("#currentstock").textContent = res.find(p => p.note === productList).amount -= quantity;
+
+
+                    if (checkDue < 0) {
+                      due = true
+                    }
+                    else {
+                      due = false
+                    }
+                    // Decrease from cash or bank
+                    const wdata = {
+                      "date": d.date,
+                      "amount": d.amount ? -Math.abs(d.amount) : 0.00,
+                      "note": `Sell delted To ${d.method ? d.method : "cash"} for sell to ${d.buyerName ? d.buyerName : "Annonymous Buyer"} at ${d.date} || product: ${d.productList}, quantity: ${d.quantity}`,
+                      "status": true
+                    };
+                    const wdata2 = {
+                      "date": d.date,
+                      "amount": due ? parseInt(-Math.abs(checkDue)) : 0.00,
+                      "note": `sell deleted so due due deleted ${d.buyerName ? d.buyerName : "annonymous with method: " + d.method} || date : ${d.date}, product : ${d.productList}, quantity: ${d.quantity}`,
+                      "status": true
+                    };
+
+                    if (d.method === "cash") {
+                      poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
+                    } else if (d.method === "bank") {
+                      poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
+                    }
+                    if (due) {
+                      // console.log(due, " ", checkbox.checked)
+                      poster('https://agroserver-mdz5.onrender.com/insert/due/', wdata2);
+                    }
+                  })
+                  .catch(err => {
+                    console.error("Delete failed:", err);
+                    alert("Failed to delete. Please try again.");
+                  });
+              });
+            }
+          });
+
+          document.querySelector("#totalsellhappened").textContent = totalSell;
+        });
 
       // Fetch and populate product list
       fetcher("https://agroserver-mdz5.onrender.com/data/products/")
         .then((data) => {
-          let selection = document.querySelector("#productselect")
-          let stock = document.querySelector("#currentstock")
-          selection.innerHTML = "" // Clear existing options
-          stock.textContent = "" // Reset stock display
+          let selection = document.querySelector("#productselect");
+          let stock = document.querySelector("#currentstock");
+          selection.innerHTML = ""; // Clear existing options
+          stock.textContent = ""; // Reset stock display
 
           data.forEach((d) => {
-            let opt = document.createElement("option")
-            opt.value = d.note
-            opt.textContent = d.note
-            selection.appendChild(opt)
-          })
+            let opt = document.createElement("option");
+            opt.value = d.note;
+            opt.textContent = d.note;
+            selection.appendChild(opt);
+          });
 
           // Update stock when product changes
           selection.addEventListener("change", () => {
-            const selectedProduct = selection.value
-            const selected = data.find(p => p.note === selectedProduct)
-            stock.textContent = selected ? selected.amount : "0"
-          })
+            const selectedProduct = selection.value;
+            const selected = data.find(p => p.note === selectedProduct);
+            stock.textContent = selected ? selected.amount : "0";
+          });
 
           // Initial stock display
           if (data.length > 0) {
-            stock.textContent = data[0].amount
+            stock.textContent = data[0].amount;
           }
-        })
-    })
+        });
+    });
 
     document.querySelector("#quantitysell").addEventListener("input", (e) => {
       const selectedProduct = document.querySelector("#productselect").value
@@ -1758,97 +1892,185 @@
     })
 
     document.querySelector("#histbank").addEventListener("click", () => {
-      let b = document.querySelector("#alltimehistory")
-      b.style.display = "block"
-      b.appendChild(loader)
+      let b = document.querySelector("#alltimehistory");
+      b.style.display = "block";
+      b.appendChild(loader);
 
       fetcher("https://agroserver-mdz5.onrender.com/data/bank/")
         .then(data => {
+          totalAmount = 0;
+          document.querySelector("#histtable").innerHTML = ""; // Clear previous entries
 
-          // console.log(data)
-          totalAmount = 0
           data.forEach((item, index) => {
             if (item.status == true) {
-              totalAmount += parseInt(item.amount)
-              let row = document.createElement("tr")
-              row.style.width = "100%"
+              totalAmount += parseInt(item.amount);
+              let row = document.createElement("tr");
+              row.style.width = "100%";
+              row.setAttribute("data-id", item._id); // Add row ID for easier deletion
+
               row.innerHTML = `
-          <td style="width: 85px; overflow-x: auto; ">${item.date}</td>
-          <td style="overflow-x: auto; ">${item.note}</td>
-          <td style="width: 85px; overflow-x: auto; ">${item.amount}</td>
-          `
-              document.querySelector("#histtable").appendChild(row)
-              loader.style.display = "none"
+            <td style="width: 85px; overflow-x: auto;">${item.date}</td>
+            <td style="overflow-x: auto;">${item.note}</td>
+            <td style="width: 85px; overflow-x: auto;">
+              ${item.amount}
+              <span id="bankhistdel-${item._id}" style="cursor:pointer; color:red; margin-left: 8px;">del</span>
+            </td>
+          `;
+
+              document.querySelector("#histtable").appendChild(row);
+              loader.style.display = "none";
+
+              // Add delete event listener
+              document.querySelector(`#bankhistdel-${item._id}`).addEventListener("click", () => {
+                poster("https://agroserver-mdz5.onrender.com/delete/bank/", { id: item._id })
+                  .then(response => {
+                    if (response) {
+                      // Remove row from DOM
+                      row.remove();
+                      // Update totalAmount
+                      totalAmount -= parseInt(item.amount);
+                      document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount}</span>`;
+                    } else {
+                      alert("Failed to delete");
+                    }
+                  })
+                  .catch(err => {
+                    console.error("Delete error:", err);
+                    alert("Error deleting item");
+                  });
+              });
             }
           });
 
-          document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount ? totalAmount : "loading"}</span>`
-        })
-    })
+          document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount ? totalAmount : "loading"}</span>`;
+        });
+    });
 
 
     document.querySelector("#histcash").addEventListener("click", () => {
-      let b = document.querySelector("#alltimehistory")
-      b.style.display = "block"
-      b.appendChild(loader)
+      let b = document.querySelector("#alltimehistory");
+      b.style.display = "block";
+      b.appendChild(loader);
 
       fetcher("https://agroserver-mdz5.onrender.com/data/cash/")
         .then(data => {
+          totalAmount = 0;
+          document.querySelector("#histtable").innerHTML = ""; // Clear old entries
 
-          // console.log(data)
-          totalAmount = 0
           data.forEach((item, index) => {
             if (item.status == true) {
-              totalAmount += parseInt(item.amount)
-              let row = document.createElement("tr")
-              row.style.width = "100%"
+              totalAmount += parseInt(item.amount);
+              let row = document.createElement("tr");
+              row.style.width = "100%";
+              row.setAttribute("data-id", item._id); // Add for reference
+
               row.innerHTML = `
-          <td style="width: 85px; overflow-x: auto; ">${item.date}</td>
-          <td style="overflow-x: auto; ">${item.note}</td>
-          <td style="width: 85px; overflow-x: auto; ">${item.amount}</td>
-          `
-              document.querySelector("#histtable").appendChild(row)
-              loader.style.display = "none"
+            <td style="width: 85px; overflow-x: auto;">${item.date}</td>
+            <td style="overflow-x: auto;">${item.note}</td>
+            <td style="width: 85px; overflow-x: auto;">
+              ${item.amount}
+              <span id="cashhistdel-${item._id}" style="cursor:pointer; color:red; margin-left: 8px;">del</span>
+            </td>
+          `;
+
+              document.querySelector("#histtable").appendChild(row);
+              loader.style.display = "none";
+
+              // Attach delete logic
+              document.querySelector(`#cashhistdel-${item._id}`).addEventListener("click", () => {
+                poster("https://agroserver-mdz5.onrender.com/delete/cash/", { id: item._id })
+                  .then(response => {
+                    if (response) {
+                      row.remove();
+                      totalAmount -= parseInt(item.amount);
+                      document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount}</span>`;
+                    } else {
+                      alert("Failed to delete entry.");
+                    }
+                  })
+                  .catch(err => {
+                    console.error("Delete error:", err);
+                    alert("Error deleting entry.");
+                  });
+              });
             }
           });
 
-          document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount ? totalAmount : "loading"}</span>`
-        })
-    })
+          document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount ? totalAmount : "loading"}</span>`;
+        });
+    });
+
+
     document.querySelector("#histwithdraw").addEventListener("click", () => {
-      let b = document.querySelector("#alltimehistory")
-      b.style.display = "block"
-      b.appendChild(loader)
+      let b = document.querySelector("#alltimehistory");
+      b.style.display = "block";
+      b.appendChild(loader);
 
       fetcher("https://agroserver-mdz5.onrender.com/data/withdraw/")
         .then(data => {
+          totalAmount = 0;
+          document.querySelector("#histtable").innerHTML = ""; // Clear previous entries
 
-          // console.log(data)
-          totalAmount = 0
           data.forEach((item, index) => {
             if (item.status == true) {
-              totalAmount += parseInt(item.amount)
-              let row = document.createElement("tr")
-              row.style.width = "100%"
+              totalAmount += parseInt(item.amount);
+              let row = document.createElement("tr");
+              row.style.width = "100%";
+              row.setAttribute("data-id", item._id);
+
               row.innerHTML = `
-          <td style="width: 85px; overflow-x: auto; ">${item.date}</td>
-          <td style="overflow-x: auto; ">${item.note}</td>
-          <td style="width: 85px; overflow-x: auto; ">${item.amount}</td>
-          `
-              document.querySelector("#histtable").appendChild(row)
-              loader.style.display = "none"
+            <td style="width: 85px; overflow-x: auto;">${item.date}</td>
+            <td style="overflow-x: auto;">${item.note}</td>
+            <td style="width: 85px; overflow-x: auto;">
+              ${item.amount}
+              <span id="withdeldel-${item._id}" style="cursor:pointer; color:red; margin-left:8px;">del</span>
+            </td>
+          `;
+
+              document.querySelector("#histtable").appendChild(row);
+              loader.style.display = "none";
+
+              // Add delete event
+              document.querySelector(`#withdeldel-${item._id}`).addEventListener("click", () => {
+                poster("https://agroserver-mdz5.onrender.com/delete/withdraw/", { id: item._id })
+                  .then(response => {
+                    if (response) {
+                      const wdata = {
+                        "date": item.date,
+                        "amount": item.amount ? Math.abs(item.amount) : 0.00,
+                        "note": "with decreased by deletion",
+                        "status": true
+                      };
+
+                      if (item.withdrawType === "cash") {
+                        // console.log(item)
+                        poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
+                      } else if (item.withdrawType === "bank") {
+                        poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
+                      }
+                      row.remove();
+                      totalAmount -= parseInt(item.amount);
+                      document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount}</span>`;
+                    } else {
+                      alert("Failed to delete entry.");
+                    }
+                  })
+                  .catch(err => {
+                    console.error("Delete error:", err);
+                    alert("Error deleting entry.");
+                  });
+              });
             }
           });
 
-          document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount ? totalAmount : "loading"}</span>`
-        })
-    })
+          document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount ? totalAmount : "loading"}</span>`;
+        });
+    });
 
 
     document.querySelector("#histwithdraw").addEventListener("click", () => {
       document.querySelector("#alltimehistory").style.display = "block"
     })
-
     document.querySelector("#historycencel").addEventListener("click", () => {
       document.querySelector("#alltimehistory").style.display = "none"
       let tablerows = document.querySelector("#histtable")
@@ -1963,6 +2185,7 @@
     });
 
     document.querySelector("#addcostdata").addEventListener("click", async () => {
+
       let date = document.querySelector("#addcostdate").value;
       if (!date) {
         date = new Date().toISOString().replace('T', ', ').split('.')[0];
@@ -1999,6 +2222,7 @@
         const res = await poster('https://agroserver-mdz5.onrender.com/insert/cost/', data);
 
         if (res) {
+          document.querySelector("#refreshbtn").click()
           document.querySelector("#costaddsuccess").style.display = "block";
           setTimeout(() => {
             document.querySelector("#costaddsuccess").style.display = "none";
@@ -2029,7 +2253,6 @@
         console.error("Error in cost insert:", error);
       }
     });
-
 
     document.querySelector("#addselldata").addEventListener("click", async () => {
 
@@ -2078,7 +2301,7 @@
         fetcher('https://agroserver-mdz5.onrender.com/data/sell/')
           .then((datas) => {
             datas.forEach(d => {
-              if(d.status == true){
+              if (d.status == true) {
                 totalDue += parseInt(d.amount)
               }
             })
@@ -2209,7 +2432,6 @@
         });
     });
 
-
     document.querySelector("#addduedata").addEventListener("click", () => {
       let date = document.querySelector("#addduedate").value;
       if (!date) {
@@ -2250,7 +2472,7 @@
             .then((data) => {
               data.forEach(d => {
                 // console.log(d.amount)
-                if(d.status == true){
+                if (d.status == true) {
                   totalDue += parseInt(d.amount)
                 }
               })
