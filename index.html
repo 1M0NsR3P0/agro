@@ -267,6 +267,39 @@
       overflow: auto;
       flex-direction: column;
     }
+
+    .radio {
+      background-color: rgb(255, 255, 255);
+      border: 1px solid rgb(0, 0, 0);
+      border-radius: 50%;
+      height: 15px;
+      width: 15px;
+    }
+
+    .radioP {
+      display: flex;
+      gap: 50px;
+      height: 50px;
+      width: 350px;
+      justify-content: flex-start;
+      align-items: center;
+      /* background-color: red; */
+    }
+
+    .radio::before {}
+
+    .link {
+      font-size: 20px;
+      color: rgb(0, 0, 0);
+      font-weight: 800;
+      background-color: transparent;
+      border: none;
+      text-decoration: underline;
+    }
+
+    .link:active {
+      background-color: rgba(5, 17, 124, 0.719);
+    }
   </style>
 </head>
 
@@ -778,6 +811,7 @@
 
     </div>
   </div>
+
   <!-- add setting page -->
   <!-- Todo// pass change, reset database, logo/icon change -->
   <div id="settingpage" style="display: none; flex-direction: column; justify-content: center; align-items: center;">
@@ -789,30 +823,40 @@
     </div>
     <div style="display: flex;">
       <div style="margin: 10px;" class="">
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-          <button class="statusBtn">Statement</button>
-          <button class="statusBtn" id="changepasswordbtn">Change password</button>
-          <div style="display: flex; justify-content: center; align-items: center; width: 150px; gap: 10px;">
-            <select class="statusBtn"  name="resetCollection" id="resetcollectionselect">
-              <option value="sell">sell</option>
-              <option value="cost">cost</option>
-              <option value="withdraw">withdraw</option>
-              <option value="due">due</option>
-              <option value="user">all user data</option>
-              <option value="products">products</option>
-              <option value="bank">bank</option>
-              <option value="cash">cash</option>
-            </select>
-            <button id="resetCollectionbtn">reset</button>
+        <div style="display: flex; flex-direction: column; gap: 20px; align-items: flex-start;">
+          <div class="radioP">
+            <span class="radio"></span>
+            <div class="link">Statement</div>
           </div>
-          <button class="statusBtn" id="factoryresetbtn">Factory Reset All</button>
-          <button class="statusBtn" id="settingpagecancelbtn" style="margin: 10px;" class="statement-btn"> Back</button>
+          <div class="radioP">
+            <span class="radio"></span>
+            <div class="link" id="changepasswordbtn">Change password</div>
+          </div>
+
+          <div class="radioP">
+            <span class="radio"></span>
+            <div style="display: flex;  justify-content: center; align-items: center; width: 150px; gap: 3px;">
+              <select class="link" style="width: 110px;" name="resetCollection" id="resetcollectionselect">
+                <option value="sell">sell</option>
+                <option value="cost">cost</option>
+                <option value="withdraw">withdraw</option>
+                <option value="due">due</option>
+                <option value="user">all user data</option>
+                <option value="products">products</option>
+                <option value="bank">bank</option>
+                <option value="cash">cash</option>
+                <option value="all" id="factoryresetbtn">Reset All</option>
+              </select>
+              <div id="resetCollectionbtn" style="height: 20ox; width: 40px; font-size: xx-small;" class="link">reset
+              </div>
+              <div style="display: none;"><input type="password" id="confirmpass" placeholder="password"></div>
+            </div>
+          </div>
+          <div class="statement-btn" id="settingpagecancelbtn" style="margin: 10px;" class="statement-btn"> Back</div>
         </div>
       </div>
     </div>
   </div>
-
-
   </div>
 
   <!-- add cost page -->
@@ -1062,7 +1106,7 @@
       document.querySelector("#create-section").style.display = "none"
       document.querySelector("#login-container").style.display = "block"
       document.getElementById("home-section").style.display = "none"
-      
+
     }))
 
     document.querySelector("#createacc").addEventListener("click", () => {
@@ -1309,9 +1353,9 @@
       document.querySelector("#costtablebody").innerHTML = ``
       location.reload()
     })
-
+    
     let totalSell = 0
-
+    
     document.querySelector("#addsellbtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "none"
       document.querySelector("#addsellpage").style.display = "flex"
@@ -1371,7 +1415,6 @@
         })
     })
 
-    // Restrict sell amount based on current stock from API (no cache)
     document.querySelector("#quantitysell").addEventListener("input", (e) => {
       const selectedProduct = document.querySelector("#productselect").value
 
@@ -1388,7 +1431,6 @@
           }
         })
     })
-
 
     document.querySelector("#addsellpagecancel").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "block"
@@ -1555,23 +1597,111 @@
     })
 
     document.querySelector("#notebtn").addEventListener("click", () => {
-      document.querySelector("#homepage").style.display = "none"
-      document.querySelector("#notepage").style.display = "flex"
+      document.querySelector("#homepage").style.display = "none";
+      document.querySelector("#notepage").style.display = "flex";
+
+      // Clear existing rows before refetching
+      document.querySelector("#notepadtablebody").innerHTML = "";
+
       fetcher('https://agroserver-mdz5.onrender.com/data/note/')
         .then((data) => {
           data.forEach(d => {
-            // console.log(d)
-            let parent = document.querySelector("#notepadtablebody")
-            let rows = document.createElement("tr")
-            rows.innerHTML = `
-                <td style="width:150px;">${d.date}</td>
-                <td style="width:250px;">${d.title}</td>
-                <td style="display:flex;justify-content:space-between; align-items:center;">${d.note} <button>edit</button> </td>
-                `
-            parent.appendChild(rows)
-          })
-        })
-    })
+            if (d.status !== false) { // ✅ Only show non-deleted notes
+              renderNoteRow(d);
+            }
+          });
+        });
+    });
+
+    function renderNoteRow(d) {
+      let parent = document.querySelector("#notepadtablebody");
+      let row = document.createElement("tr");
+      row.id = `row-${d._id}`; // Add ID to easily remove later
+
+      row.innerHTML = `
+    <td style="width:150px;">${d.date}</td>
+    <td style="width:250px;">${d.title}</td>
+    <td style="display:flex; justify-content:space-between; align-items:center;" id="note${d._id}">
+      <span>${d.amount}</span>
+      <div style="display: flex; gap: 5px;">
+        <button id="noteEdit${d._id}">edit</button>
+        <button id="noteDelete${d._id}" style="color: red;">delete</button>
+      </div>
+    </td>
+  `;
+
+      parent.appendChild(row);
+
+      bindEditButton2(d);
+      bindDeleteButton(d);
+    }
+
+    function bindEditButton2(d) {
+      const editBtn = document.querySelector(`#noteEdit${d._id}`);
+      const cell = document.querySelector(`#note${d._id}`);
+
+      editBtn.addEventListener("click", () => {
+        cell.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <input type="text" id="edit-amount-${d._id}" value="${d.amount}" style="flex: 1; margin-right: 10px;">
+        <button id="save-amount-${d._id}">Save</button>
+        <button id="cancel-amount-${d._id}">Cancel</button>
+      </div>
+    `;
+
+        // Save handler
+        document.querySelector(`#save-amount-${d._id}`).addEventListener("click", () => {
+          const newAmount = document.querySelector(`#edit-amount-${d._id}`).value;
+
+          poster('https://agroserver-mdz5.onrender.com/edit/note/', {
+            id: d._id,
+            amount: newAmount
+          }).then(() => {
+            document.querySelector(`#note${d._id}`).innerHTML = `
+          <span>${newAmount}</span>
+          <div style="display: flex; gap: 5px;">
+            <button id="noteEdit${d._id}">edit</button>
+            <button id="noteDelete${d._id}" style="color: red;">delete</button>
+          </div>
+        `;
+            // Update the data and rebind buttons
+            d.amount = newAmount;
+            bindEditButton2(d);
+            bindDeleteButton(d);
+          });
+        });
+
+        // Cancel handler
+        document.querySelector(`#cancel-amount-${d._id}`).addEventListener("click", () => {
+          cell.innerHTML = `
+        <span>${d.amount}</span>
+        <div style="display: flex; gap: 5px;">
+          <button id="noteEdit${d._id}">edit</button>
+          <button id="noteDelete${d._id}" style="color: red;">delete</button>
+        </div>
+      `;
+          bindEditButton2(d);
+          bindDeleteButton(d);
+        });
+      });
+    }
+
+    function bindDeleteButton(d) {
+      const deleteBtn = document.querySelector(`#noteDelete${d._id}`);
+      deleteBtn.addEventListener("click", () => {
+        if (confirm("Are you sure you want to delete this note?")) {
+          poster('https://agroserver-mdz5.onrender.com/delete/note/', {
+            id: d._id
+          }).then(() => {
+            const row = document.querySelector(`#row-${d._id}`);
+            if (row) row.remove(); // ✅ Remove note from table immediately
+          }).catch(() => {
+            alert("Failed to delete (soft delete) the note.");
+          });
+        }
+      });
+    }
+
     document.querySelector("#notepagecancelbtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "block"
       document.querySelector("#notepage").style.display = "none"
@@ -2107,30 +2237,19 @@
       data = {
         "date": date,
         "title": title ? title : "No Title added",
-        "note": note ? note : "You didn't added a Name, should have",
+        "amount": note ? note : "You didn't added a Name, should have",
+        "status": true
       }
       poster('https://agroserver-mdz5.onrender.com/insert/note/', data)
         .then(() => {
           document.querySelector("#notepadtablebody").innerHTML = ``
           fetcher('https://agroserver-mdz5.onrender.com/data/note/')
             .then((data) => {
-              data.forEach(d => {
-                // console.log(d.amount)
-                let parent = document.querySelector("#notepadtablebody")
-                let rows = document.createElement("tr")
-                rows.innerHTML = `
-                <td style="width:150px;">${d.date}</td>
-                <td style="width:250px;">${d.title}</td>
-                <td style="display:flex;justify-content:space-between; align-items:center;">${d.note} <button>edit</button> </td>
-                `
-                parent.appendChild(rows)
-              })
+              document.querySelector("#notebtn").click();
             })
         })
 
     })
-
-
 
     document.querySelector("#changepasswordbtn").addEventListener("click", () => {
       const divva = document.createElement("div")
@@ -2171,17 +2290,26 @@
 
     })
 
-    document.querySelector("#resetCollectionbtn").addEventListener("click", () => {
-      alert("ALert!!!!! (Remember! it will effect on the other database, such as bank balance or cash balance mismatch etc) ")
-      let name = document.querySelector("#resetcollectionselect").value
-      console.log(name)
+let name = document.querySelector("#resetcollectionselect").value;
+let selectionvalue = document.querySelector("#resetcollectionselect");
+let confirm = document.querySelector("#confirmpass").value; // ✅ get the actual password value
+
+selectionvalue.style.display = "none";
+document.querySelector("#confirmpass").style.display = "block";
+
+fetcher(`https://agroserver-mdz5.onrender.com/data/user`)
+  .then((data) => {
+    const check = data.find((d) => d.pass == confirm); // ✅ now you're comparing string to string
+    if (check) {
       fetcher(`https://agroserver-mdz5.onrender.com/reset/${name}/`)
         .then(() => {
-          alert(`${name} deleted successfully!!`)
-        })
+          alert(`${name} data Reset successfully!!`);
+        });
+    } else {
+      alert("Password not matched");
+    }
+  });
 
-
-    })
 
     document.querySelector("#factoryresetbtn").addEventListener("click", () => {
       alert("alert!! you know what you doing right? all your database will be reset.")
