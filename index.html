@@ -1308,16 +1308,18 @@
         .then(data => {
           totalcost = 0
           data.forEach((d) => {
-            totalcost += parseInt(d.amount)
-            table = document.querySelector("#costtablebody")
-            rows = document.createElement("tr")
-            table.classList.add("costtablebody")
-            rows.innerHTML = `
-              <td style="width: 85px; overflow-x: scroll; ">${d.date}</td>
-              <td>${d.note}</td>
-              <td>${d.amount}</td>
-          `
-            table.appendChild(rows)
+            if (d.status === true) {
+              totalcost += parseInt(d.amount)
+              table = document.querySelector("#costtablebody")
+              rows = document.createElement("tr")
+              table.classList.add("costtablebody")
+              rows.innerHTML = `
+                <td style="width: 85px; overflow-x: scroll; ">${d.date}</td>
+                <td>${d.note}</td>
+                <td>${d.amount}</td>
+            `
+              table.appendChild(rows)
+            };
           })
           document.querySelector("#totalcost2").textContent = `${totalcost ? totalcost : "loading.."}`
           document.querySelector("#refreshbtn").addEventListener("click", () => {
@@ -1329,16 +1331,18 @@
               .then(data => {
                 totalcost2 = 0
                 data.forEach(d => {
-                  totalcost2 += parseInt(d.amount)
-                  document.querySelector("#totalcost2").textContent = `${totalcost2 ? totalcost2 : "loading.."}`
-                  rows = document.createElement("tr")
-                  table.classList.add("costtablebody")
-                  rows.innerHTML = `
-                    <td style="width: 85px; overflow-x: scroll; ">${d.date}</td>
-                    <td>${d.note}</td>
-                    <td>${d.amount}</td>
-          `
-                  table.appendChild(rows)
+                  if (d.status == true) {
+                    totalcost2 += parseInt(d.amount)
+                    document.querySelector("#totalcost2").textContent = `${totalcost2 ? totalcost2 : "loading.."}`
+                    rows = document.createElement("tr")
+                    table.classList.add("costtablebody")
+                    rows.innerHTML = `
+                      <td style="width: 85px; overflow-x: scroll; ">${d.date}</td>
+                      <td>${d.note}</td>
+                      <td>${d.amount}</td>
+            `
+                    table.appendChild(rows)
+                  }
                 })
               })
           })
@@ -1370,17 +1374,20 @@
           table.innerHTML = "" // Clear previous rows
 
           data.forEach((d) => {
-            totalSell += parseInt(d.amount)
+            if (d.status == true) {
 
-            let row = document.createElement("tr")
-            row.innerHTML = `
-          <td style="width: 85px; overflow-x: scroll;">${d.date}</td>
-          <td>${d.note}</td>
-          <td>${d.buyerName}</td>
-          <td>${d.productList}</td>
-          <td>${d.amount}</td>
-        `
-            table.appendChild(row)
+              totalSell += parseInt(d.amount)
+
+              let row = document.createElement("tr")
+              row.innerHTML = `
+            <td style="width: 85px; overflow-x: scroll;">${d.date}</td>
+            <td>${d.note}</td>
+            <td>${d.buyerName}</td>
+            <td>${d.productList}</td>
+            <td>${d.amount}</td>
+          `
+              table.appendChild(row)
+            }
           })
 
           document.querySelector("#totalsellhappened").textContent = totalSell
@@ -1449,22 +1456,25 @@
           tablebody.innerHTML = ""; // clear old rows if any
 
           data.forEach(d => {
-            const row = document.createElement("tr");
-            row.classList.add("productpagetable");
+            if (d.status == true) {
 
-            row.innerHTML = `
-          <td style="padding: 5px; width: 80%;">${d.note}</td>
-          <td style="padding: 5px;">
-            <span id="amount-${d._id}">
-              ${d.amount}
-              <button id="btn-${d._id}">edit</button>
-            </span>
-          </td>
-        `;
+              const row = document.createElement("tr");
+              row.classList.add("productpagetable");
 
-            tablebody.appendChild(row);
+              row.innerHTML = `
+            <td style="padding: 5px; width: 80%;">${d.note}</td>
+            <td style="padding: 5px;">
+              <span id="amount-${d._id}">
+                ${d.amount}
+                <button id="btn-${d._id}">edit</button>
+              </span>
+            </td>
+          `;
 
-            bindEditButton(d); // bind edit logic per row
+              tablebody.appendChild(row);
+
+              bindEditButton(d); // bind edit logic per row
+            }
           });
         });
     });
@@ -1523,8 +1533,10 @@
       fetcher('https://agroserver-mdz5.onrender.com/data/due/')
         .then((data) => {
           data.forEach(d => {
-            totalDue += parseInt(d.amount);
-            renderDueRow(d);
+            if (d.status == true) {
+              totalDue += parseInt(d.amount);
+              renderDueRow(d);
+            }
           });
           document.querySelector("#totalsuespan").textContent = totalDue;
         });
@@ -1756,16 +1768,18 @@
           // console.log(data)
           totalAmount = 0
           data.forEach((item, index) => {
-            totalAmount += parseInt(item.amount)
-            let row = document.createElement("tr")
-            row.style.width = "100%"
-            row.innerHTML = `
+            if (item.status == true) {
+              totalAmount += parseInt(item.amount)
+              let row = document.createElement("tr")
+              row.style.width = "100%"
+              row.innerHTML = `
           <td style="width: 85px; overflow-x: auto; ">${item.date}</td>
           <td style="overflow-x: auto; ">${item.note}</td>
           <td style="width: 85px; overflow-x: auto; ">${item.amount}</td>
           `
-            document.querySelector("#histtable").appendChild(row)
-            loader.style.display = "none"
+              document.querySelector("#histtable").appendChild(row)
+              loader.style.display = "none"
+            }
           });
 
           document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount ? totalAmount : "loading"}</span>`
@@ -1784,16 +1798,18 @@
           // console.log(data)
           totalAmount = 0
           data.forEach((item, index) => {
-            totalAmount += parseInt(item.amount)
-            let row = document.createElement("tr")
-            row.style.width = "100%"
-            row.innerHTML = `
+            if (item.status == true) {
+              totalAmount += parseInt(item.amount)
+              let row = document.createElement("tr")
+              row.style.width = "100%"
+              row.innerHTML = `
           <td style="width: 85px; overflow-x: auto; ">${item.date}</td>
           <td style="overflow-x: auto; ">${item.note}</td>
           <td style="width: 85px; overflow-x: auto; ">${item.amount}</td>
           `
-            document.querySelector("#histtable").appendChild(row)
-            loader.style.display = "none"
+              document.querySelector("#histtable").appendChild(row)
+              loader.style.display = "none"
+            }
           });
 
           document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount ? totalAmount : "loading"}</span>`
@@ -1810,16 +1826,18 @@
           // console.log(data)
           totalAmount = 0
           data.forEach((item, index) => {
-            totalAmount += parseInt(item.amount)
-            let row = document.createElement("tr")
-            row.style.width = "100%"
-            row.innerHTML = `
+            if (item.status == true) {
+              totalAmount += parseInt(item.amount)
+              let row = document.createElement("tr")
+              row.style.width = "100%"
+              row.innerHTML = `
           <td style="width: 85px; overflow-x: auto; ">${item.date}</td>
           <td style="overflow-x: auto; ">${item.note}</td>
           <td style="width: 85px; overflow-x: auto; ">${item.amount}</td>
           `
-            document.querySelector("#histtable").appendChild(row)
-            loader.style.display = "none"
+              document.querySelector("#histtable").appendChild(row)
+              loader.style.display = "none"
+            }
           });
 
           document.querySelector("#totalbankamount").innerHTML = `<span>total amount: ${totalAmount ? totalAmount : "loading"}</span>`
@@ -1852,7 +1870,8 @@
       data = {
         "date": date,
         "amount": amount ? amount : 0,
-        "note": note ? note : "No Note Added!!"
+        "note": note ? note : "No Note Added!!",
+        "status": true
       }
       poster('https://agroserver-mdz5.onrender.com/insert/bank/', data)
         .then(() => {
@@ -1874,7 +1893,8 @@
       data = {
         "date": date,
         "amount": amount ? amount : 0,
-        "note": note ? note : "No Note Added!!"
+        "note": note ? note : "No Note Added!!",
+        "status": true
       }
       poster('https://agroserver-mdz5.onrender.com/insert/cash/', data)
         .then(() => {
@@ -1899,7 +1919,8 @@
         "date": date,
         "amount": isNaN(amount) ? 0 : amount,
         "note": note || "No Note Added!!",
-        "withdrawType": Wtype || "cash"
+        "withdrawType": Wtype || "cash",
+        "status": true
       };
 
       try {
@@ -1911,7 +1932,8 @@
             const wdata = {
               "date": date,
               "amount": amount ? -Math.abs(amount) : 0,
-              "note": "Withdraw from cash"
+              "note": "Withdraw from cash",
+              "status": true
             };
             await poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
           }
@@ -1919,7 +1941,8 @@
             const wdata = {
               "date": date,
               "amount": amount ? -Math.abs(amount) : 0,
-              "note": "Withdraw from cash"
+              "note": "Withdraw from cash",
+              "status": true
             };
             await poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
           }
@@ -1968,7 +1991,8 @@
         "date": date,
         "amount": isNaN(amount) ? 0 : amount,
         "note": note || "No Note Added!!",
-        "method": method || "cash"
+        "method": method || "cash",
+        "status": true
       };
 
       try {
@@ -1986,7 +2010,8 @@
           const wdata = {
             "date": date,
             "amount": amount ? -Math.abs(amount) : 0.00,
-            "note": "Cost deducted from cash/bank"
+            "note": "Cost deducted from cash/bank",
+            "status": true
           };
 
           if (method === "cash") {
@@ -2043,7 +2068,7 @@
         "quantity": quantity ? quantity : 0,
         "eachprice": eachprice ? eachprice : 0.0,
         "amount": isNaN(amount) ? 0 : amount,
-
+        "status": true
       };
 
       try {
@@ -2053,7 +2078,9 @@
         fetcher('https://agroserver-mdz5.onrender.com/data/sell/')
           .then((datas) => {
             datas.forEach(d => {
-              totalDue += parseInt(d.amount)
+              if(d.status == true){
+                totalDue += parseInt(d.amount)
+              }
             })
             document.querySelector("#totalsellhappened").textContent = totalDue
 
@@ -2076,7 +2103,7 @@
           let due = false
 
           decreaser(productList, quantity)
-          document.querySelector("#currentstock").textContent = productData.find(p => p.note === productList).amount -= quantity;
+          // document.querySelector("#currentstock").textContent = res.find(p => p.note === productList).amount -= quantity;
 
 
           if (checkDue < 0) {
@@ -2089,12 +2116,14 @@
           const wdata = {
             "date": date,
             "amount": amount ? Math.abs(amount) : 0.00,
-            "note": `Sell Added To ${method ? method : "cash"} for sell to ${buyerName ? buyerName : "Annonymous Buyer"} at ${date} || product: ${productList}, quantity: ${quantity}`
+            "note": `Sell Added To ${method ? method : "cash"} for sell to ${buyerName ? buyerName : "Annonymous Buyer"} at ${date} || product: ${productList}, quantity: ${quantity}`,
+            "status": true
           };
           const wdata2 = {
             "date": date,
             "amount": due ? parseInt(Math.abs(checkDue)) : 0.00,
-            "note": `Due Added From Sell To ${buyerName ? buyerName : "annonymous with method: " + method} || date : ${date}, product : ${productList}, quantity: ${quantity}`
+            "note": `Due Added From Sell To ${buyerName ? buyerName : "annonymous with method: " + method} || date : ${date}, product : ${productList}, quantity: ${quantity}`,
+            "status": true
           };
 
           if (method === "cash") {
@@ -2147,7 +2176,8 @@
       const data = {
         date: date,
         amount: parseInt(qCheck),
-        note: name || "Anonymous Product"
+        note: name || "Anonymous Product",
+        "status": true
       };
 
       fetcher('https://agroserver-mdz5.onrender.com/data/products/')
@@ -2203,7 +2233,8 @@
       data = {
         "date": date,
         "note": note ? note : "You didn't added a Name, should have",
-        "amount": amount ? parseInt(amount) : 0
+        "amount": amount ? parseInt(amount) : 0,
+        "status": true
       }
       poster('https://agroserver-mdz5.onrender.com/insert/due/', data)
         .then(() => {
@@ -2219,7 +2250,9 @@
             .then((data) => {
               data.forEach(d => {
                 // console.log(d.amount)
-                totalDue += parseInt(d.amount)
+                if(d.status == true){
+                  totalDue += parseInt(d.amount)
+                }
               })
               document.querySelector("#totalsuespan").textContent = totalDue
             })
@@ -2299,20 +2332,13 @@
         fetcher(`https://agroserver-mdz5.onrender.com/reset/${name}/`)
           .then(() => {
             alert(`${name} deleted successfully!!`)
+            localStorage.removeItem("loginTime")
+            location.reload()
           })
 
       }
 
 
-    })
-
-    document.querySelector("#factoryresetbtn").addEventListener("click", () => {
-      alert("alert!! you know what you doing right? all your database will be reset.")
-      fetcher('https://agroserver-mdz5.onrender.com/reset/all/')
-        .then(() => {
-          alert("database deleted success!!!")
-          location.reload()
-        })
     })
 
 
