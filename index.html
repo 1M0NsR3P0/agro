@@ -649,7 +649,7 @@
         </div>
       </div>
       <div id="costHistory" class="costhistory">
-        <div style="width: 98vw;height: 15vw; overflow-y: scroll; display: flex; justify-content: center;">
+        <div style="width: 98vw;height: 80vw; overflow-y: scroll; display: flex; justify-content: center;">
           <table style="width: 90vw; ">
             <thead>
               <tr style="">
@@ -849,7 +849,7 @@
               </select>
               <div id="resetCollectionbtn" style="height: 20ox; width: 40px; font-size: xx-small;" class="link">reset
               </div>
-              <div style="display: none;"><input type="password" id="confirmpass" placeholder="password"></div>
+
             </div>
           </div>
           <div class="statement-btn" id="settingpagecancelbtn" style="margin: 10px;" class="statement-btn"> Back</div>
@@ -1353,9 +1353,9 @@
       document.querySelector("#costtablebody").innerHTML = ``
       location.reload()
     })
-    
+
     let totalSell = 0
-    
+
     document.querySelector("#addsellbtn").addEventListener("click", () => {
       document.querySelector("#homepage").style.display = "none"
       document.querySelector("#addsellpage").style.display = "flex"
@@ -2290,26 +2290,21 @@
 
     })
 
-let name = document.querySelector("#resetcollectionselect").value;
-let selectionvalue = document.querySelector("#resetcollectionselect");
-let confirm = document.querySelector("#confirmpass").value; // ✅ get the actual password value
+    document.querySelector("#resetCollectionbtn").addEventListener("click", () => {
+      // alert("ALert!!!!! (Remember! it will effect on the other database, such as bank balance or cash balance mismatch etc) ")
+      let name = document.querySelector("#resetcollectionselect").value
+      p = prompt(`Enter This name to confirm: "${name}"`)
+      if (p.toLowerCase() === name.toLowerCase()) {
 
-selectionvalue.style.display = "none";
-document.querySelector("#confirmpass").style.display = "block";
+        fetcher(`https://agroserver-mdz5.onrender.com/reset/${name}/`)
+          .then(() => {
+            alert(`${name} deleted successfully!!`)
+          })
 
-fetcher(`https://agroserver-mdz5.onrender.com/data/user`)
-  .then((data) => {
-    const check = data.find((d) => d.pass == confirm); // ✅ now you're comparing string to string
-    if (check) {
-      fetcher(`https://agroserver-mdz5.onrender.com/reset/${name}/`)
-        .then(() => {
-          alert(`${name} data Reset successfully!!`);
-        });
-    } else {
-      alert("Password not matched");
-    }
-  });
+      }
 
+
+    })
 
     document.querySelector("#factoryresetbtn").addEventListener("click", () => {
       alert("alert!! you know what you doing right? all your database will be reset.")
