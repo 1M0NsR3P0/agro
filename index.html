@@ -258,7 +258,7 @@
     }
 
     .costhistory {
-      /* height: 60vh; */
+      height: 100vh;
       width: 100%;
       display: flex;
       padding: 5px;
@@ -266,6 +266,8 @@
       font-size: 15px;
       overflow: auto;
       flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
     }
 
     .radio {
@@ -584,7 +586,7 @@
 
   <!-- ADD PAGES SECTION -->
   <!-- add sell page -->
-  <div id="addsellpage" style="display: none; flex-direction: column; justify-content: center; align-items: center;">
+  <div id="addsellpage" style="display: none; flex-direction: column; justify-content: flex-start; height: 120vh; align-items: center;">
     <div
       style=" margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
       <div style="display: flex; justify-content: space-evenly;">
@@ -702,29 +704,36 @@
   </div>
   </div>
   <!-- add Due Page -->
-  <div id="addduepage" style="display: none; flex-direction: column; justify-content: center; align-items: center;">
+  <div id="addduepage" style="display: none; flex-direction: column; justify-content: flex-start; height: 120vh; align-items: center;">
     <div
-      style=" margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
+      style="display: none; margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px; ">
       <div style="display: flex; justify-content: space-evenly;">
         <span style="font-weight: 900; font-size: 20px;">Add Due</span>
       </div>
     </div>
 
-    <div>
+    <div style="display: none;">
       <div> Date:
         <input id="addduedate" type="date" style="background-color: white; padding: 3px;">
       </div>
     </div>
-    <div style="margin: 10px; display: flex; align-items: center; gap: 15px;"> <span>Details</span>
+    <div style="margin: 10px; display: none; align-items: center; gap: 15px;"> <span>Details</span>
       <textarea style="padding: 5px; border-radius: 15px;" name="costAddNote" id="addduenote"
         placeholder="Add Detils/Name" cols="15" rows="3"></textarea>
     </div>
-    <div> Ttoal Amount
+    <div style="display: none;"> Ttoal Amount
       <input id="adddueamount" type="number" placeholder="0.00" style="background-color: white; padding: 5px;">
     </div>
+    <div style="display: none;">
+      <select name="duemethod" id="duemethod">
+        <option value="none">none</option>
+        <option value="cash">Cash</option>
+        <option value="bank">Bank</option>
+      </select>
+    </div>
     <div style="display: flex;">
-      <div id="addduedata" style="margin: 10px;" class="statement-btn"> Add
-      </div>
+      <button id="addduedata" style="margin: 10px; display: none;" class="statement-btn" disabled> Add
+      </button>
       <div style="margin: 10px;" class="statement-btn" id="addduepagecancel"> Back
       </div>
     </div>
@@ -739,9 +748,9 @@
         </div>
       </div>
       <div id="costHistory" class="costhistory"
-        style="width: 99vw; display: flex; justify-content: center; align-items: center;">
+        style="width: 99vw;  ">
         <div
-          style="width: 96vw; display: flex; justify-content: center; align-items: center;height:45vh; position: relative;">
+          style="width: 96vw; display: flex; justify-content: center; align-items: center;height:75vh; position: relative;">
           <table style="width: 90vw; margin-top: 15px; position: absolute;top: 2%;">
             <thead>
               <tr style="">
@@ -758,7 +767,7 @@
     </div>
   </div>
   <!-- add Note page -->
-  <div id="notepage" style="display: none; flex-direction: column; justify-content: center; align-items: center;">
+  <div id="notepage" style="display: none; flex-direction: column; justify-content: flex-start; height: 120vh; align-items: center;">
     <div
       style=" margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
       <div style="display: flex; justify-content: space-evenly;">
@@ -793,7 +802,7 @@
           <span>Note List</span>
         </div>
       </div>
-      <div id="NoteHistory" class="costhistory" style="display: flex; width: 98vw; height: 40vh;">
+      <div id="NoteHistory" class="costhistory" style="display: flex; width: 98vw; height: 100vh;">
         <div>
           <!-- Todo/// add note title system -->
           <table style="width: 100%;">
@@ -810,11 +819,25 @@
       </div>
 
     </div>
+    <div
+      style="position: absolute; top: 90ox; height: 75vh; width: 58vw; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); display: none; justify-content: center; align-items: center; border-radius: 15px; border: 1px solid rgb(0, 0, 0);"
+      id="notepopup">
+      <div
+        style="display: flex; justify-content: flex-start; flex-direction: column; align-items: center; height: 70vh; width: 52vw; padding: 25px; margin-top: 50px; gap: 30px; font-size: 20px;">
+        <span id="titlenote">
+          this is the time of the note showing in headers
+        </span>
+        <span id="notenote" style="width: 42vw; height: 40vh; overflow-y: auto;">
+          at fuga eos, nihil quas sit! lorem2000
+        </span>
+        <button id="backnotepopup" class="statusBtn">back</button>
+      </div>
+    </div>
   </div>
 
   <!-- add setting page -->
   <!-- Todo// pass change, reset database, logo/icon change -->
-  <div id="settingpage" style="display: none; flex-direction: column; justify-content: center; align-items: center;">
+  <div id="settingpage" style="display: none; flex-direction: column; justify-content: flex-start; align-items: center;">
     <div
       style=" margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
       <div style="display: flex; justify-content: space-evenly;">
@@ -860,7 +883,7 @@
   </div>
 
   <!-- add cost page -->
-  <div id="addcostpage" style="display: none; flex-direction: column; justify-content: center; align-items: center;">
+  <div id="addcostpage" style="display: none; flex-direction: column; justify-content: flex-start; height: 120vh; align-items: center;">
     <div
       style=" margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
       <div style="display: flex; justify-content: space-evenly;">
@@ -906,7 +929,7 @@
           <img id="refreshbtn" src="images/refresh.svg" alt="" style="width: 25px; height: 20px;">
         </div>
       </div>
-      <div id="costHistory" class="costhistory" style="height: 35vh; width: 95vw;">
+      <div id="costHistory" class="costhistory" style=" width: 95vw;">
         <div style="width: 95vw;">
           <table style="width: 95vw;">
             <thead>
@@ -946,30 +969,53 @@
         document.getElementById("login-section").style.display = "block";
         document.getElementById("home-section").style.display = "none";
       }
+
     });
 
     document.getElementById("login").addEventListener("click", (e) => {
       e.preventDefault(); // Just in case a form tries to submit
+      const user = document.getElementById('user').value;
+      const pwd = document.getElementById('password').value;
+      // if (!pwd) {
+
+      //   document.querySelector("#login").textContent = "login"
+      //   setTimeout(() => {
+      //     document.querySelector("#login").display = "none"
+
+      //   }, 1000)
+      // }
+
       fetcher('https://agroserver-mdz5.onrender.com/data/user/')
         .then((data) => {
           // console.log(data)
-          const user = document.getElementById('user').value;
-          const pwd = document.getElementById('password').value;
 
           const matched = data.find(d => d.amount === pwd);
 
           if (matched) {
+            checklogin = localStorage.getItem("loginTime")
+
             localStorage.setItem('loginTime', Date.now().toString());
             console.log("login successful");
             document.getElementById("login-section").style.display = "none";
             document.getElementById("home-section").style.display = "block";
+            document.querySelector("#login").textContent = "login"
+
           } else {
-            alert("Wrong username or password, try again");
+
+            document.querySelector("#login").textContent = "incorrect!"
+            setTimeout(() => { document.querySelector("#login").textContent = "login" }, 1000)
           }
         })
         .catch(err => {
           console.error("Error fetching users:", err);
         });
+
+      let cheklaoding = localStorage.getItem("loginTime")
+      if (!cheklaoding) {
+        document.querySelector("#login").innerHTML = `
+            <img src="../images/loading.gif" alt="loading.." style="height:8px;width:8px;">
+        `
+      }
     });
 
     function mail(sub, whom, msg) {
@@ -1138,7 +1184,7 @@
           // freedomabir67@gmail.com
           const otp = document.querySelector("#otp").value
 
-          console.log(otp, presentOTP)
+          console.log(presentOTP)
           if (Number(otp) === Number(presentOTP)) {
             poster('https://agroserver-mdz5.onrender.com/insert/user/', data)
               .then(() => {
@@ -1601,6 +1647,7 @@
               <span id="amount-${d._id}">
                 ${d.amount}
                 <button id="btn-${d._id}">edit</button>
+                <button id="delp-${d._id}" style="color:red;">del</button>
               </span>
             </td>
           `;
@@ -1608,10 +1655,22 @@
               tablebody.appendChild(row);
 
               bindEditButton(d); // bind edit logic per row
+              bindDeleteButton6(d);
             }
           });
         });
     });
+
+    function bindDeleteButton6(d) {
+      document.querySelector(`#delp-${d._id}`).addEventListener("click", () => {
+        poster("https://agroserver-mdz5.onrender.com/delete/products/", { "id": d._id })
+          .then(() => {
+            // alert("deleted")
+            document.querySelector("#totalproductbtn").click()
+
+          })
+      })
+    }
 
     function bindEditButton(d) {
       const editBtn = document.querySelector(`#btn-${d._id}`);
@@ -1670,6 +1729,7 @@
             if (d.status == true) {
               totalDue += parseInt(d.amount);
               renderDueRow(d);
+
             }
           });
           document.querySelector("#totalsuespan").textContent = totalDue;
@@ -1684,13 +1744,29 @@
       <td style="display:flex; justify-content:space-around; align-items:center;" id="due-cell-${d._id}">
         <span id="amountDue-${d._id}">${d.amount}</span>
         <button id="dueeditbtn-${d._id}">✏️</button>
+        <button id="duedelbtn-${d._id}" style="color:red;">del</button>
       </td>
     `;
 
       document.querySelector("#addduetable").appendChild(row);
 
       bindEditButton3(d);
+      bindDeleteButton7(d);
     }
+
+    function bindDeleteButton7(d) {
+      document.querySelector(`#duedelbtn-${d._id}`).addEventListener("click", () => {
+        poster('https://agroserver-mdz5.onrender.com/delete/due/', { "id": d._id })
+          .then(() => {
+            poster(`https://agroserver-mdz5.onrender.com/insert/${d.method}/`, { "id": d._id, "amount": Number(d.amount), "note": `due record addintion`, "status": true, "method": d.method })
+              .then(() => {
+                alert("successfully due added/decreased from: ", d.method)
+              })
+            document.querySelector("#addduebtn").click();
+          })
+      })
+    }
+
 
     function bindEditButton3(d) {
       const editBtn = document.querySelector(`#dueeditbtn-${d._id}`);
@@ -1710,7 +1786,12 @@
           const newAmount = document.querySelector(`#due-newAmount-${d._id}`).value;
           poster('https://agroserver-mdz5.onrender.com/edit/due/', { id: d._id, amount: newAmount ? Number(newAmount) : 0 })
             .then(() => {
-              document.querySelector("#addduebtn").click(); // Refresh the entire table
+              // alert(d.method)
+              poster(`https://agroserver-mdz5.onrender.com/insert/${d.method}/`, { "id": d._id, "amount": Number(d.amount) - Number(newAmount), "note": `due rechived from customer`, "status": true, "method": d.method })
+                .then(() => {
+                  alert("successfully due decreased from: ", d.method)
+                })
+              document.querySelector("#addduebtn").click();
             });
         });
 
@@ -1768,7 +1849,7 @@
     <td style="width:150px;">${d.date}</td>
     <td style="width:250px;">${d.title}</td>
     <td style="display:flex; justify-content:space-between; align-items:center;" id="note${d._id}">
-      <span>${d.amount}</span>
+      <span id="notepop-${d._id}">${d.amount}</span>
       <div style="display: flex; gap: 5px;">
         <button id="noteEdit${d._id}">edit</button>
         <button id="noteDelete${d._id}" style="color: red;">delete</button>
@@ -1780,7 +1861,24 @@
 
       bindEditButton2(d);
       bindDeleteButton(d);
+      popupnote(d)
     }
+
+    function popupnote(d) {
+      let popuppage = document.querySelector("#notepopup")
+      let details = document.querySelector("#notenote")
+      let title = document.querySelector("#titlenote")
+      let backbtn = document.querySelector("#backnotepopup")
+      document.querySelector(`#note${d._id}`).addEventListener("dblclick", () => {
+        popuppage.style.display = "flex"
+        details.textContent = d.amount
+        title.textContent = d.title
+        backbtn.addEventListener("click", () => [
+          popuppage.style.display = "none"
+        ])
+      })
+    }
+
 
     function bindEditButton2(d) {
       const editBtn = document.querySelector(`#noteEdit${d._id}`);
@@ -2234,7 +2332,7 @@
           const wdata = {
             "date": date,
             "amount": amount ? -Math.abs(amount) : 0.00,
-            "note": "Cost deducted from cash/bank",
+            "note": "Cost deducted from cash/bank/",
             "status": true
           };
 
@@ -2340,12 +2438,14 @@
             "date": date,
             "amount": amount ? Math.abs(amount) : 0.00,
             "note": `Sell Added To ${method ? method : "cash"} for sell to ${buyerName ? buyerName : "Annonymous Buyer"} at ${date} || product: ${productList}, quantity: ${quantity}`,
+            "method": method,
             "status": true
           };
           const wdata2 = {
             "date": date,
             "amount": due ? parseInt(Math.abs(checkDue)) : 0.00,
             "note": `Due Added From Sell To ${buyerName ? buyerName : "annonymous with method: " + method} || date : ${date}, product : ${productList}, quantity: ${quantity}`,
+            "method": method,
             "status": true
           };
 
@@ -2439,6 +2539,7 @@
       }
       note = document.querySelector("#addduenote").value;
       amount = document.querySelector("#adddueamount").value;
+      method = document.querySelector("#duemethod").value;
 
       if (note == "" || amount <= 0 || isNaN(amount)) {
         document.querySelector("#msgsuccessfordue").style.display = "block"
@@ -2456,6 +2557,7 @@
         "date": date,
         "note": note ? note : "You didn't added a Name, should have",
         "amount": amount ? parseInt(amount) : 0,
+        "method": method ? method == "none" ? "" : method : "cash",
         "status": true
       }
       poster('https://agroserver-mdz5.onrender.com/insert/due/', data)
@@ -2474,8 +2576,10 @@
                 // console.log(d.amount)
                 if (d.status == true) {
                   totalDue += parseInt(d.amount)
+
                 }
               })
+              document.querySelector("#addduebtn").click()
               document.querySelector("#totalsuespan").textContent = totalDue
             })
         })
