@@ -586,7 +586,8 @@
 
   <!-- ADD PAGES SECTION -->
   <!-- add sell page -->
-  <div id="addsellpage" style="display: none; flex-direction: column; justify-content: flex-start; height: 120vh; align-items: center;">
+  <div id="addsellpage"
+    style="display: none; flex-direction: column; justify-content: flex-start; height: 120vh; align-items: center;">
     <div
       style=" margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
       <div style="display: flex; justify-content: space-evenly;">
@@ -704,7 +705,8 @@
   </div>
   </div>
   <!-- add Due Page -->
-  <div id="addduepage" style="display: none; flex-direction: column; justify-content: flex-start; height: 120vh; align-items: center;">
+  <div id="addduepage"
+    style="display: none; flex-direction: column; justify-content: flex-start; height: 120vh; align-items: center;">
     <div
       style="display: none; margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px; ">
       <div style="display: flex; justify-content: space-evenly;">
@@ -747,8 +749,7 @@
           <span style="color: red;" id="totalsuespan">500 </span>
         </div>
       </div>
-      <div id="costHistory" class="costhistory"
-        style="width: 99vw;  ">
+      <div id="costHistory" class="costhistory" style="width: 99vw;  ">
         <div
           style="width: 96vw; display: flex; justify-content: center; align-items: center;height:75vh; position: relative;">
           <table style="width: 90vw; margin-top: 15px; position: absolute;top: 2%;">
@@ -767,7 +768,8 @@
     </div>
   </div>
   <!-- add Note page -->
-  <div id="notepage" style="display: none; flex-direction: column; justify-content: flex-start; height: 120vh; align-items: center;">
+  <div id="notepage"
+    style="display: none; flex-direction: column; justify-content: flex-start; height: 120vh; align-items: center;">
     <div
       style=" margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
       <div style="display: flex; justify-content: space-evenly;">
@@ -837,7 +839,8 @@
 
   <!-- add setting page -->
   <!-- Todo// pass change, reset database, logo/icon change -->
-  <div id="settingpage" style="display: none; flex-direction: column; justify-content: flex-start; align-items: center;">
+  <div id="settingpage"
+    style="display: none; flex-direction: column; justify-content: flex-start; align-items: center;">
     <div
       style=" margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
       <div style="display: flex; justify-content: space-evenly;">
@@ -883,7 +886,8 @@
   </div>
 
   <!-- add cost page -->
-  <div id="addcostpage" style="display: none; flex-direction: column; justify-content: flex-start; height: 120vh; align-items: center;">
+  <div id="addcostpage"
+    style="display: none; flex-direction: column; justify-content: flex-start; height: 120vh; align-items: center;">
     <div
       style=" margin: 10px 0 20px 0; background-color: rgb(189, 189, 189); width: 100%; border: 1px solid black; padding: 10px; height: fit-content; border-radius: 15px;">
       <div style="display: flex; justify-content: space-evenly;">
@@ -955,9 +959,9 @@
     window.addEventListener("DOMContentLoaded", () => {
 
       const loginTime = localStorage.getItem('loginTime');
-      const SIX_HOURS = 6 * 60 * 60 * 1000;
+      const logoutTimeCount = 30 * 60 * 1000;
 
-      if (loginTime && (Date.now() - parseInt(loginTime)) < SIX_HOURS) {
+      if (loginTime && (Date.now() - parseInt(loginTime)) < logoutTimeCount) {
         // Still within session time
         console.log("Auto-login");
         document.getElementById("login-section").style.display = "none";
@@ -1379,32 +1383,32 @@
 
               // Add delete button functionality
               document.querySelector(`#costdel-${d._id}`).addEventListener("click", () => {
-                document.querySelector("#refreshbtn").click()
                 poster("https://agroserver-mdz5.onrender.com/delete/cost/", { id: d._id })
-                  .then(response => {
-                    if (response) {
-                      const wdata = {
-                        "date": d.date,
-                        "amount": d.amount ? Math.abs(d.amount) : 0.00,
-                        "note": "Cost decreased",
-                        "status": true
-                      };
-                      if (d.method === "cash") {
-                        poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
-                      } else if (d.method === "bank") {
-                        poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
-                      }
-                      row.remove();
-                      totalcost -= parseInt(d.amount);
-                      document.querySelector("#totalcost2").textContent = totalcost;
-                    } else {
-                      alert("Failed to delete item");
+                .then(response => {
+                  if (response) {
+                    const wdata = {
+                      "date": d.date,
+                      "amount": d.amount ? Math.abs(d.amount) : 0.00,
+                      "note": "Cost decreased",
+                      "status": true
+                    };
+                    if (d.method === "cash") {
+                      poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
+                    } else if (d.method === "bank") {
+                      poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
                     }
-                  })
-                  .catch(err => {
-                    console.error("Delete error:", err);
-                    alert("Error deleting item.");
-                  });
+                    row.remove();
+                    totalcost -= parseInt(d.amount);
+                    document.querySelector("#totalcost2").textContent = totalcost;
+                  } else {
+                    alert("Failed to delete item");
+                  }
+                })
+                .catch(err => {
+                  console.error("Delete error:", err);
+                  alert("Error deleting item.");
+                });
+                document.querySelector("#refreshbtn").click()
               });
             }
           });
@@ -1414,64 +1418,65 @@
 
       // Refresh Button Handler
       document.querySelector("#refreshbtn").addEventListener("click", () => {
-        document.querySelector("#totalcost2").textContent = "loading..";
-        table.innerHTML = "";
-        let totalcost2 = 0;
+        // document.querySelector("#addcostbtn").click()
+        // document.querySelector("#totalcost2").textContent = "loading..";
+        // table.innerHTML = "";
+        // let totalcost2 = 0;
 
-        fetcher("https://agroserver-mdz5.onrender.com/data/cost/")
-          .then(data => {
-            data.forEach(d => {
-              if (d.status === true) {
-                totalcost2 += parseInt(d.amount);
-                const row = document.createElement("tr");
-                table.classList.add("costtablebody");
+        // fetcher("https://agroserver-mdz5.onrender.com/data/cost/")
+        //   .then(data => {
+        //     data.forEach(d => {
+        //       if (d.status === true) {
+        //         totalcost2 += parseInt(d.amount);
+        //         const row = document.createElement("tr");
+        //         table.classList.add("costtablebody");
 
-                row.innerHTML = `
-              <td style="width: 85px; overflow-x: scroll;">${d.date}</td>
-              <td>${d.note}</td>
-              <td>
-                ${d.amount}
-                <span id="costdel-${d._id}" style="cursor:pointer; color:red; margin-left:8px;">del</span>
-              </td>
-            `;
+        //         row.innerHTML = `
+        //       <td style="width: 85px; overflow-x: scroll;">${d.date}</td>
+        //       <td>${d.note} | method: ${d.method}</td>
+        //       <td>
+        //         ${d.amount}
+        //         <span id="costdel-${d._id}" style="cursor:pointer; color:red; margin-left:8px;">del</span>
+        //       </td>
+        //     `;
 
-                table.appendChild(row);
+        //         table.appendChild(row);
 
-                // Add delete logic again for refreshed entries
-                document.querySelector(`#costdel-${d._id}`).addEventListener("click", () => {
-                  poster("https://agroserver-mdz5.onrender.com/delete/cost/", { id: d._id })
-                    .then(response => {
-                      if (response.status == "success") {
-                        console.log(d, response)
-                        row.remove();
-                        const wdata = {
-                          "date": d.date,
-                          "amount": d.amount ? Math.abs(d.amount) : 0.00,
-                          "note": "Cost decreased",
-                          "status": true
-                        };
-                        if (d.method === "cash") {
-                          poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
-                        } else if (d.method === "bank") {
-                          poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
-                        }
+        //         // Add delete logic again for refreshed entries
+        //         document.querySelector(`#costdel-${d._id}`).addEventListener("click", () => {
+        //           poster("https://agroserver-mdz5.onrender.com/delete/cost/", { id: d._id })
+        //             .then(response => {
+        //               if (response.status == "success") {
+        //                 console.log(d, response)
+        //                 row.remove();
+        //                 const wdata = {
+        //                   "date": d.date,
+        //                   "amount": d.amount ? Math.abs(d.amount) : 0.00,
+        //                   "note": "Cost decreased",
+        //                   "status": true
+        //                 };
+        //                 if (d.method === "cash") {
+        //                   poster('https://agroserver-mdz5.onrender.com/insert/cash/', wdata);
+        //                 } else if (d.method === "bank") {
+        //                   poster('https://agroserver-mdz5.onrender.com/insert/bank/', wdata);
+        //                 }
 
-                        totalcost2 -= parseInt(d.amount);
-                        document.querySelector("#totalcost2").textContent = totalcost2;
-                      } else {
-                        alert("Failed to delete item");
-                      }
-                    })
-                    .catch(err => {
-                      console.error("Delete error:", err);
-                      alert("Error deleting item.");
-                    });
-                });
-              }
-            });
+        //                 totalcost2 -= parseInt(d.amount);
+        //                 document.querySelector("#totalcost2").textContent = totalcost2;
+        //               } else {
+        //                 alert("Failed to delete item");
+        //               }
+        //             })
+        //             .catch(err => {
+        //               console.error("Delete error:", err);
+        //               alert("Error deleting item.");
+        //             });
+        //         });
+        //       }
+        //     });
 
-            document.querySelector("#totalcost2").textContent = totalcost2 ? totalcost2 : "loading..";
-          });
+        //     document.querySelector("#totalcost2").textContent = totalcost2 ? totalcost2 : "loading..";
+        //   });
       });
     });
 
@@ -1505,7 +1510,7 @@
               let row = document.createElement("tr");
               row.innerHTML = `
             <td style="width: 85px; overflow-x: scroll; height:25px;">${d.date}</td>
-            <td>${d.note}</td>
+            <td>${d.note} | method: ${d.method}</td>
             <td>${d.buyerName}</td>
             <td >${d.productList}</td>
             <td style="">
@@ -2118,7 +2123,7 @@
 
               row.innerHTML = `
             <td style="width: 85px; overflow-x: auto;">${item.date}</td>
-            <td style="overflow-x: auto;">${item.note}</td>
+            <td style="overflow-x: auto;">${item.note} mthod: ${item.withdrawType}</td>
             <td style="width: 85px; overflow-x: auto;">
               ${item.amount}
               <span id="withdeldel-${item._id}" style="cursor:pointer; color:red; margin-left:8px;">del</span>
@@ -2320,7 +2325,8 @@
         const res = await poster('https://agroserver-mdz5.onrender.com/insert/cost/', data);
 
         if (res) {
-          document.querySelector("#refreshbtn").click()
+          document.querySelector("#costtablebody").innerHTML = ``
+          document.querySelector("#addcostbtn").click()
           document.querySelector("#costaddsuccess").style.display = "block";
           setTimeout(() => {
             document.querySelector("#costaddsuccess").style.display = "none";
@@ -2638,8 +2644,13 @@
               console.log(matched._id, newpass)
               poster(`https://agroserver-mdz5.onrender.com/edit/user/`, { "id": matched._id, "amount": newpass })
 
-                .then(alert("Password changed"))
-              document.querySelector("#logoutbtn").click()
+                .then(() => {
+                  alert("Password changed")
+                  localStorage.setItem("loginTime","")
+                  setTimeout(()=>{
+                    location.reload()
+                  },1000)
+                })
 
             }
           })
