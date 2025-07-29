@@ -330,7 +330,7 @@
     <div class="" style="display: flex; justify-content: center; align-items: center; width: 99vw;">
       <div
         style="width: 99vw; height: 20vh; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; padding: 10px; margin: 10px;">
-        <p type="text" placeholder="Enter Username" id="user" style="font-weight: 800; font-size: 20px;">Hi Abir </p>
+        <p type="text" placeholder="Enter Username" id="user" style="font-weight: 800; font-size: 25px;">Hi User </p>
         <input type="password" placeholder="Password" id="password" required />
         <button id="login" class="statusBtn">Login</button>
         <button id="createacc"
@@ -1017,7 +1017,7 @@
       let cheklaoding = localStorage.getItem("loginTime")
       if (!cheklaoding) {
         document.querySelector("#login").innerHTML = `
-            <img src="../images/loading.gif" alt="loading.." style="height:8px;width:8px;">
+            <img src="./images/loading.gif" alt="loading.." style="height:8px;width:8px;">
         `
       }
     });
